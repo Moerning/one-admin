@@ -73,7 +73,7 @@ const buildingHeaders = [
               color="info"
               :icon="mdiEye"
               small
-              @click="isModalActive = true"
+              @click="$router.push(`/buildings/form/${building.id}`)"
             />
             <BaseButton
               color="danger"

@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { onUpdated, reactive, ref } from "vue";
 import { mdiAccount, mdiMail } from "@mdi/js";
 import CardBox from "@/components/CardBox.vue";
 import FormField from "@/components/FormField.vue";
@@ -7,6 +7,20 @@ import FormControl from "@/components/FormControl.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import { useBuilding } from "../../../graph-medium/building";
+import { useRoute } from "vue-router";
+
+const route = useRoute()
+const editable = ref()
+
+if(route.params.id){
+  const { fetchBuilding } = useBuilding()
+  fetchBuilding(route.params.id).then((response)=>{
+    editable.value = response.data.data.building[0]
+    form.name = editable.value.name
+    form.id = editable.value.id
+    form.address = editable.value.address
+  })
+}
 
 const add = () => {
   const { createBuilding } = useBuilding()
@@ -17,6 +31,17 @@ const add = () => {
     alert('Operation Failed!')
   })
 }
+
+const update = () => {
+  const { updateBuilding } = useBuilding()
+
+  updateBuilding( form.id, form.name, form.address ).then(()=>{
+    alert('Successful Operation')
+  }).catch(()=>{
+    alert('Operation Failed!')
+  })
+}
+
 
 const form = reactive({
   id: "",
@@ -30,7 +55,10 @@ const form = reactive({
 });
 
 const submit = () => {
-  add()
+  if(!route.params.id)
+    add()
+  else
+    update()
   //
 };
 
@@ -46,7 +74,7 @@ const submit = () => {
 
         <template #footer>
           <BaseButtons>
-            <BaseButton type="submit" color="info" label="Submit" />
+            <BaseButton type="submit" color="info" label="Submit"  @click="submit"/>
             <BaseButton type="reset" color="info" outline label="Reset" />
           </BaseButtons>
         </template>

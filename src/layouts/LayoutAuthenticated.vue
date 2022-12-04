@@ -38,6 +38,7 @@ onMounted(()=>{
 })
 
 watch(buildingsTree, async (newTree)=>{
+  buildingsMenu.value = []
   for (let i = 0; i < newTree.length; i++) {
     const building = newTree[i];
     const controllerMenu = []
@@ -51,7 +52,6 @@ watch(buildingsTree, async (newTree)=>{
       menu:controllerMenu
     })
   }
-  console.log('zzzzz')
 })
 // computed(() => {
 //   let subMenu = []

@@ -114,13 +114,14 @@ const buildingsMenu = computed(()=>{
 })
 
 const menu = computed(()=>{
-  return [
-    {
-      label: "Dropdown",
-      icon: mdiViewList,
-      menu: buildingsMenu.value,
-    },
-  ]
+  // return [
+  //   {
+  //     label: "Dropdown",
+  //     icon: mdiViewList,
+  //     menu: buildingsMenu.value,
+  //   },
+  // ]
+  []
 })
 
 export default menu

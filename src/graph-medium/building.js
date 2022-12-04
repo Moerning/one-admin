@@ -57,13 +57,57 @@ export const useBuilding = () => {
               insert_building(objects: {name: "${name}", id: "${id}", address: "${address}"}, on_conflict: {constraint: building_pkey, update_columns: account_id}) {
                 affected_rows
                 returning {
-                  id
-                  name
                   address
+                  name
+                  type
+                  lat
+                  long
+                  status
+                  created_at
+                  id
                 }
               }
             }`
       })
+    }
+
+    const updateBuilding = async ( id, name, address) => {
+      return axe.post(
+        'http://185.231.181.50:8080/v1/graphql', {
+            query: `mutation MyMutation {
+              update_building(where: {id: {_eq: "${id}"}}, _set: {name: "${name}", id: "${id}", address: "${address}"}) {
+                affected_rows
+                returning {
+                  address
+                  name
+                  type
+                  lat
+                  long
+                  status
+                  created_at
+                  id
+                }
+              }
+            }`
+      })
+    }
+
+    const fetchBuilding = (id) => {
+      return axe.post(
+          'http://185.231.181.50:8080/v1/graphql', {
+            query: `{
+              building(where: {id: {_eq: "${id}"}}) {
+                address
+                name
+                type
+                lat
+                long
+                status
+                created_at
+                id
+              }
+            }`
+        })
     }
 
     getAllBuildings()
@@ -71,6 +115,8 @@ export const useBuilding = () => {
     return {
         ...toRefs(state),
         getAllBuildings,
-        createBuilding
+        createBuilding, 
+        fetchBuilding,
+        updateBuilding
     }
 }
