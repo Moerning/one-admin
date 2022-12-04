@@ -1,4 +1,7 @@
-import { createApp } from "vue";
+import { createApp, provide, h } from "vue"
+
+import { DefaultApolloClient } from "@vue/apollo-composable"
+import { apolloClient } from "./apollo-client"
 import { createPinia } from "pinia";
 
 import App from "./App.vue";
@@ -9,11 +12,19 @@ import { darkModeKey, styleKey } from "@/config.js";
 
 import "./css/main.css";
 
+
 /* Init Pinia */
 const pinia = createPinia();
 
 /* Create Vue app */
-createApp(App).use(router).use(pinia).mount("#app");
+const app = createApp({
+  setup() {
+    provide(DefaultApolloClient, apolloClient)
+  },
+  render: () => h(App),
+})
+
+app.use(router).use(pinia).mount("#app");
 
 /* Init Pinia stores */
 const mainStore = useMainStore(pinia);

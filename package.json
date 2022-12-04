@@ -8,13 +8,20 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.1",
     "@mdi/js": "^7.0.96",
     "@rushstack/eslint-patch": "^1.1.4",
-    "axios": "^0.27.0",
+    "@vue/apollo-composable": "^4.0.0-beta.1",
+    "@vue/apollo-util": "^4.0.0-alpha.18",
+    "apollo-boost": "^0.4.9",
+    "axios": "^1.2.0",
     "chart.js": "^3.6.0",
+    "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6",
     "numeral": "^2.0.6",
     "pinia": "^2.0.13",
     "vue": "^3.0.0",
+    "vue-apollo": "^3.1.0",
     "vue-router": "^4.0.0"
   },
   "devDependencies": {

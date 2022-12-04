@@ -1,8 +1,7 @@
 <script setup>
 import { mdiForwardburger, mdiBackburger, mdiMenu } from "@mdi/js";
-import { ref } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import menuAside from "@/menuAside.js";
 import menuNavBar from "@/menuNavBar.js";
 import { useMainStore } from "@/stores/main.js";
 import { useStyleStore } from "@/stores/style.js";
@@ -12,6 +11,81 @@ import NavBar from "@/components/NavBar.vue";
 import NavBarItemPlain from "@/components/NavBarItemPlain.vue";
 import AsideMenu from "@/components/AsideMenu.vue";
 import FooterBar from "@/components/FooterBar.vue";
+import { useBuilding } from "../graph-medium/building";
+import { useController } from "../graph-medium/controller";
+import {
+  mdiAccountCircle,
+  mdiMonitor,
+  mdiGithub,
+  mdiLock,
+  mdiAlertCircle,
+  mdiSquareEditOutline,
+  mdiTable,
+  mdiViewList,
+  mdiTelevisionGuide,
+  mdiResponsive,
+  mdiPalette,
+  mdiReact,
+} from "@mdi/js";
+
+const { buildings, buildingsTree, fetchAllBuildings } = useBuilding()
+const { fetchBuildingControllers } = useController()
+
+const buildingsMenu = ref([])
+
+onMounted(()=>{
+
+})
+
+watch(buildingsTree, async (newTree)=>{
+  for (let i = 0; i < newTree.length; i++) {
+    const building = newTree[i];
+    const controllerMenu = []
+    for (let j = 0; j < building.controllers.length; j++) {
+      controllerMenu.push({
+        label:building.controllers[j]?.mac_address
+      })
+    }
+    buildingsMenu.value.push({
+      label: building.name,
+      menu:controllerMenu
+    })
+  }
+  console.log('zzzzz')
+})
+// computed(() => {
+//   let subMenu = []
+//   for (let index = 0; index < buildingsTree.value.length; index++) {
+//     const element = buildings[index];
+//     const { controller } = useController(buildings[index]?.id ? buildings[index]?.id : '')
+//     subMenu.push({
+//       label: buildingsTree.value[index].name
+      // ,
+      // menu: {
+      //   label: computed(() => {
+      //     return controller.value[0]?.mac_address ? [
+      //       {
+      //         label: controller.value[0]?.mac_address
+      //       }
+      //     ] : [{
+      //       label: 'loadings...'
+      //     }]
+      //   })
+      // }
+//     })
+//   }
+//   return subMenu
+// })
+
+const menuAside = computed(() => {
+  return [
+    {
+      label: "Buildings",
+      icon: mdiViewList,
+      menu: buildingsMenu.value,
+    },
+  ]
+})
 
 useMainStore().setUser({
   name: "John Doe",
@@ -46,64 +120,32 @@ const menuClick = (event, item) => {
 </script>
 
 <template>
-  <div
-    :class="{
-      dark: styleStore.darkMode,
-      'overflow-hidden lg:overflow-visible': isAsideMobileExpanded,
-    }"
-  >
-    <div
-      :class="[layoutAsidePadding, { 'ml-60 lg:ml-0': isAsideMobileExpanded }]"
-      class="pt-14 min-h-screen w-screen transition-position lg:w-auto bg-gray-50 dark:bg-slate-800 dark:text-slate-100"
-    >
-      <NavBar
-        :menu="menuNavBar"
-        :class="[
-          layoutAsidePadding,
-          { 'ml-60 lg:ml-0': isAsideMobileExpanded },
-        ]"
-        @menu-click="menuClick"
-      >
-        <NavBarItemPlain
-          display="flex lg:hidden"
-          @click.prevent="isAsideMobileExpanded = !isAsideMobileExpanded"
-        >
-          <BaseIcon
-            :path="isAsideMobileExpanded ? mdiBackburger : mdiForwardburger"
-            size="24"
-          />
+  <div :class="{
+    dark: styleStore.darkMode,
+    'overflow-hidden lg:overflow-visible': isAsideMobileExpanded,
+  }">
+    <div :class="[layoutAsidePadding, { 'ml-60 lg:ml-0': isAsideMobileExpanded }]"
+      class="pt-14 min-h-screen w-screen transition-position lg:w-auto bg-gray-50 dark:bg-slate-800 dark:text-slate-100">
+      <NavBar :menu="menuNavBar" :class="[
+        layoutAsidePadding,
+        { 'ml-60 lg:ml-0': isAsideMobileExpanded },
+      ]" @menu-click="menuClick">
+        <NavBarItemPlain display="flex lg:hidden" @click.prevent="isAsideMobileExpanded = !isAsideMobileExpanded">
+          <BaseIcon :path="isAsideMobileExpanded ? mdiBackburger : mdiForwardburger" size="24" />
         </NavBarItemPlain>
-        <NavBarItemPlain
-          display="hidden lg:flex xl:hidden"
-          @click.prevent="isAsideLgActive = true"
-        >
+        <NavBarItemPlain display="hidden lg:flex xl:hidden" @click.prevent="isAsideLgActive = true">
           <BaseIcon :path="mdiMenu" size="24" />
         </NavBarItemPlain>
         <NavBarItemPlain use-margin>
-          <FormControl
-            placeholder="Search (ctrl+k)"
-            ctrl-k-focus
-            transparent
-            borderless
-          />
+          <FormControl placeholder="Search (ctrl+k)" ctrl-k-focus transparent borderless />
         </NavBarItemPlain>
       </NavBar>
-      <AsideMenu
-        :is-aside-mobile-expanded="isAsideMobileExpanded"
-        :is-aside-lg-active="isAsideLgActive"
-        :menu="menuAside"
-        @menu-click="menuClick"
-        @aside-lg-close-click="isAsideLgActive = false"
-      />
+      <AsideMenu :is-aside-mobile-expanded="isAsideMobileExpanded" :is-aside-lg-active="isAsideLgActive"
+        :menu="menuAside" @menu-click="menuClick" @aside-lg-close-click="isAsideLgActive = false" />
       <slot />
       <FooterBar>
         Get more with
-        <a
-          href="https://tailwind-vue.justboil.me/"
-          target="_blank"
-          class="text-blue-600"
-          >Premium version</a
-        >
+        <a href="https://tailwind-vue.justboil.me/" target="_blank" class="text-blue-600">Premium version</a>
       </FooterBar>
     </div>
   </div>

@@ -18,12 +18,17 @@ const menuClick = (event, item) => {
 
 <template>
   <ul>
-    <AsideMenuItem
-      v-for="(item, index) in menu"
-      :key="index"
-      :item="item"
-      :is-dropdown-list="isDropdownList"
-      @menu-click="menuClick"
-    />
+    <template v-if="menu.length">
+      <AsideMenuItem
+        v-for="(item, index) in menu"
+        :key="index"
+        :item="item"
+        :is-dropdown-list="isDropdownList"
+        @menu-click="menuClick"
+      />
+    </template>
+    <div v-else>
+      loading...
+    </div>
   </ul>
 </template>

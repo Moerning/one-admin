@@ -34,7 +34,7 @@ import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
       </NotificationBar>
 
       <CardBox class="mb-6" has-table>
-        <TableSampleClients checkable />
+        <RouterView />
       </CardBox>
 
       <SectionTitleLineWithButton :icon="mdiTableOff" title="Empty variation" />
