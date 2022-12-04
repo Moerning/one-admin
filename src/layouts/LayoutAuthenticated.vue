@@ -47,6 +47,11 @@ watch(buildingsTree, async (newTree)=>{
         label:building.controllers[j]?.mac_address
       })
     }
+    if(!controllerMenu.length){
+      controllerMenu.push({
+        label:'No Controllers Registered'
+      })
+    }
     buildingsMenu.value.push({
       label: building.name,
       menu:controllerMenu

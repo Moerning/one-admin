@@ -1,16 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Style from "@/views/StyleView.vue";
 import Home from "@/views/HomeView.vue";
 
 const routes = [
-  {
-    meta: {
-      title: "Select style",
-    },
-    path: "/",
-    name: "style",
-    component: Style,
-  },
   {
     meta: {
       title: "Buildings",
@@ -52,7 +43,7 @@ const routes = [
     meta: {
       title: "Dashboard",
     },
-    path: "/dashboard",
+    path: "/",
     name: "dashboard",
     component: Home,
   },
