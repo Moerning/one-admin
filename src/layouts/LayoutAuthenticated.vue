@@ -14,18 +14,7 @@ import FooterBar from "@/components/FooterBar.vue";
 import { useBuilding } from "../graph-medium/building";
 import { useController } from "../graph-medium/controller";
 import {
-  mdiAccountCircle,
-  mdiMonitor,
-  mdiGithub,
-  mdiLock,
-  mdiAlertCircle,
-  mdiSquareEditOutline,
-  mdiTable,
   mdiViewList,
-  mdiTelevisionGuide,
-  mdiResponsive,
-  mdiPalette,
-  mdiReact,
 } from "@mdi/js";
 
 const { buildings, buildingsTree, fetchAllBuildings } = useBuilding()
@@ -58,35 +47,13 @@ watch(buildingsTree, async (newTree)=>{
     })
   }
 })
-// computed(() => {
-//   let subMenu = []
-//   for (let index = 0; index < buildingsTree.value.length; index++) {
-//     const element = buildings[index];
-//     const { controller } = useController(buildings[index]?.id ? buildings[index]?.id : '')
-//     subMenu.push({
-//       label: buildingsTree.value[index].name
-      // ,
-      // menu: {
-      //   label: computed(() => {
-      //     return controller.value[0]?.mac_address ? [
-      //       {
-      //         label: controller.value[0]?.mac_address
-      //       }
-      //     ] : [{
-      //       label: 'loadings...'
-      //     }]
-      //   })
-      // }
-//     })
-//   }
-//   return subMenu
-// })
 
 const menuAside = computed(() => {
   return [
     {
       label: "Buildings",
       icon: mdiViewList,
+      to:'/buildings',
       menu: buildingsMenu.value,
     },
   ]

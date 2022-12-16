@@ -14,6 +14,9 @@ const routes = [
         path: "",
         name: "BuildingsTable",
         component: () => import('@/components/app/building/BuildingsTable.vue'),
+        meta: {
+          table: "Buildings",
+        },
       },
     ]
   },
@@ -64,6 +67,9 @@ const routes = [
         path: ":id",
         name: "BuildingEvents",
         component: () => import('@/components/app/event/EventsTable.vue'),
+        meta: {
+          table: "Events",
+        },
       },
     ]
   },

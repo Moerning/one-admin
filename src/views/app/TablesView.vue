@@ -18,7 +18,7 @@ import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiTableBorder" title="Tables" main>
+      <SectionTitleLineWithButton :icon="mdiTableBorder" :title="$route.meta.table" main>
         <BaseButton
           href="https://github.com/justboil/admin-one-vue-tailwind"
           target="_blank"
@@ -30,15 +30,15 @@ import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
         />
       </SectionTitleLineWithButton>
 
-      <CardBox class="mb-6" has-table>
+      <CardBox class="mb-6">
         <RouterView />
       </CardBox>
 
-      <SectionTitleLineWithButton :icon="mdiTableOff" title="Empty variation" />
+      <!-- <SectionTitleLineWithButton :icon="mdiTableOff" title="Empty variation" />
 
       <CardBox>
         <CardBoxComponentEmpty />
-      </CardBox>
+      </CardBox> -->
     </SectionMain>
   </LayoutAuthenticated>
 </template>

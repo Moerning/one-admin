@@ -4,18 +4,18 @@ import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useEvent } from "@/graph-medium/event.js";
 import { useRoute } from "vue-router";
-
+import { ref } from "vue";
 const route = useRoute()
 
 const { fetchBuildingEvents } = useEvent()
 const events = ref([])
-fetchBuildingEvents(route.params.id).then((response)=>{
+fetchBuildingEvents(route.params.id).then((response) => {
   events.value = response.data.data.event
 })
 
 const eventHeaders = [
-    { label:'Id' },
-    { label: 'MAC_ADDRESS' },
+  { label: 'Id' },
+  { label: 'MAC_ADDRESS' },
 ]
 </script>
 
@@ -24,7 +24,7 @@ const eventHeaders = [
     <thead>
       <tr>
         <th v-for="header in eventHeaders">
-            {{ header.label }}
+          {{ header.label }}
         </th>
         <th />
       </tr>

@@ -13,7 +13,15 @@ export const useEvent = (building_id) => {
         return axe.post('http://185.231.181.50:8080/v1/graphql', {
             query: `{
                 event(where: {node_id: {_eq: "${id}"}}) {
-                  mac_address
+                    account_id
+                    created_at
+                    deleted_at
+                    id
+                    log_id
+                    node_id
+                    priority
+                    status
+                    unit_id
                 }
               }`
         })
