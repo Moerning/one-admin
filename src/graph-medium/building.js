@@ -50,11 +50,11 @@ export const useBuilding = () => {
             }
     }
 
-    const createBuilding = async ( id, name, address) => {
+    const createBuilding = async ( id, name, address, lat, long) => {
       return axe.post(
         'http://185.231.181.50:8080/v1/graphql', {
             query: `mutation MyMutation {
-              insert_building(objects: {name: "${name}", id: "${id}", address: "${address}"}, on_conflict: {constraint: building_pkey, update_columns: account_id}) {
+              insert_building(objects: {name: "${name}", id: "${id}", address: "${address}", lat: "${lat}", long: "${long}"}, on_conflict: {constraint: building_pkey, update_columns: account_id}) {
                 affected_rows
                 returning {
                   address
@@ -71,11 +71,11 @@ export const useBuilding = () => {
       })
     }
 
-    const updateBuilding = async ( id, name, address) => {
+    const updateBuilding = async ( id, name, address, lat, long) => {
       return axe.post(
         'http://185.231.181.50:8080/v1/graphql', {
             query: `mutation MyMutation {
-              update_building(where: {id: {_eq: "${id}"}}, _set: {name: "${name}", id: "${id}", address: "${address}"}) {
+              update_building(where: {id: {_eq: "${id}"}}, _set: {name: "${name}", id: "${id}", address: "${address}", lat: "${lat}", long: "${long}"}) {
                 affected_rows
                 returning {
                   address

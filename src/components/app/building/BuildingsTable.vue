@@ -1,10 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
-import { useMainStore } from "@/stores/main";
-import { mdiEye, mdiTrashCan } from "@mdi/js";
-import CardBoxModal from "@/components/CardBoxModal.vue";
-import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
-import BaseLevel from "@/components/BaseLevel.vue";
+import { mdiEye, mdiPencil, mdiAlarmCheck } from "@mdi/js";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useBuilding } from "@/graph-medium/building.js"
@@ -73,13 +68,19 @@ const buildingHeaders = [
               color="info"
               :icon="mdiEye"
               small
+              @click="$router.push(`/buildings/show/${building.id}`)"
+            />
+            <BaseButton
+              color="success"
+              :icon="mdiPencil"
+              small
               @click="$router.push(`/buildings/form/${building.id}`)"
             />
             <BaseButton
-              color="danger"
-              :icon="mdiTrashCan"
+              color="warning"
+              :icon="mdiAlarmCheck"
               small
-              @click="isModalDangerActive = true"
+              @click="$router.push(`/events/${building.id}`)"
             />
           </BaseButtons>
         </td>

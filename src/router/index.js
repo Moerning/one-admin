@@ -14,7 +14,22 @@ const routes = [
         path: "",
         name: "BuildingsTable",
         component: () => import('@/components/app/building/BuildingsTable.vue'),
-      }
+      },
+    ]
+  },
+  {
+    meta: {
+      title: "Building",
+    },
+    path: "/buildings/show/:id",
+    name: "BuildingShow",
+    component: () => import("@/views/app/SimpleView.vue"),
+    children:[
+      {
+        path: "",
+        name: "BuildingShowId",
+        component: () => import('@/components/app/building/BuildingShow.vue'),
+      },
     ]
   },
   {
@@ -38,6 +53,21 @@ const routes = [
     ]
   },
   {
+    meta: {
+      title: "Events",
+    },
+    path: "/events",
+    name: "Events",
+    component: () => import("@/views/app/TablesView.vue"),
+    children:[
+      {
+        path: ":id",
+        name: "BuildingEvents",
+        component: () => import('@/components/app/event/EventsTable.vue'),
+      },
+    ]
+  },
+  {
     // Document title tag
     // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
     meta: {
@@ -53,7 +83,7 @@ const routes = [
     },
     path: "/tables",
     name: "tables",
-    component: () => import("@/views/TablesView.vue"),
+    component: () => import("@/views/app/TablesView.vue"),
   },
   {
     meta: {

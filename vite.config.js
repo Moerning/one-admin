@@ -12,4 +12,8 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  define: { "process.env": {} },
+  optimizeDeps: {
+    include: ['map-promisified']
+  },
 });

@@ -18,27 +18,13 @@ import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiTableBorder" title="Tables" main>
-        <BaseButton
-          href="https://github.com/justboil/admin-one-vue-tailwind"
-          target="_blank"
-          :icon="mdiGithub"
-          label="Star on GitHub"
-          color="contrast"
-          rounded-full
-          small
-        />
+      <SectionTitleLineWithButton :icon="mdiTableBorder" title="View Building" main>
       </SectionTitleLineWithButton>
 
       <CardBox class="mb-6" has-table>
         <RouterView />
       </CardBox>
 
-      <SectionTitleLineWithButton :icon="mdiTableOff" title="Empty variation" />
-
-      <CardBox>
-        <CardBoxComponentEmpty />
-      </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
 </template>

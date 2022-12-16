@@ -19,6 +19,8 @@ if(route.params.id){
     form.name = editable.value.name
     form.id = editable.value.id
     form.address = editable.value.address
+    form.lat = editable.value.lat
+    form.long = editable.value.long
   })
 }
 
@@ -35,7 +37,7 @@ const add = () => {
 const update = () => {
   const { updateBuilding } = useBuilding()
 
-  updateBuilding( form.id, form.name, form.address ).then(()=>{
+  updateBuilding( form.id, form.name, form.address, form.lat, form.long ).then(()=>{
     alert('Successful Operation')
   }).catch(()=>{
     alert('Operation Failed!')
@@ -70,6 +72,8 @@ const submit = () => {
           <FormControl v-model="form.name" placeholder="Name" type="text" :icon="mdiAccount" />
           <FormControl v-model="form.id" placeholder="Id" type="text" />
           <FormControl v-model="form.address" placeholder="Address" type="text" />
+          <FormControl v-model="form.lat" placeholder="Latitude" type="text" />
+          <FormControl v-model="form.long" placeholder="Longitude" type="text" />
         </FormField>
 
         <template #footer>
