@@ -3,7 +3,15 @@ import { mdiEye, mdiPencil, mdiAlarmCheck } from "@mdi/js";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useBuilding } from "@/graph-medium/building.js"
+import LineChart from "@/components/Charts/LineChart.vue";
+import * as chartConfig from "@/components/Charts/chart.config.js";
+import { ref, onMounted, watchEffect } from "vue";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
+
+
+// GET BUILDINGS
 const { buildingsTree } = useBuilding()
 
 const buildingHeaders = [
@@ -16,9 +24,79 @@ const buildingHeaders = [
     { label: 'Status' },
     { label: 'Created_At' },
 ]
+
+// PREPARE CHART DATE
+
+const chartData = ref(null);
+
+const fillChartData = () => {
+  chartData.value = chartConfig.sampleChartData();
+};
+
+//PREPARE MAP DATA
+
+const mapInit = ref(false)
+const mapMarkers = ref([])
+
+const setupLeafletMap = (center, markers) => {
+  console.log('zzzzzzzz',center)
+  console.log('zzzzzzzz',markers)
+    var mapOptions = {
+            center: center,
+            zoom: 12
+         }
+         // Creating a map object
+         var map = new L.map('mapContainer', mapOptions);
+         
+         // Creating a Layer object
+         var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+         
+         // Adding layer to the map
+         map.addLayer(layer);
+         
+        //  // Creating a marker
+         for (let index = 0; index < markers.length; index++) {
+          const element = markers[index];
+          let marker = L.marker([element[0],element[1]]);
+          // Adding marker to the map
+          marker.addTo(map);
+         }
+         
+}
+
+onMounted(() => {
+  fillChartData();
+  watchEffect(()=>{
+    let tree = buildingsTree.value
+    if(buildingsTree.value.length && document && document.getElementById('mapContainer') && !mapInit.value){
+      mapInit.value = true
+      for (let index = 0; index < buildingsTree.value.length; index++) {
+        const element = buildingsTree.value[index];
+        if(element.lat){
+          mapMarkers.value.push([element.lat,element.long])
+        }
+      }
+      setupLeafletMap([mapMarkers.value[1][0],mapMarkers.value[1][1]],mapMarkers.value)
+    }
+  })
+});
+
+
 </script>
 
 <template>
+  <div class="grid lg:grid-cols-2 grid-cols-1">
+    <div class="flex justify-center">
+      <div class="w-[300px]">
+        <line-chart :data="chartData" class="h-96" />
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <div id="container">
+          <div id="mapContainer"></div>
+      </div>
+    </div>
+  </div>
   <table>
     <thead>
       <tr>
@@ -88,3 +166,9 @@ const buildingHeaders = [
     </tbody>
   </table>
 </template>
+<style scoped>
+#mapContainer {
+    width: 600px;
+    height: 300px;
+}
+</style>
