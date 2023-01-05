@@ -21,6 +21,7 @@
     "leaflet": "^1.9.3",
     "numeral": "^2.0.6",
     "pinia": "^2.0.13",
+    "secure-ls": "^1.2.6",
     "vue": "^3.0.0",
     "vue-apollo": "^3.1.0",
     "vue-router": "^4.0.13"

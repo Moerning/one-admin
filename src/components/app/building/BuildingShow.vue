@@ -8,35 +8,49 @@
         <CardBox>
             <div class="p-10">
                 <div class="grid grid-cols-3" v-if="building?.name">
-                    <div class="flex flex-col items-start">
+                    <div class="flex flex-col items-start py-4">
                         <span class="font-bold text-gray-400">NAME :</span>
                         <span>{{building.name}}</span>
                     </div>
-                    <div class="flex flex-col items-start">
+                    <div class="flex flex-col items-start py-4">
                         <span class="font-bold text-gray-400">ADDRESS :</span>
                         <span>{{building.address}}</span>
                     </div>
-                    <div class="flex flex-col items-start">
+                    <div class="flex flex-col items-start py-4">
                         <span class="font-bold text-gray-400">TYPE :</span>
                         <span>{{building.type ? building.type : 'tower'}}</span>
                     </div>
-                    <div class="flex flex-col items-start">
+                    <div class="flex flex-col items-start py-4">
                         <span class="font-bold text-gray-400">LOCATION :</span>
                         <span>{{building.lat ? `${building.lat}, ${building.long}` : 'TBD'}}</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-8 border-t border-zinc-300 w-full">
+                    <span class="font-bold text-gray-400">CONTROLLERS :</span>
+                    <div class="flex flex-col items-start mt-5">
+                        <div v-for="controller in controllers">
+                            <router-link :to="`/controller/${controller.id}`" as="a">
+                                <div class="text-sky-400 border border-sky-400 hover:text-sky-600 rounded-md hover:bg-sky-50 px-3 py-1 flex justify-between items-center">
+                                    <span>{{controller.model ? controller.model : controller.id}}</span>
+                                </div>
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
         </CardBox>
     </div>
 </template>
-<script setup>
+<script setup async>
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import CardBox from "@/components/CardBox.vue";
 import { onMounted, ref } from "vue";
 import { useBuilding } from "../../../graph-medium/building";
 import { useRoute } from "vue-router";
+import { useController } from "../../../graph-medium/controller";
 
+const  { fetchBuildingControllers } = useController()
 const { fetchBuilding } = useBuilding()
 const route = useRoute()
 
@@ -62,16 +76,20 @@ const setupLeafletMap = (center) => {
 }
 
 const building = ref()
+const controllers = ref([])
 
-
-fetchBuilding(route.params.id).then((response)=>{
-    building.value = response.data.data.building[0]
-})
+// fetchBuilding(route.params.id).then((response)=>{
+//     building.value = response.data.data.building[0]
+// })
 
 onMounted(()=>{
     fetchBuilding(route.params.id).then((response)=>{
         building.value = response.data.data.building[0]
         setupLeafletMap([building.value.lat, building.value.long])
+    })
+    fetchBuildingControllers(route.params.id).then((response)=>{
+        controllers.value = response.data.data.controller
+        console.log(controllers.value)
     })
 })
 

@@ -1,16 +1,9 @@
-import axios from "axios";
-
-const axe = axios.create({
-    headers:{
-        'x-hasura-access-key' : 'hasurasecret'
-    }
-})
-
+import { axe } from "./api"
 
 export const useEvent = (building_id) => {
 
     const fetchBuildingEvents = (id) => {
-        return axe.post('http://185.231.181.50:8080/v1/graphql', {
+        return axe.post('', {
             query: `{
                 event(where: {node_id: {_eq: "${id}"}}) {
                     account_id

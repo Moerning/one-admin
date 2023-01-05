@@ -1,15 +1,25 @@
-import { computed, onMounted, reactive, toRefs, watch } from "vue";
-import { gql } from "graphql-tag"
-import { useQuery, useResult } from "@vue/apollo-composable"
-import axios from "axios";
+import { reactive, toRefs } from "vue";
+import { gql } from "graphql-tag";
+import { useQuery, useResult } from "@vue/apollo-composable";
+import { axe } from "./api";
 import { useController } from "./controller";
+import SecureLS from "secure-ls";
+
+var ls = new SecureLS({
+  encodingType: "aes",
+  isCompression: false,
+  encryptionSecret: "123456789",
+});
+
+const cookieStorage = {
+  getItem: (key) => ls.get(key),
+  setItem: (key, value) =>
+    ls.set(key, value),
+  removeItem: (key) => ls.remove(key),
+};
 
 const { fetchBuildingControllers } = useController()
-const axe = axios.create({
-    headers:{
-        'x-hasura-access-key' : 'hasurasecret'
-    }
-})
+
 const state = reactive({
     buildingsTree: [],
     buildings: []
@@ -17,10 +27,12 @@ const state = reactive({
 
 export const useBuilding = () => {
 
+    state.buildingsTree = cookieStorage.getItem('_buildings')
+
     const getAllBuildings = async () => {
             try {
               const res = await axe.post(
-                'http://185.231.181.50:8080/v1/graphql', {
+                '', {
                     query: `{
                         building {
                           address
@@ -45,6 +57,7 @@ export const useBuilding = () => {
                 }
               }
               state.buildingsTree = [...list]
+              cookieStorage.setItem('_buildings',state.buildingsTree)
             } catch (e) {
               console.log('err', e)
             }
@@ -52,7 +65,7 @@ export const useBuilding = () => {
 
     const createBuilding = async ( id, name, address, lat, long) => {
       return axe.post(
-        'http://185.231.181.50:8080/v1/graphql', {
+        '', {
             query: `mutation MyMutation {
               insert_building(objects: {name: "${name}", id: "${id}", address: "${address}", lat: "${lat}", long: "${long}"}, on_conflict: {constraint: building_pkey, update_columns: account_id}) {
                 affected_rows
@@ -73,7 +86,7 @@ export const useBuilding = () => {
 
     const updateBuilding = async ( id, name, address, lat, long) => {
       return axe.post(
-        'http://185.231.181.50:8080/v1/graphql', {
+        '', {
             query: `mutation MyMutation {
               update_building(where: {id: {_eq: "${id}"}}, _set: {name: "${name}", id: "${id}", address: "${address}", lat: "${lat}", long: "${long}"}) {
                 affected_rows
@@ -94,7 +107,7 @@ export const useBuilding = () => {
 
     const fetchBuilding = (id) => {
       return axe.post(
-          'http://185.231.181.50:8080/v1/graphql', {
+          '', {
             query: `{
               building(where: {id: {_eq: "${id}"}}) {
                 address

@@ -19,8 +19,7 @@ const buildingHeaders = [
     { label: 'Name' },
     { label: 'Address' },
     { label: 'Type' },
-    { label: 'Latitude' },
-    { label: 'Longitude' },
+    { label: 'Lat-Long' },
     { label: 'Status' },
     { label: 'Created_At' },
 ]
@@ -39,11 +38,9 @@ const mapInit = ref(false)
 const mapMarkers = ref([])
 
 const setupLeafletMap = (center, markers) => {
-  console.log('zzzzzzzz',center)
-  console.log('zzzzzzzz',markers)
     var mapOptions = {
             center: center,
-            zoom: 12
+            zoom: 10
          }
          // Creating a map object
          var map = new L.map('mapContainer', mapOptions);
@@ -85,12 +82,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="grid lg:grid-cols-2 grid-cols-1">
-    <div class="flex justify-center">
+  <div class="grid lg:grid-cols-1 grid-cols-1 py-12">
+    <!-- <div class="flex justify-center">
       <div class="w-[300px]">
         <line-chart :data="chartData" class="h-96" />
       </div>
-    </div>
+    </div> -->
     <div class="flex justify-center">
       <div id="container">
           <div id="mapContainer"></div>
@@ -124,11 +121,8 @@ onMounted(() => {
         <td data-label="Type">
           {{ building.type }}
         </td>
-        <td data-label="Latitude">
-          {{ building.lat }}
-        </td>
-        <td data-label="Longitude">
-          {{ building.long }}
+        <td data-label="Lat-Long">
+          {{( building.lat + '-' + building.long)}}
         </td>
         <td data-label="Status">
           {{ building.status }}

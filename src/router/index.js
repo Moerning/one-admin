@@ -32,6 +32,9 @@ const routes = [
         path: "",
         name: "BuildingShowId",
         component: () => import('@/components/app/building/BuildingShow.vue'),
+        meta:{
+          view: 'Building'
+        }
       },
     ]
   },
@@ -70,6 +73,24 @@ const routes = [
         meta: {
           table: "Events",
         },
+      },
+    ]
+  },
+  {
+    meta: {
+      title: "Controller",
+    },
+    path: "/controller/:id",
+    name: "Controller",
+    component: () => import("@/views/app/SimpleView.vue"),
+    children:[
+      {
+        path: "",
+        name: "ControllerShow",
+        component: () => import('@/components/app/controller/ControllerShow.vue'),
+        meta:{
+          view:'Controller'
+        }
       },
     ]
   },
