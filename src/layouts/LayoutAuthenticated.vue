@@ -51,7 +51,7 @@ watch(buildingsTree, async (newTree)=>{
 const menuAside = computed(() => {
   return [
     {
-      label: "Buildings",
+      label: "ساختمان‌ها",
       icon: mdiViewList,
       to:'/buildings',
       menu: buildingsMenu.value,

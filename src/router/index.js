@@ -4,7 +4,7 @@ import Home from "@/views/HomeView.vue";
 const routes = [
   {
     meta: {
-      title: "Buildings",
+      title: "ساختمان‌ها",
     },
     path: "/buildings",
     name: "buildings",
@@ -15,7 +15,7 @@ const routes = [
         name: "BuildingsTable",
         component: () => import('@/components/app/building/BuildingsTable.vue'),
         meta: {
-          table: "Buildings",
+          table: "ساختمان‌ها",
         },
       },
     ]
