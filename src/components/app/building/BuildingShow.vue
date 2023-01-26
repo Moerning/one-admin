@@ -9,24 +9,24 @@
             <div class="p-10">
                 <div class="grid grid-cols-3" v-if="building?.name">
                     <div class="flex flex-col items-start py-4">
-                        <span class="font-bold text-gray-400">NAME :</span>
+                        <span class="font-bold text-gray-400">نام :</span>
                         <span>{{building.name}}</span>
                     </div>
                     <div class="flex flex-col items-start py-4">
-                        <span class="font-bold text-gray-400">ADDRESS :</span>
+                        <span class="font-bold text-gray-400">نشانی :</span>
                         <span>{{building.address}}</span>
                     </div>
                     <div class="flex flex-col items-start py-4">
-                        <span class="font-bold text-gray-400">TYPE :</span>
+                        <span class="font-bold text-gray-400">نوع :</span>
                         <span>{{building.type ? building.type : 'tower'}}</span>
                     </div>
                     <div class="flex flex-col items-start py-4">
-                        <span class="font-bold text-gray-400">LOCATION :</span>
+                        <span class="font-bold text-gray-400">موقعیت :</span>
                         <span>{{building.lat ? `${building.lat}, ${building.long}` : 'TBD'}}</span>
                     </div>
                 </div>
                 <div class="mt-4 pt-8 border-t border-zinc-300 w-full">
-                    <span class="font-bold text-gray-400">CONTROLLERS :</span>
+                    <span class="font-bold text-gray-400">کنترلرهای مرکزی :</span>
                     <div class="flex flex-col items-start mt-5">
                         <div v-for="controller in controllers">
                             <router-link :to="`/controller/${controller.id}`" as="a">

@@ -78,8 +78,8 @@ const submit = () => {
 
         <template #footer>
           <BaseButtons>
-            <BaseButton type="submit" color="info" label="Submit"  @click="submit"/>
-            <BaseButton type="reset" color="info" outline label="Reset" />
+            <BaseButton type="submit" color="info" label="تایید"  @click="submit"/>
+            <BaseButton type="reset" color="info" outline label="بازنشانی" />
           </BaseButtons>
         </template>
       </CardBox>
