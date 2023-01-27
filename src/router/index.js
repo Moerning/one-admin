@@ -22,6 +22,24 @@ const routes = [
   },
   {
     meta: {
+      title: "Nodes",
+    },
+    path: "/nodes",
+    name: "nodes",
+    component: () => import("@/views/app/TablesView.vue"),
+    children:[
+      {
+        path: "",
+        name: "NodesTable",
+        component: () => import('@/components/app/node/NodesTable.vue'),
+        meta: {
+          table: "Nodes",
+        },
+      },
+    ]
+  },
+  {
+    meta: {
       title: "Building",
     },
     path: "/buildings/show/:id",
@@ -73,6 +91,24 @@ const routes = [
         meta: {
           table: "Events",
         },
+      },
+    ]
+  },
+  {
+    meta: {
+      title: "Node",
+    },
+    path: "/nodes/show/:id",
+    name: "NodeShow",
+    component: () => import("@/views/app/SimpleView.vue"),
+    children:[
+      {
+        path: "",
+        name: "NodeShowId",
+        component: () => import('@/components/app/node/NodeShow.vue'),
+        meta:{
+          view: 'Node'
+        }
       },
     ]
   },

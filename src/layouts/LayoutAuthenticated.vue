@@ -1,6 +1,6 @@
 <script setup>
 import { mdiForwardburger, mdiBackburger, mdiMenu } from "@mdi/js";
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, watchEffect, watch } from "vue";
 import { useRouter } from "vue-router";
 import menuNavBar from "@/menuNavBar.js";
 import { useMainStore } from "@/stores/main.js";
@@ -12,19 +12,18 @@ import NavBarItemPlain from "@/components/NavBarItemPlain.vue";
 import AsideMenu from "@/components/AsideMenu.vue";
 import FooterBar from "@/components/FooterBar.vue";
 import { useBuilding } from "../graph-medium/building";
-import { useController } from "../graph-medium/controller";
 import {
   mdiViewList,
 } from "@mdi/js";
+import { useNode } from "../graph-medium/node";
 
-const { buildings, buildingsTree, fetchAllBuildings } = useBuilding()
-const { fetchBuildingControllers } = useController()
+const { buildingsTree,getAllBuildings } = useBuilding()
+const { nodes } = useNode()
 
 const buildingsMenu = ref([])
+const nodesMenu = ref([])
 
-onMounted(()=>{
-
-})
+getAllBuildings()
 
 watch(buildingsTree, async (newTree)=>{
   buildingsMenu.value = []
@@ -43,7 +42,19 @@ watch(buildingsTree, async (newTree)=>{
     }
     buildingsMenu.value.push({
       label: building.name,
+      to: `/buildings/show/${building.id}`,
       menu:controllerMenu
+    })
+  }
+})
+
+watchEffect(()=>{
+  nodesMenu.value = []
+  for (let i = 0; i < nodes.value.length; i++) {
+    const node = nodes.value[i];
+    nodesMenu.value.push({
+      label: node.id,
+      to: `/nodes/show/${node.id}`
     })
   }
 })
@@ -56,6 +67,11 @@ const menuAside = computed(() => {
       to:'/buildings',
       menu: buildingsMenu.value,
     },
+    {
+      label: "Nodes",
+      icon: mdiViewList,
+      menu: nodesMenu.value,
+    }
   ]
 })
 

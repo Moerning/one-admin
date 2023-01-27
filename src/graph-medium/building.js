@@ -1,9 +1,8 @@
 import { reactive, toRefs } from "vue";
-import { gql } from "graphql-tag";
-import { useQuery, useResult } from "@vue/apollo-composable";
 import { axe } from "./api";
 import { useController } from "./controller";
 import SecureLS from "secure-ls";
+import { useNode } from "./node";
 
 var ls = new SecureLS({
   encodingType: "aes",
@@ -19,10 +18,11 @@ const cookieStorage = {
 };
 
 const { fetchBuildingControllers } = useController()
+const { fetchNodes, emptyNodes } = useNode()
 
 const state = reactive({
     buildingsTree: [],
-    buildings: []
+    buildings: [],
 })
 
 export const useBuilding = () => {
@@ -47,13 +47,15 @@ export const useBuilding = () => {
                       }`
               })
               let list = res.data.data.building
+              emptyNodes()
               for (let index = 0; index < list.length; index++) {
                 const element = list[index];
                 try {
                     const controllers = await fetchBuildingControllers(element.id)
                     element.controllers = controllers.data.data.controller
+                    fetchNodes(element.controllers)
                 } catch (error) {
-                    console.log('err', e)      
+                    console.log('err', error)      
                 }
               }
               state.buildingsTree = [...list]
@@ -123,7 +125,6 @@ export const useBuilding = () => {
         })
     }
 
-    getAllBuildings()
 
     return {
         ...toRefs(state),
