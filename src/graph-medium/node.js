@@ -5,7 +5,7 @@ const state = reactive({
     nodes:[]
 })
 
-export const useNode = (building_id) => {
+export const useNode = () => {
 
     const fetchControllerNodes = (id) => {
         return axe.post('', {
@@ -41,10 +41,47 @@ export const useNode = (building_id) => {
         }
     }
 
+    const fetchNode = (id) => {
+        return axe.post('', {
+            query: `{
+                node(where: {id: {_eq: "${id}"}}) {
+                    account_id
+                    controller_id
+                    created_at
+                    description
+                    id
+                    ip_local
+                    model
+                    settings
+                    status
+                }
+              }`
+      })
+    }
+
+    const fetchNodeChannels = (id) => {
+        return axe.post('', {
+            query: `{
+                channel(where: {node_id: {_eq: "${id}"}}) {
+                    value
+                    type
+                    number
+                }
+              }`
+      })
+    }
+
+    const emptyNodes = () => {
+        state.nodes = []
+    }
+
     return {
         pushToNodes,
         fetchControllerNodes,
         fetchNodes,
+        fetchNode,
+        emptyNodes,
+        fetchNodeChannels,
         ...toRefs(state)
     }
 }

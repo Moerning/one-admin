@@ -18,7 +18,7 @@ const cookieStorage = {
 };
 
 const { fetchBuildingControllers } = useController()
-const { fetchNodes } = useNode()
+const { fetchNodes, emptyNodes } = useNode()
 
 const state = reactive({
     buildingsTree: [],
@@ -47,6 +47,7 @@ export const useBuilding = () => {
                       }`
               })
               let list = res.data.data.building
+              emptyNodes()
               for (let index = 0; index < list.length; index++) {
                 const element = list[index];
                 try {
@@ -124,7 +125,6 @@ export const useBuilding = () => {
         })
     }
 
-    getAllBuildings()
 
     return {
         ...toRefs(state),

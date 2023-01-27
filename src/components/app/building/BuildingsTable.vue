@@ -100,7 +100,6 @@ onMounted(() => {
         <th v-for="header in buildingHeaders">
             {{ header.label }}
         </th>
-        <th />
       </tr>
     </thead>
     <tbody>

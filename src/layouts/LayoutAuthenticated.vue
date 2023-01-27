@@ -17,12 +17,13 @@ import {
 } from "@mdi/js";
 import { useNode } from "../graph-medium/node";
 
-const { buildingsTree } = useBuilding()
+const { buildingsTree,getAllBuildings } = useBuilding()
 const { nodes } = useNode()
 
 const buildingsMenu = ref([])
 const nodesMenu = ref([])
 
+getAllBuildings()
 
 watch(buildingsTree, async (newTree)=>{
   buildingsMenu.value = []
@@ -41,7 +42,7 @@ watch(buildingsTree, async (newTree)=>{
     }
     buildingsMenu.value.push({
       label: building.name,
-      // to: `/buildings/${building.id}`,
+      to: `/buildings/show/${building.id}`,
       menu:controllerMenu
     })
   }
@@ -50,11 +51,10 @@ watch(buildingsTree, async (newTree)=>{
 watchEffect(()=>{
   nodesMenu.value = []
   for (let i = 0; i < nodes.value.length; i++) {
-    console.log('zzzzzzzzzz',nodes.value[i])
     const node = nodes.value[i];
     nodesMenu.value.push({
       label: node.id,
-      to: `nodes/${node.id}`
+      to: `/nodes/show/${node.id}`
     })
   }
 })
