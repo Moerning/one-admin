@@ -8,6 +8,8 @@ import {
   LinearScale,
   CategoryScale,
   Tooltip,
+  Legend,
+  Title
 } from "chart.js";
 
 const props = defineProps({
@@ -27,7 +29,9 @@ Chart.register(
   LineController,
   LinearScale,
   CategoryScale,
-  Tooltip
+  Legend,
+  Tooltip,
+  Title
 );
 
 onMounted(() => {
@@ -47,8 +51,16 @@ onMounted(() => {
       },
       plugins: {
         legend: {
-          display: false,
+          display: true,
+          title:{
+            display:true,
+            text:'Channel Type'
+          }
         },
+        title:{
+          display:true,
+          text:"Controller Log Data"
+        }
       },
     },
   });

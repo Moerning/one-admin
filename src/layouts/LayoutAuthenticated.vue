@@ -1,5 +1,5 @@
 <script setup>
-import { mdiForwardburger, mdiBackburger, mdiMenu } from "@mdi/js";
+import { mdiForwardburger, mdiBackburger, mdiMenu, mdiArrowRight } from "@mdi/js";
 import { ref, computed, watchEffect, watch } from "vue";
 import { useRouter } from "vue-router";
 import menuNavBar from "@/menuNavBar.js";
@@ -16,6 +16,9 @@ import {
   mdiViewList,
 } from "@mdi/js";
 import { useNode } from "../graph-medium/node";
+import { useAccount } from "../graph-medium/account";
+
+const { username, logout } = useAccount()
 
 const { buildingsTree,getAllBuildings } = useBuilding()
 const { nodes } = useNode()
@@ -26,13 +29,24 @@ const nodesMenu = ref([])
 getAllBuildings()
 
 watch(buildingsTree, async (newTree)=>{
-  buildingsMenu.value = []
+  buildingsMenu.value = [{
+      label: "View All Buildings",
+      to: { name: "BuildingsTable" },
+      icon:mdiArrowRight,
+      color:"info",
+    }]
   for (let i = 0; i < newTree.length; i++) {
     const building = newTree[i];
-    const controllerMenu = []
+    const controllerMenu = [{
+      to: { name: 'BuildingShowId', params: { id: building.id } },
+      label: "View Building",
+      color: "contrast",
+      icon:mdiArrowRight
+    }]
     for (let j = 0; j < building.controllers.length; j++) {
       controllerMenu.push({
-        label:building.controllers[j]?.mac_address
+        label:building.controllers[j]?.mac_address,
+        to:{ name: "ControllerShow", params: { id:building.controllers[j]?.id } }
       })
     }
     if(!controllerMenu.length){
@@ -42,14 +56,18 @@ watch(buildingsTree, async (newTree)=>{
     }
     buildingsMenu.value.push({
       label: building.name,
-      to: `/buildings/show/${building.id}`,
-      menu:controllerMenu
+      menu:controllerMenu,
     })
   }
 })
 
 watchEffect(()=>{
-  nodesMenu.value = []
+  nodesMenu.value = [{
+      label: "View All",
+      to: { name: "NodesTable" },
+      icon:mdiArrowRight,
+      color:"info"
+    }]
   for (let i = 0; i < nodes.value.length; i++) {
     const node = nodes.value[i];
     nodesMenu.value.push({
@@ -64,7 +82,6 @@ const menuAside = computed(() => {
     {
       label: "Buildings",
       icon: mdiViewList,
-      to:'/buildings',
       menu: buildingsMenu.value,
     },
     {
@@ -76,7 +93,7 @@ const menuAside = computed(() => {
 })
 
 useMainStore().setUser({
-  name: "John Doe",
+  name: username.value,
   email: "john@example.com",
   avatar:
     "https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93",
@@ -102,7 +119,7 @@ const menuClick = (event, item) => {
   }
 
   if (item.isLogout) {
-    //
+    logout()
   }
 };
 </script>
@@ -124,9 +141,9 @@ const menuClick = (event, item) => {
         <NavBarItemPlain display="hidden lg:flex xl:hidden" @click.prevent="isAsideLgActive = true">
           <BaseIcon :path="mdiMenu" size="24" />
         </NavBarItemPlain>
-        <NavBarItemPlain use-margin>
+        <!-- <NavBarItemPlain use-margin>
           <FormControl placeholder="Search (ctrl+k)" ctrl-k-focus transparent borderless />
-        </NavBarItemPlain>
+        </NavBarItemPlain> -->
       </NavBar>
       <AsideMenu :is-aside-mobile-expanded="isAsideMobileExpanded" :is-aside-lg-active="isAsideLgActive"
         :menu="menuAside" @menu-click="menuClick" @aside-lg-close-click="isAsideLgActive = false" />

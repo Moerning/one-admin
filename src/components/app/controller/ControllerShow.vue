@@ -10,7 +10,7 @@
                 <div class="grid grid-cols-3" v-if="controller?.id">
                     <div class="flex flex-col items-start py-4">
                         <span class="font-bold text-gray-400">MODEL :</span>
-                        <span>{{controller.MODEL}}</span>
+                        <span>{{controller.model}}</span>
                     </div>
                     <div class="flex flex-col items-start py-4">
                         <span class="font-bold text-gray-400">MAC_ADDRESS :</span>
@@ -43,20 +43,29 @@ import LineChart from '../../Charts/LineChart.vue';
 import { useLog } from "../../../graph-medium/log";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
-
+import CardBox from "@/components/CardBox.vue"
 const route = useRoute()
 
-const { fetchController } = useController()
+const { fetchController, fetchControllerNodes, fetchLogsInterval } = useController()
 const { fetchLog } = useLog()
 
+const selectOptions = [
+  { id: 1, label: "Monthly" },
+  { id: 2, label: "Weekly" },
+  { id: 3, label: "Daily" },
+];
+
 const controller = ref()
+const nodes = ref()
+
 const log = ref()
-const time = ref(1)
+const time = ref( selectOptions[0] )
 
 const time_from = ref(new Date().toISOString())
 const time_to = ref()
 
 watchEffect(()=>{
+  if(nodes.value){
     if(time.value.id == 1){
         time_to.value = new Date().toISOString()
         var d = new Date();
@@ -95,24 +104,23 @@ watchEffect(()=>{
         // Get the time value in milliseconds and convert to seconds
         time_from.value = d.toISOString()
     }
-    fetchLog(time_to.value,time_from.value).then((resp)=>{
+    fetchLogsInterval(time_to.value,time_from.value,nodes.value.id).then((resp)=>{
         log.value = resp.data.data.log
+        console.log('log: ',log.value)
         fillChartData(log.value)
     })
+  }
 })
 
 onMounted(()=>{
     fetchController(route.params.id).then((resp)=>{
         controller.value = resp.data.data.controller[0]
+        fetchControllerNodes(controller.value.id).then((resp)=>{
+          nodes.value = resp.data.data.node[0]
+        })
     })
 })
 
-//select
-const selectOptions = [
-  { id: 1, label: "Monthly" },
-  { id: 2, label: "Weekly" },
-  { id: 3, label: "Daily" },
-];
 
 //chart data
 const chartData = ref(null);
@@ -121,16 +129,16 @@ const fillChartData = (logs) => {
   chartData.value = sampleChartData(logs);
 };
 
-const getChartData = (data) => {
+const getChartData = (data, channelType = "Temperature" ) => {
   const dataValue = [];
 
   for (let i = 0; i < data.length; i++) {
     let logData = data[i]
     if(logData.log?.channels){
         let temperatureSensor = logData.log.channels.filter((channel) => {
-            return channel.type == "Temperature"
+            return channel.type == channelType
         })
-        dataValue.push(temperatureSensor[0].value)
+        dataValue.push(temperatureSensor[0]?.value)
     }
   }
 
@@ -145,7 +153,7 @@ const chartColors = {
   },
 };
 
-const datasetObject = (color, points) => {
+const datasetObject = (color, points, channelType = "Temperature") => {
   return {
     fill: false,
     borderColor: chartColors.default[color],
@@ -159,13 +167,15 @@ const datasetObject = (color, points) => {
     pointHoverRadius: 4,
     pointHoverBorderWidth: 15,
     pointRadius: 4,
-    data: getChartData(points),
+    data: getChartData(points, channelType),
     tension: 0.5,
     cubicInterpolationMode: "default",
+    label:channelType
   };
 };
 
 const sampleChartData = (points) => {
+  console.log('points: ', points)
   const labels = [];
   for (let i = 0; i < points.length; i++) {
     labels.push(`${points[i].created_at}`);
@@ -174,9 +184,9 @@ const sampleChartData = (points) => {
   return {
     labels,
     datasets: [
-      datasetObject("primary", points),
-    //   datasetObject("info", points),
-    //   datasetObject("danger", points),
+      datasetObject("primary", points, "Temperature"),
+      datasetObject("danger", points , "Fire"),
+      datasetObject("info", points, "Humidity"),
     ],
   };
 };

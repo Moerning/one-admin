@@ -3,6 +3,9 @@ import { axe } from "./api";
 import { useController } from "./controller";
 import SecureLS from "secure-ls";
 import { useNode } from "./node";
+import { useAccount } from "./account";
+
+const { username,userId } = useAccount()
 
 var ls = new SecureLS({
   encodingType: "aes",
@@ -34,7 +37,7 @@ export const useBuilding = () => {
               const res = await axe.post(
                 '', {
                     query: `{
-                        building {
+                        building(where: {account_id: {_eq: "${userId.value}"}}){
                           address
                           name
                           type

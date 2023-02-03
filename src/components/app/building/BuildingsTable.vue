@@ -1,5 +1,5 @@
 <script setup>
-import { mdiEye, mdiPencil, mdiAlarmCheck } from "@mdi/js";
+import { mdiEye, mdiPencil, mdiAlarmCheck, mdiPlus } from "@mdi/js";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useBuilding } from "@/graph-medium/building.js"
@@ -8,7 +8,6 @@ import * as chartConfig from "@/components/Charts/chart.config.js";
 import { ref, onMounted, watchEffect } from "vue";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-
 
 
 // GET BUILDINGS
@@ -50,11 +49,12 @@ const setupLeafletMap = (center, markers) => {
          
          // Adding layer to the map
          map.addLayer(layer);
-         
+         console.log('markersss: ', markers)
         //  // Creating a marker
          for (let index = 0; index < markers.length; index++) {
           const element = markers[index];
           let marker = L.marker([element[0],element[1]]);
+          marker.bindTooltip(element[2]).openTooltip();
           // Adding marker to the map
           marker.addTo(map);
          }
@@ -67,13 +67,16 @@ onMounted(() => {
     let tree = buildingsTree.value
     if(buildingsTree.value.length && document && document.getElementById('mapContainer') && !mapInit.value){
       mapInit.value = true
+      let tooltipText;
       for (let index = 0; index < buildingsTree.value.length; index++) {
+        tooltipText = ''
         const element = buildingsTree.value[index];
         if(element.lat){
-          mapMarkers.value.push([element.lat,element.long])
+          tooltipText = element.name ? element.name : element.id
+          mapMarkers.value.push([element.lat,element.long, tooltipText])
         }
       }
-      setupLeafletMap([mapMarkers.value[1][0],mapMarkers.value[1][1]],mapMarkers.value)
+      setupLeafletMap([mapMarkers.value[0][0],mapMarkers.value[0][1]],mapMarkers.value)
     }
   })
 });
@@ -82,12 +85,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="grid lg:grid-cols-1 grid-cols-1 py-12">
+  <div class="grid lg:grid-cols-1 grid-cols-1 pb-12 pt-8">
     <!-- <div class="flex justify-center">
       <div class="w-[300px]">
         <line-chart :data="chartData" class="h-96" />
       </div>
     </div> -->
+    <div class="pb-8">
+      <BaseButton
+              color="primary"
+              :icon="mdiPlus"
+              label="Add Building"
+              small
+              @click="$router.push({ name: 'BuildingsForm' })"
+            />
+    </div>
     <div class="flex justify-center">
       <div id="container">
           <div id="mapContainer"></div>

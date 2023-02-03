@@ -1,7 +1,44 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "@/views/HomeView.vue";
+import SecureLS from "secure-ls";
+import { useAccount } from "../graph-medium/account";
+
+const { setUsername,setUserId, username } = useAccount()
+
+var ls = new SecureLS({
+  encodingType: "aes",
+  isCompression: false,
+  encryptionSecret: "123456789",
+});
+
+const cookieStorage = {
+  getItem: (key) => ls.get(key),
+  setItem: (key, value) =>
+    ls.set(key, value),
+  removeItem: (key) => ls.remove(key),
+};
 
 const routes = [
+  {
+    meta: {
+      title: "Account",
+    },
+    path: "/account",
+    name: "account",
+    component: () => import("@/views/app/LoginView.vue"),
+    children:[
+      {
+        path: "",
+        name: "AccountForm",
+        component: () => import('@/components/app/account/AccountForm.vue'),
+      },
+      {
+        path: "login",
+        name: "LoginForm",
+        component: () => import('@/components/app/account/Login.vue'),
+      },
+    ]
+  },
   {
     meta: {
       title: "Buildings",
@@ -205,5 +242,22 @@ const router = createRouter({
     return savedPosition || { top: 0 };
   },
 });
+
+router.beforeEach((to)=>{
+  console.log(to)
+  if(to.name != "LoginForm" && to.name != "AccountForm"){
+    if(!cookieStorage.getItem('_account')){
+      return {
+        name:"LoginForm"
+      }
+    }
+    else {
+      if(!username.value){
+        setUsername(cookieStorage.getItem('_account'))
+        setUserId(cookieStorage.getItem('_account_id'))
+      }
+    }
+  }
+})
 
 export default router;
