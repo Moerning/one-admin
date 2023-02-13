@@ -23,9 +23,9 @@
             </div>
         </CardBox>
         <CardBox>
-            <SectionTitleLineWithButton :icon="mdiTableBorder" title="Channels" main>
+            <SectionTitleLineWithButton :icon="mdiTableBorder" title="Channels">
             </SectionTitleLineWithButton>
-            <table>
+            <!-- <table>
                 <thead>
                     <tr>
                         <th v-for="header in channelHeaders">
@@ -46,11 +46,24 @@
                         </td>
                     </tr>
                 </tbody>
-            </table>
-        </CardBox>
+            </table> -->
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6 p-5 bg-gray-100 rounded-2xl">
+                <CardBoxWidget
+                :trend="channel.type"
+                trend-type="alert"
+                color="text-red-500"
+                :icon="mdiChartTimelineVariant"
+                :number="channel.value"
+                :suffix="channel.type == 'Temperature' ? '℃' : ''"
+                :label="channel.type"
+                v-for="channel in channels"
+                />
+            </div>
+        </CardBox> 
     </div>
 </template>
 <script setup async>
+import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox.vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";

@@ -53,7 +53,7 @@ const menuClick = (event) => {
       :to="item.to ?? null"
       :href="item.href ?? null"
       :target="item.target ?? null"
-      class="flex cursor-pointer"
+      class="flex justify-center items-center cursor-pointer"
       :class="componentClass"
       @click="menuClick"
     >
@@ -62,13 +62,13 @@ const menuClick = (event) => {
         :path="item.icon"
         class="flex-none"
         :class="[vSlot && vSlot.isExactActive ? asideMenuItemActiveStyle : '']"
-        w="w-16"
+        w="w-10"
         :size="18"
       />
       <span
         class="grow text-ellipsis line-clamp-1"
         :class="[
-          { 'pr-12': !hasDropdown },
+          { '': !hasDropdown },
           vSlot && vSlot.isExactActive ? asideMenuItemActiveStyle : '',
         ]"
         >{{ item.label }}</span
@@ -78,7 +78,7 @@ const menuClick = (event) => {
         :path="isDropdownActive ? mdiMinus : mdiPlus"
         class="flex-none"
         :class="[vSlot && vSlot.isExactActive ? asideMenuItemActiveStyle : '']"
-        w="w-12"
+        w="w-10"
       />
     </component>
     <AsideMenuList

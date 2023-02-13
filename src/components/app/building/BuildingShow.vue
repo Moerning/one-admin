@@ -45,7 +45,7 @@
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import CardBox from "@/components/CardBox.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onErrorCaptured, watchEffect, computed } from "vue";
 import { useBuilding } from "../../../graph-medium/building";
 import { useRoute } from "vue-router";
 import { useController } from "../../../graph-medium/controller";
@@ -53,91 +53,68 @@ import { useController } from "../../../graph-medium/controller";
 const  { fetchBuildingControllers } = useController()
 const { fetchBuilding } = useBuilding()
 const route = useRoute()
+let map = null;
 
 const setupLeafletMap = (center) => {
+    console.log('creating map...')
     var mapOptions = {
             center: center,
             zoom: 12
          }
-         // Creating a map object
-         var map = new L.map('mapContainer', mapOptions);
-         
-         // Creating a Layer object
-         var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-         
-         // Adding layer to the map
-         map.addLayer(layer);
-         
-         // Creating a marker
-         var marker = L.marker(center);
-         
-         // Adding marker to the map
-         marker.addTo(map);
+         // Remove existing 
+         if(!!map){
+            map.off()
+            map.remove()
+         }
+         if(center.length){
+             // Creating a map object
+             map = new L.map('mapContainer', mapOptions);
+             
+             // Creating a Layer object
+             var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+             
+             // Adding layer to the map
+             map.addLayer(layer);
+             
+             // Creating a marker
+             var marker = L.marker(center);
+             
+             // Adding marker to the map
+             marker.addTo(map);
+         }
 }
 
 const building = ref()
 const controllers = ref([])
 
-// fetchBuilding(route.params.id).then((response)=>{
-//     building.value = response.data.data.building[0]
-// })
-
-onMounted(()=>{
-    fetchBuilding(route.params.id).then((response)=>{
-        building.value = response.data.data.building[0]
-        setupLeafletMap([building.value.lat, building.value.long])
-    })
-    fetchBuildingControllers(route.params.id).then((response)=>{
-        controllers.value = response.data.data.controller
-        console.log(controllers.value)
-    })
+const mount = ref(false)
+const buildingId = computed(()=>{
+    return route.params.id
+})
+watchEffect(()=>{
+    if(mount.value){
+        fetchBuilding(buildingId.value).then((response)=>{
+            building.value = response.data.data.building[0]
+            if(building.value?.lat){
+                setupLeafletMap([building.value?.lat, building.value?.long])
+            }
+            else
+                setupLeafletMap([])
+        })
+        fetchBuildingControllers(buildingId.value).then((response)=>{
+            controllers.value = response.data.data.controller
+        })
+    }
 })
 
-// export default {
-//     name: "Map",
-//     data() {
-//         return {
-//             center: [37, 7749, -122, 4194]
-//         }
-//     },
-//     methods: {
-//         setupLeafletMap: function () {
-//             // const mapDiv = L.map("mapContainer").setView(this.center, 13);
-//             // var mark = L.marker(
-//             //     L.latLng(
-//             //         parseFloat(item["38.8951"]),
-//             //         parseFloat(item["-77.0364"])
-//             //     )
-//             // );
-//             // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapDiv);
-//                     // Creating map options
-//          var mapOptions = {
-//             center: [35.7219, 51.3347],
-//             zoom: 10
-//          }
-//          // Creating a map object
-//          var map = new L.map('mapContainer', mapOptions);
-         
-//          // Creating a Layer object
-//          var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-         
-//          // Adding layer to the map
-//          map.addLayer(layer);
-         
-//          // Creating a marker
-//          var marker = L.marker([17.385044, 78.486671]);
-         
-//          // Adding marker to the map
-//          marker.addTo(map);
-//         },
-//     },
-//     mounted() {
-//         this.setupLeafletMap();
-//     },
-//     components:{
-//         CardBox
-//     }
-// };
+onMounted(()=>{
+    mount.value = true
+})
+
+onErrorCaptured((e)=>{
+    console.log('Error: ', { e } )
+})
+
 </script>
 
 <style scoped>
