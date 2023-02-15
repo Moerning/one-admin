@@ -45,17 +45,6 @@ const submitPass = () => {
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiAccount" title="Profile" main>
-        <BaseButton
-          href="https://github.com/justboil/admin-one-vue-tailwind"
-          target="_blank"
-          :icon="mdiGithub"
-          label="Star on GitHub"
-          color="contrast"
-          rounded-full
-          small
-        />
-      </SectionTitleLineWithButton>
 
       <UserCard class="mb-6" />
 
@@ -87,8 +76,8 @@ const submitPass = () => {
 
           <template #footer>
             <BaseButtons>
-              <BaseButton color="info" type="submit" label="Submit" />
-              <BaseButton color="info" label="Options" outline />
+              <BaseButton color="info" type="submit" label="تایید" />
+              <BaseButton color="info" label="بیشتر" outline />
             </BaseButtons>
           </template>
         </CardBox>
@@ -137,8 +126,8 @@ const submitPass = () => {
 
           <template #footer>
             <BaseButtons>
-              <BaseButton type="submit" color="info" label="Submit" />
-              <BaseButton color="info" label="Options" outline />
+              <BaseButton type="submit" color="info" label="تایید" />
+              <BaseButton color="info" label="بیشتر" outline />
             </BaseButtons>
           </template>
         </CardBox>

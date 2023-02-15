@@ -21,7 +21,7 @@ const cookieStorage = {
 const routes = [
   {
     meta: {
-      title: "Account",
+      title: "ساختمان‌ها",
     },
     path: "/account",
     name: "account",
@@ -52,7 +52,7 @@ const routes = [
         name: "BuildingsTable",
         component: () => import('@/components/app/building/BuildingsTable.vue'),
         meta: {
-          table: "Buildings",
+          table: "ساختمان‌ها",
         },
       },
     ]

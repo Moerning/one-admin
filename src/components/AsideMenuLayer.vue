@@ -18,7 +18,7 @@ const emit = defineEmits(["menu-click", "aside-lg-close-click"]);
 const styleStore = useStyleStore();
 
 const logoutItem = computed(() => ({
-  label: "Logout",
+  label: "خروج",
   icon: mdiLogout,
   color: "info",
   isLogout: true,
@@ -49,7 +49,9 @@ const asideLgCloseClick = (event) => {
         <div
           class="text-center flex-1 lg:text-left lg:pl-6 xl:text-center xl:pl-0"
         >
-          <b class="font-black">One</b>
+          <b class="font-black">
+          <img src="../../public/logo.png" class="inline-flex justify-center items-center w-18 h-14 flex-none bg-gray-200">
+          </b>
         </div>
         <button
           class="hidden lg:inline-block xl:hidden p-3"

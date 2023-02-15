@@ -18,8 +18,6 @@ import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiTableBorder" :title="$route.meta.table" main>
-      </SectionTitleLineWithButton>
 
       <CardBox class="mb-6">
         <RouterView />

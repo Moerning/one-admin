@@ -22,7 +22,7 @@ const selectOptions = [
 ];
 
 const form = reactive({
-  name: "John Doe",
+  name: "کاربر مدیر",
   email: "john.doe@example.com",
   phone: "",
   department: selectOptions[0],
@@ -62,15 +62,6 @@ const formStatusSubmit = () => {
         title="Forms example"
         main
       >
-        <BaseButton
-          href="https://github.com/justboil/admin-one-vue-tailwind"
-          target="_blank"
-          :icon="mdiGithub"
-          label="Star on GitHub"
-          color="contrast"
-          rounded-full
-          small
-        />
       </SectionTitleLineWithButton>
       <CardBox form @submit.prevent="submit">
         <FormField label="Grouped with icons">
@@ -101,8 +92,8 @@ const formStatusSubmit = () => {
 
         <template #footer>
           <BaseButtons>
-            <BaseButton type="submit" color="info" label="Submit" />
-            <BaseButton type="reset" color="info" outline label="Reset" />
+            <BaseButton type="submit" color="info" label="تایید" />
+            <BaseButton type="reset" color="info" outline label="بازنشانی" />
           </BaseButtons>
         </template>
       </CardBox>

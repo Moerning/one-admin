@@ -1,6 +1,6 @@
-# [Admin One &mdash; Free Vue 3.x Tailwind 3.x Admin Dashboard with dark mode](https://justboil.me/tailwind-admin-templates/free-vue-dashboard/)
+# [Admin One &mdash; Free Vue 3.x Tailwind 3.x Admin Dashboard with dark mode](https://github.com/payamQorbanpour/tailwind-admin-templates/free-vue-dashboard/)
 
-[![version](https://img.shields.io/github/v/release/justboil/admin-one-vue-tailwind)](https://justboil.me/tailwind-admin-templates/free-vue-dashboard/)  [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://justboil.me/tailwind-admin-templates/free-vue-dashboard/)
+[![version](https://img.shields.io/github/v/release/justboil/admin-one-vue-tailwind)](https://github.com/payamQorbanpour/tailwind-admin-templates/free-vue-dashboard/)  [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/payamQorbanpour/tailwind-admin-templates/free-vue-dashboard/)
 
 ### Tailwind 3.x Vue 3.x with Vite or Nuxt or Laravel
 
@@ -24,7 +24,7 @@
 * **Production CSS** is only **&thickapprox;38kb**
 * Reusable components
 * Free under MIT License
-* [Premium version](https://justboil.me/tailwind-admin-templates/vue-dashboard/) available
+* [Premium version](https://github.com/payamQorbanpour/tailwind-admin-templates/vue-dashboard/) available
 
 ## Table of Contents
 
@@ -154,7 +154,7 @@ Customization & info: https://justboil.github.io/docs/
 
 We try to make sure Dashboard works well in the latest versions of all major browsers
 
-<img src="https://justboil.me/images/browsers-svg/chrome.svg" width="64" height="64" alt="Chrome"> <img src="https://justboil.me/images/browsers-svg/firefox.svg" width="64" height="64" alt="Firefox"> <img src="https://justboil.me/images/browsers-svg/edge.svg" width="64" height="64" alt="Edge"> <img src="https://justboil.me/images/browsers-svg/safari.svg" width="64" height="64" alt="Safari"> <img src="https://justboil.me/images/browsers-svg/opera.svg" width="64" height="64" alt="Opera">
+<img src="https://github.com/payamQorbanpour/images/browsers-svg/chrome.svg" width="64" height="64" alt="Chrome"> <img src="https://github.com/payamQorbanpour/images/browsers-svg/firefox.svg" width="64" height="64" alt="Firefox"> <img src="https://github.com/payamQorbanpour/images/browsers-svg/edge.svg" width="64" height="64" alt="Edge"> <img src="https://github.com/payamQorbanpour/images/browsers-svg/safari.svg" width="64" height="64" alt="Safari"> <img src="https://github.com/payamQorbanpour/images/browsers-svg/opera.svg" width="64" height="64" alt="Opera">
 
 ## Reporting Issues
 
@@ -170,12 +170,12 @@ The issue list is reserved exclusively for bug reports and feature requests. Tha
 
 ## Licensing
 
-- Copyright &copy; 2019-2022 JustBoil.me (https://justboil.me)
+- Copyright &copy; 2019-2022 JustBoil.me (https://github.com/payamQorbanpour)
 - Licensed under MIT
 
 ## Useful Links
 
-- [JustBoil.me](https://justboil.me/)
+- [JustBoil.me](https://github.com/payamQorbanpour/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Vue.js 3](https://v3.vuejs.org/)
 - [Vite](https://vitejs.dev)

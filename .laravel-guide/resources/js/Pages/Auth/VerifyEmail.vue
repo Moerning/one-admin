@@ -70,7 +70,7 @@ const submit = () => {
             method="post"
             as="button"
           >
-            Logout
+            خروج
           </Link>
         </BaseLevel>
       </CardBox>

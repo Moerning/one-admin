@@ -14,13 +14,13 @@ import L from "leaflet";
 const { buildingsTree } = useBuilding()
 
 const buildingHeaders = [
-    { label:'Id' },
-    { label: 'Name' },
-    { label: 'Address' },
-    { label: 'Type' },
-    { label: 'Lat-Long' },
-    { label: 'Status' },
-    { label: 'Created_At' },
+    { label:'شناسه' },
+    { label: 'نام' },
+    { label: 'نشانی' },
+    { label: 'نوع' },
+    { label: 'موقعیت' },
+    { label: 'وضعیت' },
+    { label: 'زمان ساخت' },
 ]
 
 // PREPARE CHART DATE
