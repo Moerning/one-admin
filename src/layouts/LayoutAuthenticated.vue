@@ -44,9 +44,27 @@ watch(buildingsTree, async (newTree)=>{
       icon:mdiArrowRight
     }]
     for (let j = 0; j < building.controllers.length; j++) {
+      const element = building.controllers[j]
+      let controllerNodesMenu = [{
+        to:{ name: "ControllerShow", params: { id:element?.id } },
+        label: "View Controller",
+        color: "success",
+        icon:mdiArrowRight
+      }]
+      if(element.nodes?.length){
+        element.nodes.forEach(nodeElement => {
+          controllerNodesMenu.push({
+            label: nodeElement?.id,
+            to: `/nodes/show/${nodeElement?.id}`,
+            color:"success"
+          })
+        });
+      }
+
       controllerMenu.push({
-        label:building.controllers[j]?.mac_address,
-        to:{ name: "ControllerShow", params: { id:building.controllers[j]?.id } }
+        label:element?.mac_address,
+        menu:controllerNodesMenu,
+        color:"success"
       })
     }
     if(!controllerMenu.length){
@@ -61,21 +79,21 @@ watch(buildingsTree, async (newTree)=>{
   }
 })
 
-watchEffect(()=>{
-  nodesMenu.value = [{
-      label: "View All",
-      to: { name: "NodesTable" },
-      icon:mdiArrowRight,
-      color:"info"
-    }]
-  for (let i = 0; i < nodes.value.length; i++) {
-    const node = nodes.value[i];
-    nodesMenu.value.push({
-      label: node.id,
-      to: `/nodes/show/${node.id}`
-    })
-  }
-})
+// watchEffect(()=>{
+//   nodesMenu.value = [{
+//       label: "View All",
+//       to: { name: "NodesTable" },
+//       icon:mdiArrowRight,
+//       color:"info"
+//     }]
+//   for (let i = 0; i < nodes.value.length; i++) {
+//     const node = nodes.value[i];
+//     nodesMenu.value.push({
+//       label: node.id,
+//       to: `/nodes/show/${node.id}`
+//     })
+//   }
+// })
 
 const menuAside = computed(() => {
   return [
@@ -83,11 +101,6 @@ const menuAside = computed(() => {
       label: "Buildings",
       icon: mdiViewList,
       menu: buildingsMenu.value,
-    },
-    {
-      label: "Nodes",
-      icon: mdiViewList,
-      menu: nodesMenu.value,
     }
   ]
 })

@@ -30,15 +30,20 @@ export const useNode = () => {
     }
 
     const fetchNodes = async (controllers) => {
+        let gotAll = true
         for (let index = 0; index < controllers.length; index++) {
             try {
                 const nodes = await fetchControllerNodes(controllers[index].id)
                 if(nodes.data.data.node.length)
                     pushToNodes(...nodes.data.data.node)
             } catch (error) {
+                gotAll = false
                 console.log('failed to fetch nodes')
             }
         }
+        if(gotAll)
+            return Promise.resolve(state.nodes)
+        return Promise.reject(null)
     }
 
     const fetchNode = (id) => {

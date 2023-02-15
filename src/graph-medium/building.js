@@ -56,7 +56,23 @@ export const useBuilding = () => {
                 try {
                     const controllers = await fetchBuildingControllers(element.id)
                     element.controllers = controllers.data.data.controller
-                    fetchNodes(element.controllers)
+                    if(element.controllers.length){
+                      let nodes = await fetchNodes(element.controllers)
+                      if(nodes.length){
+                        for (let index = 0; index < nodes.length; index++) {
+                          const node = nodes[index];
+                          let nodeController = element.controllers.findIndex((c)=>{
+                            return c.id == node.controller_id
+                          })
+                          if(element.controllers[nodeController] && element.controllers[nodeController].nodes){
+                            element.controllers.nodes.push(node)
+                          }
+                          else if(element.controllers[nodeController]){
+                            element.controllers[nodeController].nodes = [node]
+                          }
+                        }
+                      }
+                    }
                 } catch (error) {
                     console.log('err', error)      
                 }
@@ -128,12 +144,25 @@ export const useBuilding = () => {
         })
     }
 
+    const getBuildingFromLs = (id) => {
+      let tree = state.buildingsTree
+      let result = null
+      if(tree.length){
+        let building = tree.filter((b)=>{
+          return b.id == id
+        })
+        result = building.length ? building[0] : null
+      }
+      return result
+    }
+
 
     return {
         ...toRefs(state),
         getAllBuildings,
         createBuilding, 
         fetchBuilding,
+        getBuildingFromLs,
         updateBuilding
     }
 }

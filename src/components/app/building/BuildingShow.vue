@@ -51,7 +51,7 @@ import { useRoute } from "vue-router";
 import { useController } from "../../../graph-medium/controller";
 
 const  { fetchBuildingControllers } = useController()
-const { fetchBuilding } = useBuilding()
+const { fetchBuilding, getBuildingFromLs } = useBuilding()
 const route = useRoute()
 let map = null;
 
@@ -95,6 +95,13 @@ watchEffect(()=>{
     if(mount.value){
         fetchBuilding(buildingId.value).then((response)=>{
             building.value = response.data.data.building[0]
+            if(building.value?.lat){
+                setupLeafletMap([building.value?.lat, building.value?.long])
+            }
+            else
+                setupLeafletMap([])
+        }).catch((e)=>{
+            building.value = getBuildingFromLs(buildingId.value)
             if(building.value?.lat){
                 setupLeafletMap([building.value?.lat, building.value?.long])
             }
