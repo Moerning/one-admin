@@ -55,7 +55,7 @@ const { fetchBuilding, getBuildingFromLs } = useBuilding()
 const route = useRoute()
 let map = null;
 
-const setupLeafletMap = (center) => {
+const setupLeafletMap = (center, name = "") => {
     console.log('creating map...')
     var mapOptions = {
             center: center,
@@ -78,7 +78,7 @@ const setupLeafletMap = (center) => {
              
              // Creating a marker
              var marker = L.marker(center);
-             
+             marker.bindTooltip(building.value.name ?? building.value.id).openTooltip();
              // Adding marker to the map
              marker.addTo(map);
          }
@@ -103,7 +103,7 @@ watchEffect(()=>{
         }).catch((e)=>{
             building.value = getBuildingFromLs(buildingId.value)
             if(building.value?.lat){
-                setupLeafletMap([building.value?.lat, building.value?.long])
+                setupLeafletMap([building.value?.lat, building.value?.long],'building.value.name')
             }
             else
                 setupLeafletMap([])

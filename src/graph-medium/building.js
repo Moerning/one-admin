@@ -79,6 +79,7 @@ export const useBuilding = () => {
               }
               state.buildingsTree = [...list]
               cookieStorage.setItem('_buildings',state.buildingsTree)
+              
             } catch (e) {
               console.log('err', e)
             }

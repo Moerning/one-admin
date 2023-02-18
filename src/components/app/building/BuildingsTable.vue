@@ -8,7 +8,7 @@ import * as chartConfig from "@/components/Charts/chart.config.js";
 import { ref, onMounted, watchEffect } from "vue";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-
+import treeContainer from "../tree/treeContainer.vue";
 
 // GET BUILDINGS
 const { buildingsTree } = useBuilding()
@@ -49,7 +49,7 @@ const setupLeafletMap = (center, markers) => {
          
          // Adding layer to the map
          map.addLayer(layer);
-         console.log('markersss: ', markers)
+
         //  // Creating a marker
          for (let index = 0; index < markers.length; index++) {
           const element = markers[index];
@@ -85,12 +85,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="grid lg:grid-cols-1 grid-cols-1 pb-12 pt-8">
-    <!-- <div class="flex justify-center">
-      <div class="w-[300px]">
-        <line-chart :data="chartData" class="h-96" />
-      </div>
-    </div> -->
+  <!-- <div class="grid lg:grid-cols-1 grid-cols-1 pb-12 pt-8">
     <div class="pb-8">
       <BaseButton
               color="primary"
@@ -169,7 +164,8 @@ onMounted(() => {
         </td>
       </tr>
     </tbody>
-  </table>
+  </table> -->
+  <treeContainer />
 </template>
 <style scoped>
 #mapContainer {

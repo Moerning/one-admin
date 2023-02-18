@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/HomeView.vue";
 import SecureLS from "secure-ls";
 import { useAccount } from "../graph-medium/account";
@@ -227,6 +227,14 @@ const routes = [
   },
   {
     meta: {
+      title: "Tree",
+    },
+    path: "/tree",
+    name: "tree",
+    component: () => import("@/components/app/tree/tree.vue"),
+  },
+  {
+    meta: {
       title: "Error",
     },
     path: "/error",
@@ -236,7 +244,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
     return savedPosition || { top: 0 };
