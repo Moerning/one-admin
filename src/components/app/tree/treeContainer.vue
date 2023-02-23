@@ -1,5 +1,7 @@
 <template>
-    <tree :initialNodes="treeInitialNodes" v-if="showTree" />
+    <div class="rounded-lg p-2 border tree-container" v-if="showTree">
+        <tree :initialNodes="treeInitialNodes" v-if="showTree" />
+    </div>
 </template>
 <script setup>
 import { watch, ref } from "vue";
@@ -21,3 +23,8 @@ watch(buildingsTree , (val) => {
 })
 
 </script>
+<style>
+.tree-container{
+    border-width: 3px;
+}
+</style>

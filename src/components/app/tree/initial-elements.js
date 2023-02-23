@@ -5,6 +5,10 @@ import { MarkerType } from '@vue-flow/core'
  * or split them up into nodes and edges and pass them to the `nodes` and `edges` props of Vue Flow (or useVueFlow composable)
  */
 
+let buildingIndex = 0
+let nodeIndex = 0
+let controllerIndex = 0
+
 const yMarginDefault = 100
 const yMarginControllers = 1 * yMarginDefault
 const yMarginNodes = 2 * yMarginDefault
@@ -15,27 +19,29 @@ const xMarginNodes = 3 * xMarginDefault
 
 const createBuildingNode = (building, numberOfBuildings, index) => {
     let id = Math.floor(Math.random() * 100)
-    let buidlingXMargin = xMarginDefault * index
-    return { id: id + "" , type: 'building', label: building.name , position: { x: buidlingXMargin  , y: 0 }, class: 'light' }  
+    let buidlingXMargin = xMarginDefault * buildingIndex
+    buildingIndex++
+    return { id: id + "" , type: 'building', label: building.name , position: { x: buidlingXMargin  , y: 0 }, class: 'light', data:building }  
 }
 
 const createControllerNode = (controller, buildingNodeId ,numberOfControllers, index) => {
     let id = Math.floor(Math.random() * 100)
-    let buidlingXMargin = xMarginDefault * index
     
-    let edge = { id: (id * 10) + "" , target: id + "" , source: buildingNodeId, markerEnd: MarkerType.ArrowClosed, animated:true }
+    let buidlingXMargin = (xMarginDefault * controllerIndex) + 25
+    controllerIndex++
+    let edge = { id: (id * 10) + "" , target: id + "" , source: buildingNodeId, markerEnd: MarkerType.ArrowClosed }
 
-    let controllerNode = { id: id + "" , type: 'controller', label: controller.mac_address , position: { x: buidlingXMargin  , y: yMarginControllers }, class: 'light' }  
+    let controllerNode = { id: id + "" , type: 'controller', label: controller.mac_address , position: { x: buidlingXMargin  , y: yMarginControllers }, class: 'light', data:controller }  
     return [ controllerNode, edge ]
 }
 
 const createNodeNodes = (node, controllerNodeId , numberOfNodes, index) => {
     let id = Math.floor(Math.random() * 100)
-    let buidlingXMargin = xMarginDefault * index
-    
+    let buidlingXMargin = xMarginDefault * nodeIndex
+    nodeIndex++
     let edge = { id: (id * 10) + "" , target: id + "" , source: controllerNodeId, markerEnd: MarkerType.ArrowClosed, animated:true }
 
-    let nodeNode = { id: id + "" , type: 'nddd', label: node.id , position: { x: buidlingXMargin  , y: yMarginNodes }, class: 'light' }  
+    let nodeNode = { id: id + "" , type: 'node', label: node.id , position: { x: buidlingXMargin  , y: yMarginNodes }, class: 'light', data: node }  
     return [ nodeNode, edge ]
 }
 

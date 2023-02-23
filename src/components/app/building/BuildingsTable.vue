@@ -85,7 +85,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- <div class="grid lg:grid-cols-1 grid-cols-1 pb-12 pt-8">
+  <treeContainer />
+  <div class="grid lg:grid-cols-1 grid-cols-1 pb-12 pt-8 border-[3px] rounded-lg my-8 px-4">
     <div class="pb-8">
       <BaseButton
               color="primary"
@@ -164,8 +165,7 @@ onMounted(() => {
         </td>
       </tr>
     </tbody>
-  </table> -->
-  <treeContainer />
+  </table>
 </template>
 <style scoped>
 #mapContainer {

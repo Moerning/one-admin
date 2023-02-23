@@ -5,9 +5,9 @@ import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
 import { ref } from 'vue'
 import { createInitalElements } from './initial-elements.js'
-import { mdiOfficeBuilding } from "@mdi/js";
+import { mdiHome,mdiEye,mdiPencil,mdiAlarmLight,mdiAccessPoint } from "@mdi/js";
 import BaseIcon from "@/components/BaseIcon.vue";
-
+import BaseButton from "@/components/BaseButton.vue"
 const props = defineProps({
   initialNodes:{}
 })
@@ -67,6 +67,12 @@ const logToObject = () => console.log(toObject())
 const resetTransform = () => setTransform({ x: 0, y: 0, zoom: 1 })
 
 const toggleClass = () => (dark.value = !dark.value)
+
+// custom functions
+const buildingClicked = (props) => {
+  console.log(props)
+}
+
 </script>
 
 <template>
@@ -75,22 +81,71 @@ const toggleClass = () => (dark.value = !dark.value)
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
       <Controls />
-      <template #node-building="props">
-        <div class="z-10 rounded border border-primary h-[16px] w-[60px] text-[4px] bg-white flex items-center justify-center gap-1">
-          <span>Test Building 1</span>
-          <BaseIcon :path="mdiOfficeBuilding" :size="6" />
+      <template #node-building="{ data }">
+        <div @click="e => buildingClicked(props)" class="building-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded border h-[25px] w-[25px] text-[4px] bg-white flex items-center justify-center gap-1 px-1">
+          <span v-if="data?.name" class="max-w-[25px] text-[4px] building-text">{{data.name}}</span>
+          <span class="building-tools justify-around mt-1 w-full">
+            <BaseButton
+              color="info"
+              :icon="mdiEye"
+              :iconSize="4"
+              class="w-[10px] h-[10px] mr-1"
+              @click="$router.push(`/buildings/show/${data.id}`)"
+              small
+            />
+            <BaseButton
+              color="success"
+              :icon="mdiPencil"
+              :iconSize="4"
+              class="w-[10px] h-[10px]"
+              small
+            />
+          </span>
+          <BaseIcon :path="mdiHome" :size="10" class="building-icon"/>
         </div>
       </template>
-      <template #node-controller="props">
-        <div class="z-10 rounded border border-primary h-[16px] w-[60px] text-[4px] bg-white flex items-center justify-center gap-1">
-          <span>Test controller 1</span>
-          <BaseIcon :path="mdiOfficeBuilding" :size="6" />
+      <template #node-node="{ data }">
+        <div @click="e => buildingClicked(props)" class="node-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded border h-[25px] w-[25px] text-[4px] bg-white flex items-center justify-center gap-1 px-1">
+          <span v-if="data?.id" class="max-w-[25px] text-[4px] node-text">{{data.id}}</span>
+          <span class="node-tools justify-around mt-1 w-full">
+            <BaseButton
+              color="info"
+              :icon="mdiEye"
+              :iconSize="4"
+              class="w-[10px] h-[10px] mr-1"
+              small
+            />
+            <BaseButton
+              color="success"
+              :icon="mdiPencil"
+              :iconSize="4"
+              class="w-[10px] h-[10px]"
+              small
+            />
+          </span>
+          <BaseIcon :path="mdiAccessPoint" :size="10" class="node-icon"/>
         </div>
       </template>
-      <template #node-nddd="props">
-        <div class="z-10 rounded border border-primary h-[16px] w-[60px] text-[4px] bg-white flex items-center justify-center gap-1">
-          <span>Test node 1</span>
-          <BaseIcon :path="mdiOfficeBuilding" :size="6" />
+      <template #node-controller="{ data }">
+        <div @click="e => buildingClicked(props)" class="controller-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded border h-[20px] w-[35px] text-[4px] bg-white flex items-center justify-center gap-1 px-1">
+          <span v-if="data?.mac_address" class="max-w-[25px] text-[4px] controller-text">{{data.mac_address}}</span>
+          <span class="controller-tools justify-around mt-1 w-full">
+            <BaseButton
+              color="info"
+              :icon="mdiEye"
+              :iconSize="4"
+              class="w-[10px] h-[10px] mr-1"
+              small
+            />
+            <BaseButton
+              color="success"
+              :icon="mdiPencil"
+              :iconSize="4"
+              class="w-[10px] h-[10px]"
+              small
+            />
+          </span>
+          <BaseIcon :path="mdiAlarmLight" :size="10" class="controller-icon"/>
         </div>
       </template>
       <Panel :position="PanelPosition.TopRight" class="controls">
@@ -144,3 +199,88 @@ const toggleClass = () => (dark.value = !dark.value)
     </VueFlow>
   </div>
 </template>
+<style>
+.building-node {
+  background-color: #7E627B;
+  color: white;
+  border-color: #012442;
+  color: white;
+}
+
+.building-icon{
+  position: absolute;
+  top:-16px;
+  left:-16px;
+  color:#012442;
+}
+
+.building-tools {
+  display: none;
+}
+
+.building-node:hover {
+  height: 45px;
+  width: 45px;
+}
+
+.building-node:hover .building-tools{
+  display: flex;
+}
+
+/* controller */
+.controller-node {
+  background-color: #BC2041;
+  color: white;
+  border-color: #564C55;
+  color: white;
+}
+
+.controller-icon{
+  position: absolute;
+  top:-16px;
+  left:-16px;
+  color:#564C55;
+}
+
+.controller-tools {
+  display: none;
+}
+
+.controller-node:hover {
+  height: 45px;
+  width: 45px;
+}
+
+.controller-node:hover .controller-tools{
+  display: flex;
+}
+
+/* Node */
+
+.node-node {
+  background-color: #5061C5;
+  color: white;
+  border-color: #271B80;
+  color: white;
+}
+
+.node-icon{
+  position: absolute;
+  top:-16px;
+  left:-16px;
+  color:#271B80;
+}
+
+.node-tools {
+  display: none;
+}
+
+.node-node:hover {
+  height: 45px;
+  width: 45px;
+}
+
+.node-node:hover .node-tools{
+  display: flex;
+}
+</style>
