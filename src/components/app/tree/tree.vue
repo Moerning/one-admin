@@ -201,7 +201,8 @@ const buildingClicked = (props) => {
 </template>
 <style>
 .building-node {
-  background-color: #7E627B;
+  /* background-color: #7E627B; */
+  background-color: #5BA0BF;
   color: white;
   border-color: #012442;
   color: white;
