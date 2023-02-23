@@ -206,6 +206,7 @@ const buildingClicked = (props) => {
   color: white;
   border-color: #012442;
   color: white;
+  font-weight: 600;
 }
 
 .building-icon{
