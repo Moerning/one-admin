@@ -151,6 +151,60 @@ const routes = [
   },
   {
     meta: {
+      title: "Add Node Event",
+    },
+    path: "/nodes/:node_id/events/add",
+    name: "EventForm",
+    component: () => import("@/views/app/FormsView.vue"),
+    children:[
+      {
+        path: "",
+        name: "NodeEventForm",
+        component: () => import('@/components/app/event/EventForm.vue'),
+        meta:{
+          view: 'Node'
+        }
+      },
+    ]
+  },
+  {
+    meta: {
+      title: "Add Building Controller",
+    },
+    path: "/buildings/:building_id/controller/add",
+    name: "ControllerForm",
+    component: () => import("@/views/app/FormsView.vue"),
+    children:[
+      {
+        path: "",
+        name: "BuildingControllerForm",
+        component: () => import('@/components/app/controller/ControllerForm.vue'),
+        meta:{
+          view: 'Node'
+        }
+      },
+    ]
+  },
+  {
+    meta: {
+      title: "Add Controller Node",
+    },
+    path: "/controllers/:controller_id/node/add",
+    name: "NodeForm",
+    component: () => import("@/views/app/FormsView.vue"),
+    children:[
+      {
+        path: "",
+        name: "ControllerNodeForm",
+        component: () => import('@/components/app/node/NodeForm.vue'),
+        meta:{
+          view: 'Node'
+        }
+      },
+    ]
+  },
+  {
+    meta: {
       title: "Controller",
     },
     path: "/controller/:id",

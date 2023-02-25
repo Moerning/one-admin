@@ -27,13 +27,16 @@
                 </div>
                 <div class="mt-4 pt-8 border-t border-zinc-300 w-full">
                     <span class="font-bold text-gray-400">کنترلرهای مرکزی :</span>
-                    <div class="flex flex-col items-start mt-5">
+                    <div class="flex justify-start items-start gap-4 mt-5">
                         <div v-for="controller in controllers">
                             <router-link :to="`/controller/${controller.id}`" as="a">
                                 <div class="text-sky-400 border border-sky-400 hover:text-sky-600 rounded-md hover:bg-sky-50 px-3 py-1 flex justify-between items-center">
                                     <span>{{controller.model ? controller.model : controller.id}}</span>
                                 </div>
                             </router-link>
+                        </div>
+                        <div>
+                            <BaseButton color="info" label="Add Controller"  @click="$router.push(`/buildings/${$route.params.id}/controller/add`)"/>
                         </div>
                     </div>
                 </div>
@@ -49,6 +52,7 @@ import { onMounted, ref, onErrorCaptured, watchEffect, computed } from "vue";
 import { useBuilding } from "../../../graph-medium/building";
 import { useRoute } from "vue-router";
 import { useController } from "../../../graph-medium/controller";
+import BaseButton from "@/components/BaseButton.vue";
 
 const  { fetchBuildingControllers } = useController()
 const { fetchBuilding, getBuildingFromLs } = useBuilding()

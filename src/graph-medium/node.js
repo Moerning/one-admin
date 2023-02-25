@@ -1,5 +1,6 @@
 import { axe } from "./api";
 import { reactive, toRefs } from "vue";
+import { useAccount } from "./account";
 
 const state = reactive({
     nodes:[]
@@ -80,6 +81,21 @@ export const useNode = () => {
         state.nodes = []
     }
 
+    const createNode = async ( params ) => {
+        const { userId } = useAccount()
+        return axe.post(
+          '', {
+              query: `mutation InsertNode {
+                insert_node(objects: {controller_id: "${params.controller_id}",id: "test-${params.model}", description: "${params.description}", account_id: "${userId.value}", model: "${params.model}", ip_local: "${params.ip_local}"}) {
+                  affected_rows
+                  returning {
+                    id
+                  }
+                }
+              }`
+        })
+      }
+
     return {
         pushToNodes,
         fetchControllerNodes,
@@ -87,6 +103,7 @@ export const useNode = () => {
         fetchNode,
         emptyNodes,
         fetchNodeChannels,
+        createNode,
         ...toRefs(state)
     }
 }

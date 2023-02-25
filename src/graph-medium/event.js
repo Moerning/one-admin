@@ -20,7 +20,22 @@ export const useEvent = (building_id) => {
         })
     }
 
+    const createEvent = async ( node,unit_id,priority ) => {
+        return axe.post(
+          '', {
+              query: `mutation InsertEvent {
+                insert_event(objects: {node_id: "${node}", priority: "${priority}", unit_id: "${unit_id}"}) {
+                  affected_rows
+                  returning {
+                    id
+                  }
+                }
+              }`
+        })
+      }
+
     return {
-        fetchBuildingEvents
+        fetchBuildingEvents,
+        createEvent
     }
 }

@@ -49,10 +49,25 @@ export const useController = (building_id) => {
       })
     }
 
+    const createController = async ( params ) => {
+      return axe.post(
+        '', {
+            query: `mutation InsertController {
+              insert_controller(objects: {ip_local: "${params.ip_local}", id: "test-${params.model}", model: "${params.model}", mac_address: "${params.mac_address}", building_id: "${params.building_id}"}) {
+                affected_rows
+                returning {
+                  id
+                }
+              }
+            }`
+      })
+    }
+
     return {
         fetchController,
         fetchBuildingControllers,
         fetchControllerNodes,
-        fetchLogsInterval
+        fetchLogsInterval,
+        createController
     }
 }

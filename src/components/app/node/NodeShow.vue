@@ -59,19 +59,25 @@
                 v-for="channel in channels"
                 />
             </div>
+            <div class="p-5 bg-gray-100 rounded-2xl">
+                <BaseButton type="submit" color="warning" label="Add Event"  @click="$router.push(`/nodes/${route.params.id}/events/add`)"/>
+            </div>
+            
         </CardBox> 
     </div>
 </template>
 <script setup async>
 import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useNode } from "../../../graph-medium/node";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import {
   mdiTableBorder,
 } from "@mdi/js";
+import BaseButton from "@/components/BaseButton.vue"
+
 const { fetchNode,fetchNodeChannels } = useNode()
 const route = useRoute()
 const node = ref()
@@ -83,13 +89,16 @@ const channelHeaders = [
     { label: 'Type' },
 ]
 
-fetchNode(route.params.id).then((res)=>{
-    node.value = res?.data?.data?.node.length ? res?.data?.data?.node[0] : {}
+onMounted(()=>{
+    fetchNode(route.params.id).then((res)=>{
+        node.value = res?.data?.data?.node.length ? res?.data?.data?.node[0] : {}
+    })
+    
+    fetchNodeChannels(route.params.id).then((res)=>{
+        channels.value = res?.data?.data?.channel.length ? res?.data?.data?.channel : {}
+    })
 })
 
-fetchNodeChannels(route.params.id).then((res)=>{
-    channels.value = res?.data?.data?.channel.length ? res?.data?.data?.channel : {}
-})
 
 </script>
 

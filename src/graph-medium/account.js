@@ -5,7 +5,7 @@ import router from "../router";
 
 const state = reactive({
   username:'',
-  userId:''
+  userId:'',
 })
 
 var ls = new SecureLS({

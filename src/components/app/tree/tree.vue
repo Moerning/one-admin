@@ -113,6 +113,7 @@ const buildingClicked = (props) => {
               :icon="mdiEye"
               :iconSize="4"
               class="w-[10px] h-[10px] mr-1"
+              @click="$router.push({ name:'NodeShowId' ,params: { id:data.id } })"
               small
             />
             <BaseButton
@@ -135,6 +136,7 @@ const buildingClicked = (props) => {
               :icon="mdiEye"
               :iconSize="4"
               class="w-[10px] h-[10px] mr-1"
+              @click="$router.push({ name:'ControllerShow' ,params: { id:data.id } })"
               small
             />
             <BaseButton

@@ -32,6 +32,9 @@
                     <FormControl class="w-28 text-sm" v-model="time" :options="selectOptions" />
                 </FormField>
             </div>
+            <div class="gap-6 w-full mb-6 p-5 bg-gray-100 rounded-2xl mt-10">
+                <BaseButton :icon="mdiPlus" class="rounded-2xl w-full text-[12px]" type="submit" color="info" label="افزودن نود"  @click="$router.push(`/controllers/${route.params.id}/node/add`)"/>
+            </div>
         </CardBox>
     </div>
 </template>
@@ -44,6 +47,11 @@ import { useLog } from "../../../graph-medium/log";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import CardBox from "@/components/CardBox.vue"
+import BaseButton from "@/components/BaseButton.vue";
+import {
+  mdiPlus,
+} from "@mdi/js";
+
 const route = useRoute()
 
 const { fetchController, fetchControllerNodes, fetchLogsInterval } = useController()

@@ -53,10 +53,12 @@ const setupLeafletMap = (center, markers) => {
         //  // Creating a marker
          for (let index = 0; index < markers.length; index++) {
           const element = markers[index];
-          let marker = L.marker([element[0],element[1]]);
-          marker.bindTooltip(element[2]).openTooltip();
-          // Adding marker to the map
-          marker.addTo(map);
+          if( element[0] && element[1] && element[1] != 'undefined' && element[0] != 'undefined' ){
+            let marker = L.marker([element[0],element[1]]);
+            marker.bindTooltip(element[2]).openTooltip();
+            // Adding marker to the map
+            marker.addTo(map);
+          }
          }
          
 }
@@ -76,6 +78,7 @@ onMounted(() => {
           mapMarkers.value.push([element.lat,element.long, tooltipText])
         }
       }
+      console.log(mapMarkers.value)
       setupLeafletMap([mapMarkers.value[0][0],mapMarkers.value[0][1]],mapMarkers.value)
     }
   })
