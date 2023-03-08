@@ -1,8 +1,8 @@
 <template>
     <div class="py-5">
         <CardBox>
-            <div class="p-10">
-                <div class="grid grid-cols-3" v-if="node?.id">
+            <div class="p-10 bg-gray-100 rounded-2xl">
+                <div class="flex flex-col items-start" v-if="node?.id">
                     <div class="flex flex-col items-start py-4">
                         <span class="font-bold text-gray-400">MODEL :</span>
                         <span>{{node.model}}</span>

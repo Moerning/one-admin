@@ -89,7 +89,7 @@ export const useBuilding = () => {
       return axe.post(
         '', {
             query: `mutation MyMutation {
-              insert_building(objects: {name: "${name}", id: "${id}", address: "${address}", lat: "${lat}", long: "${long}"}, on_conflict: {constraint: building_pkey, update_columns: account_id}) {
+              insert_building(objects: {name: "${name}", id: "${id}", account_id: "${userId.value}", address: "${address}", lat: "${lat}", long: "${long}"}, on_conflict: {constraint: building_pkey, update_columns: account_id}) {
                 affected_rows
                 returning {
                   address
