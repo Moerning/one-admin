@@ -86,7 +86,7 @@ export const useNode = () => {
         return axe.post(
           '', {
               query: `mutation InsertNode {
-                insert_node(objects: {controller_id: "${params.controller_id}",id: "test-${params.model}", description: "${params.description}", account_id: "${userId.value}", model: "${params.model}", ip_local: "${params.ip_local}"}) {
+                insert_node(objects: {controller_id: "${params.controller_id}",status: "test-${params.status}",id: "test-${params.model}", description: "${params.description}", account_id: "${userId.value}", model: "${params.model}", ip_local: "${params.ip_local}"}) {
                   affected_rows
                   returning {
                     id

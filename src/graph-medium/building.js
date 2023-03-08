@@ -1,4 +1,4 @@
-import { reactive, toRefs } from "vue";
+import { computed, reactive, toRefs } from "vue";
 import { axe } from "./api";
 import { useController } from "./controller";
 import SecureLS from "secure-ls";
@@ -157,6 +157,18 @@ export const useBuilding = () => {
       return result
     }
 
+    const getAllControllers = computed(()=>{
+      let controllers = []
+      state.buildingsTree.forEach((b)=>{
+        if(b.controllers?.length){
+          b.controllers.forEach((c)=>{
+            controllers.push(c)
+          })
+        }
+      })
+      return controllers
+    })
+
 
     return {
         ...toRefs(state),
@@ -164,6 +176,7 @@ export const useBuilding = () => {
         createBuilding, 
         fetchBuilding,
         getBuildingFromLs,
-        updateBuilding
+        updateBuilding,
+        getAllControllers
     }
 }

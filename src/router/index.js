@@ -187,6 +187,24 @@ const routes = [
   },
   {
     meta: {
+      title: "Add Node",
+    },
+    path: "/nodes/add",
+    name: "AddNodeForm",
+    component: () => import("@/views/app/FormsView.vue"),
+    children:[
+      {
+        path: "",
+        name: "AddSimpleNodeForm",
+        component: () => import('@/components/app/node/NodeForm.vue'),
+        meta:{
+          view: 'Node'
+        }
+      },
+    ]
+  },
+  {
+    meta: {
       title: "Add Controller Node",
     },
     path: "/controllers/:controller_id/node/add",

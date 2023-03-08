@@ -53,7 +53,7 @@ export const useController = (building_id) => {
       return axe.post(
         '', {
             query: `mutation InsertController {
-              insert_controller(objects: {ip_local: "${params.ip_local}", id: "test-${params.model}", model: "${params.model}", mac_address: "${params.mac_address}", building_id: "${params.building_id}"}) {
+              insert_controller(objects: {ip_local: "${params.ip_local}", id: "test-${params.model}", status: "test-${params.status}", model: "${params.model}", mac_address: "${params.mac_address}", building_id: "${params.building_id}"}) {
                 affected_rows
                 returning {
                   id

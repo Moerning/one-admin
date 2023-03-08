@@ -2,9 +2,7 @@
 import { mdiEye, mdiPencil, mdiAlarmCheck } from "@mdi/js";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { ref, onMounted, watchEffect } from "vue";
 import { useNode } from "../../../graph-medium/node";
-
 
 // GET NODES
 const { nodes } = useNode()
@@ -61,6 +59,9 @@ const nodeHeaders = [
       </tr>
     </tbody>
   </table>
+  <div>
+    <BaseButton label="افزودن نود" @click="$router.push({ name:'AddSimpleNodeForm' })"/>
+  </div>
 </template>
 <style scoped>
 #mapContainer {

@@ -9,6 +9,9 @@ import {
   mdiReload,
   mdiGithub,
   mdiChartPie,
+  mdiOfficeBuilding,
+  mdiAlarm,
+  mdiAccessPoint
 } from "@mdi/js";
 import * as chartConfig from "@/components/Charts/chart.config.js";
 import LineChart from "@/components/Charts/LineChart.vue";
@@ -23,6 +26,7 @@ import CardBoxClient from "@/components/CardBoxClient.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import SectionBannerStarOnGitHub from "@/components/SectionBannerStarOnGitHub.vue";
+import CardBoxMainSection from "../components/CardBoxMainSection.vue";
 
 const chartData = ref(null);
 
@@ -39,6 +43,12 @@ const mainStore = useMainStore();
 const clientBarItems = computed(() => mainStore.clients.slice(0, 4));
 
 const transactionBarItems = computed(() => mainStore.history);
+
+const mainSections = [
+  { name:'ساختمان ها',icon:mdiOfficeBuilding,to:{ name:'buildings' } },
+  { name:'نود ها',icon:mdiAccessPoint,to:{ name:'buildings' } },
+  { name:'کنترلر ها',icon:mdiAlarm,to:{ name:'buildings' } },
+]
 </script>
 
 <template>
@@ -80,20 +90,16 @@ const transactionBarItems = computed(() => mainStore.history);
         />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 rtl">
         <div class="flex flex-col justify-between">
-          <CardBoxTransaction
-            v-for="(transaction, index) in transactionBarItems"
-            :key="index"
-            :amount="transaction.amount"
-            :date="transaction.date"
-            :business="transaction.business"
-            :type="transaction.type"
-            :name="transaction.name"
-            :account="transaction.account"
+          <CardBoxMainSection 
+          v-for="section in mainSections"
+          :name="section.name"
+          :icon="section.icon"
+          number="7"
           />
         </div>
-        <div class="flex flex-col justify-between">
+        <!-- <div class="flex flex-col justify-between">
           <CardBoxClient
             v-for="client in clientBarItems"
             :key="client.id"
@@ -102,7 +108,7 @@ const transactionBarItems = computed(() => mainStore.history);
             :date="client.created"
             :progress="client.progress"
           />
-        </div>
+        </div> -->
       </div>
 
       <SectionBannerStarOnGitHub class="mt-6 mb-6" />

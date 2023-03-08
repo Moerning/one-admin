@@ -31,7 +31,8 @@ const add = () => {
     mac_address:form.mac_address,
     model:form.model,
     ip_local:form.ip_local,
-    building_id:route.params.building_id
+    building_id:route.params.building_id,
+    status:form.status
   } ).then(()=>{
     alert('Successful Operation')
   }).catch((e)=>{
@@ -44,12 +45,17 @@ const update = () => {
   
 }
 
+const statusOptions = [
+  { id:0,label:"OFF"},
+  { id:1,label:"ON"}
+]
 
 const form = reactive({
   mac_address:"",
   ip_local:"",
   model:"",
-  building_id:""
+  building_id:"",
+  status:0
 });
 
 const submit = () => {
@@ -64,6 +70,9 @@ const submit = () => {
           <FormControl v-model="form.ip_local" placeholder="IP Local" type="text" />
           <FormControl v-model="form.mac_address" placeholder="MAC Address" type="text" />
           <FormControl v-model="form.model" placeholder="Model" type="text" />
+          <FormField label="وضعیت">
+            <FormControl class="text-sm ltr" v-model="form.status" :options="statusOptions" />
+          </FormField>
         </FormField>
 
         <template #footer>
@@ -74,3 +83,11 @@ const submit = () => {
         </template>
       </CardBox>
 </template>
+<style>
+.rtl{
+  direction: rtl;
+}
+.ltr{
+  direction: ltr;
+}
+</style>
