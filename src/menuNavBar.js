@@ -1,15 +1,8 @@
 import {
-  mdiMenu,
-  mdiClockOutline,
-  mdiCloud,
-  mdiCrop,
   mdiAccount,
-  mdiCogOutline,
-  mdiEmail,
+  mdiCogOutline,  
   mdiLogout,
   mdiThemeLightDark,
-  mdiGithub,
-  mdiReact,
 } from "@mdi/js";
 
 export default [

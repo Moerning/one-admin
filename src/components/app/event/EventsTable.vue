@@ -31,35 +31,12 @@ const eventHeaders = [
     </thead>
     <tbody>
       <tr v-for="event in events" :key="event.id">
-        <td data-label="Id">
+        <td data-id="Id">
           {{ event.id }}
         </td>
         <td data-label="Name">
           {{ event.name }}
         </td>
-        <!-- <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          <small
-            class="text-gray-500 dark:text-slate-400"
-            :title="building.created_at"
-            >{{ building.created_at }}</small
-          >
-        </td> -->
-        <!-- <td class="before:hidden lg:w-1 whitespace-nowrap">
-          <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton
-              color="info"
-              :icon="mdiEye"
-              small
-              @click="$router.push(`/buildings/show/${building.id}`)"
-            />
-            <BaseButton
-              color="warning"
-              :icon="mdiPencil"
-              small
-              @click="$router.push(`/buildings/form/${building.id}`)"
-            />
-          </BaseButtons>
-        </td> -->
       </tr>
     </tbody>
   </table>

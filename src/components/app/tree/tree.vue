@@ -7,10 +7,14 @@ import { ref } from 'vue'
 import { createInitalElements } from './initial-elements.js'
 import { mdiHome,mdiEye,mdiPencil,mdiAlarmLight,mdiAccessPoint } from "@mdi/js";
 import BaseIcon from "@/components/BaseIcon.vue";
-import BaseButton from "@/components/BaseButton.vue"
+import BaseButton from "@/components/BaseButton.vue";
+import NodeForm from '../node/NodeForm.vue'
+
 const props = defineProps({
   initialNodes:{}
 })
+
+const showControllerForm = ref(false)
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -28,8 +32,11 @@ const elements = ref(createInitalElements(props.initialNodes))
  *
  * onPaneReady is called when viewpane & nodes have visible dimensions
  */
-onPaneReady(({ fitView }) => {
-  fitView()
+const viewInstance = ref()
+
+onPaneReady((i) => {
+  viewInstance.value = i
+  viewInstance.value.fitView()
 })
 
 onNodeDragStop((e) => console.log('drag stop', e))
@@ -64,7 +71,7 @@ const logToObject = () => console.log(toObject())
 /**
  * Resets the current viewpane transformation (zoom & pan)
  */
-const resetTransform = () => setTransform({ x: 0, y: 0, zoom: 1 })
+const resetTransform = () => setTransform({ x: 0, y: 0, zoom: 0.1 })
 
 const toggleClass = () => (dark.value = !dark.value)
 
@@ -73,40 +80,57 @@ const buildingClicked = (props) => {
   console.log(props)
 }
 
+const zoomOnMe = (node) => {
+  viewInstance.value.fitView({ nodes:[node] })
+}
 </script>
 
 <template>
-  <div class="w-[1000px] h-[800px]">
-    <VueFlow v-model="elements" :class="{ dark }" class="basicflow" :default-viewport="{ zoom: 1.5 }" :min-zoom="0.2" :max-zoom="4">
+  <div class="w-[1500px] h-[800px]">
+    <VueFlow v-model="elements" :class="{ dark }" class="basicflow" :default-zoom="0.1" :max-zoom="4" :min-zoom="0.1">
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
       <Controls />
-      <template #node-building="{ data }">
-        <div @click="e => buildingClicked(props)" class="building-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded border h-[25px] w-[25px] text-[4px] bg-white flex items-center justify-center gap-1 px-1">
-          <span v-if="data?.name" class="max-w-[25px] text-[4px] building-text">{{data.name}}</span>
+      <template #node-building="{ data, id }">
+        <div @click="e => buildingClicked(props)" class="building-node">
+          <span v-if="data?.name" class="building-text">{{data.name}}</span>
+          <div v-if="showControllerForm">
+            <component :is="NodeForm" />
+          </div>
           <span class="building-tools justify-around mt-1 w-full">
             <BaseButton
               color="info"
               :icon="mdiEye"
-              :iconSize="4"
-              class="w-[10px] h-[10px] mr-1"
+              :iconSize="24"
+              class="w-[60px] h-[60px] mr-1"
               @click="$router.push(`/buildings/show/${data.id}`)"
+              small
+            />
+            <BaseButton
+              color="danger"
+              :icon="mdiEye"
+              :iconSize="24"
+              class="w-[60px] h-[60px] mr-1"
+              @click="() => showControllerForm = !showControllerForm"
               small
             />
             <BaseButton
               color="success"
               :icon="mdiPencil"
-              :iconSize="4"
-              class="w-[10px] h-[10px]"
+              :iconSize="24"
+              class="w-[60px] h-[60px]"
               small
+              @click="zoomOnMe(id)"
             />
           </span>
-          <BaseIcon :path="mdiHome" :size="10" class="building-icon"/>
+          <span class="building-icon" >
+            <BaseIcon :size="400" w="w-20" h="h-20" :path="mdiHome"/>
+          </span>
         </div>
       </template>
       <template #node-node="{ data }">
-        <div @click="e => buildingClicked(props)" class="node-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded border h-[25px] w-[25px] text-[4px] bg-white flex items-center justify-center gap-1 px-1">
-          <span v-if="data?.id" class="max-w-[25px] text-[4px] node-text">{{data.id}}</span>
+        <div @click="e => buildingClicked(props)" class="node-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded-[20px] border h-[150px] w-[150px] text-[16px] bg-white flex items-center justify-center gap-1 px-1">
+          <span v-if="data?.id" class="max-w-[325px] text-[40px] node-text">{{data.id}}</span>
           <span class="node-tools justify-around mt-1 w-full">
             <BaseButton
               color="info"
@@ -128,8 +152,13 @@ const buildingClicked = (props) => {
         </div>
       </template>
       <template #node-controller="{ data }">
-        <div @click="e => buildingClicked(props)" class="controller-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded border h-[20px] w-[35px] text-[4px] bg-white flex items-center justify-center gap-1 px-1">
-          <span v-if="data?.mac_address" class="max-w-[25px] text-[4px] controller-text">{{data.mac_address}}</span>
+        <div @click="e => buildingClicked(props)" class="controller-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded-[20px] border h-[300px] w-[400px] text-[40px] bg-white flex items-center justify-center gap-1 px-1">
+          <span v-if="data?.mac_address" class="max-w-[325px] text-[40px] controller-text">{{data.mac_address}}</span>
+          <div>
+            <form>
+              <input class="w-[10px] h-[1px]" type="text">
+            </form>
+          </div>
           <span class="controller-tools justify-around mt-1 w-full">
             <BaseButton
               color="info"
@@ -203,19 +232,23 @@ const buildingClicked = (props) => {
 </template>
 <style>
 .building-node {
+  @apply  flex flex-col justify-around items-center gap-1 transition-all relative z-10 rounded-[48px] border h-[325px] w-[525px] text-[40px] bg-white flex items-center justify-center gap-1 px-1;
   /* background-color: #7E627B; */
   background-color: #5BA0BF;
   color: white;
   border-color: #012442;
   color: white;
   font-weight: 600;
+  border:5px solid #012442;
 }
 
 .building-icon{
+  @apply  bg-zinc-300 rounded-full w-28 h-28 flex justify-center items-center;
   position: absolute;
-  top:-16px;
-  left:-16px;
+  top:-100px;
+  left:-100px;
   color:#012442;
+  border:5px solid #012442;
 }
 
 .building-tools {
@@ -223,8 +256,17 @@ const buildingClicked = (props) => {
 }
 
 .building-node:hover {
-  height: 45px;
-  width: 45px;
+  height: 800px;
+  width: 400px;
+}
+
+.building-text {
+  @apply max-w-[325px] text-[48px] ;
+}
+
+.building-node:hover .building-text{
+  font-size: 24px;
+  max-width: 325px;
 }
 
 .building-node:hover .building-tools{
@@ -251,8 +293,8 @@ const buildingClicked = (props) => {
 }
 
 .controller-node:hover {
-  height: 45px;
-  width: 45px;
+  height: 400px;
+  width: 400px;
 }
 
 .controller-node:hover .controller-tools{

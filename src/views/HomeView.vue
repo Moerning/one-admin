@@ -27,6 +27,32 @@ import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import SectionBannerStarOnGitHub from "@/components/SectionBannerStarOnGitHub.vue";
 import CardBoxMainSection from "../components/CardBoxMainSection.vue";
+import { useBuilding } from "../graph-medium/building";
+import { useNode } from "../graph-medium/node";
+import TreeContainer from "../components/app/tree/treeContainer.vue";
+
+const { buildingsTree } = useBuilding()
+const { nodes } = useNode()
+
+const buildingsCount = computed(()=>{
+  return buildingsTree.value.length
+})
+
+const controllersCount = computed(()=>{
+  let count = 0;
+  if(buildingsTree.value.length){
+    buildingsTree.value.forEach((b)=>{
+      if(b.controllers && b.controllers.length){
+        count = count + b.controllers.length
+      }
+    })
+  }
+  return count
+})
+
+const nodesCount = computed(()=>{
+  return nodes.value.length
+})
 
 const chartData = ref(null);
 
@@ -44,11 +70,13 @@ const clientBarItems = computed(() => mainStore.clients.slice(0, 4));
 
 const transactionBarItems = computed(() => mainStore.history);
 
-const mainSections = [
-  { name:'ساختمان ها',icon:mdiOfficeBuilding,to:{ name:'buildings' } },
-  { name:'نود ها',icon:mdiAccessPoint,to:{ name:'buildings' } },
-  { name:'کنترلر ها',icon:mdiAlarm,to:{ name:'buildings' } },
-]
+const mainSections = computed(()=>{
+  return [
+    { name:'ساختمان ها',icon:mdiOfficeBuilding,to:{ name:'buildings' }, count:buildingsCount.value },
+    { name:'نود ها',icon:mdiAccessPoint,to:{ name:'buildings' }, count: nodesCount.value },
+    { name:'کنترلر ها',icon:mdiAlarm,to:{ name:'buildings' }, count: controllersCount.value },
+  ]
+})
 </script>
 
 <template>
@@ -63,14 +91,13 @@ const mainSections = [
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
         <CardBoxWidget
-          trend="12%"
-          trend-type="up"
           color="text-emerald-500"
-          :icon="mdiAccountMultiple"
-          :number="512"
-          label="Clients"
+          :icon="section.icon"
+          :number="section.count"
+          :label="section.name"
+          v-for="section in mainSections"
         />
-        <CardBoxWidget
+        <!-- <CardBoxWidget
           trend="12%"
           trend-type="down"
           color="text-blue-500"
@@ -87,10 +114,10 @@ const mainSections = [
           :number="256"
           suffix="%"
           label="Performance"
-        />
+        /> -->
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 rtl">
+      <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 rtl">
         <div class="flex flex-col justify-between">
           <CardBoxMainSection 
           v-for="section in mainSections"
@@ -99,19 +126,9 @@ const mainSections = [
           number="7"
           />
         </div>
-        <!-- <div class="flex flex-col justify-between">
-          <CardBoxClient
-            v-for="client in clientBarItems"
-            :key="client.id"
-            :name="client.name"
-            :login="client.login"
-            :date="client.created"
-            :progress="client.progress"
-          />
-        </div> -->
-      </div>
-
-      <SectionBannerStarOnGitHub class="mt-6 mb-6" />
+      </div> -->
+      <TreeContainer />
+      <!-- <SectionBannerStarOnGitHub class="mt-6 mb-6" />
 
       <SectionTitleLineWithButton :icon="mdiChartPie" title="Trends overview">
         <BaseButton
@@ -135,7 +152,7 @@ const mainSections = [
 
       <CardBox has-table>
         <TableSampleClients />
-      </CardBox>
+      </CardBox> -->
     </SectionMain>
   </LayoutAuthenticated>
 </template>

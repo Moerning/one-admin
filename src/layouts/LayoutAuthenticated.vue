@@ -1,6 +1,6 @@
 <script setup>
-import { mdiForwardburger, mdiBackburger, mdiMenu, mdiArrowRight } from "@mdi/js";
-import { ref, computed, watchEffect, watch } from "vue";
+import { mdiForwardburger, mdiBackburger, mdiMenu, mdiArrowRight, mdiAccountCancel } from "@mdi/js";
+import { ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import menuNavBar from "@/menuNavBar.js";
 import { useMainStore } from "@/stores/main.js";
@@ -18,9 +18,9 @@ import {
 import { useNode } from "../graph-medium/node";
 import { useAccount } from "../graph-medium/account";
 
-const { username, logout } = useAccount()
+const { username, logout, role } = useAccount()
 
-const { buildingsTree,getAllBuildings } = useBuilding()
+const { buildingsTree, getAllBuildings } = useBuilding()
 const { nodes } = useNode()
 
 const buildingsMenu = ref([])
@@ -28,53 +28,53 @@ const nodesMenu = ref([])
 
 getAllBuildings()
 
-watch(buildingsTree, async (newTree)=>{
+watch(buildingsTree, async (newTree) => {
   buildingsMenu.value = [{
-      label: "View All Buildings",
-      to: { name: "BuildingsTable" },
-      icon:mdiArrowRight,
-      color:"info",
-    }]
+    label: "View All Buildings",
+    to: { name: "BuildingsTable" },
+    icon: mdiArrowRight,
+    color: "info",
+  }]
   for (let i = 0; i < newTree.length; i++) {
     const building = newTree[i];
     const controllerMenu = [{
       to: { name: 'BuildingShowId', params: { id: building.id } },
       label: "View Building",
       color: "contrast",
-      icon:mdiArrowRight
+      icon: mdiArrowRight
     }]
     for (let j = 0; j < building.controllers.length; j++) {
       const element = building.controllers[j]
       let controllerNodesMenu = [{
-        to:{ name: "ControllerShow", params: { id:element?.id } },
+        to: { name: "ControllerShow", params: { id: element?.id } },
         label: "View Controller",
         color: "success",
-        icon:mdiArrowRight
+        icon: mdiArrowRight
       }]
-      if(element.nodes?.length){
+      if (element.nodes?.length) {
         element.nodes.forEach(nodeElement => {
           controllerNodesMenu.push({
             label: nodeElement?.id,
             to: `/nodes/show/${nodeElement?.id}`,
-            color:"success"
+            color: "success"
           })
         });
       }
 
       controllerMenu.push({
-        label:element?.mac_address,
-        menu:controllerNodesMenu,
-        color:"success"
+        label: element?.mac_address,
+        menu: controllerNodesMenu,
+        color: "success"
       })
     }
-    if(!controllerMenu.length){
+    if (!controllerMenu.length) {
       controllerMenu.push({
-        label:'No Controllers Registered'
+        label: 'No Controllers Registered'
       })
     }
     buildingsMenu.value.push({
       label: building.name,
-      menu:controllerMenu,
+      menu: controllerMenu,
     })
   }
 })
@@ -135,6 +135,21 @@ const menuClick = (event, item) => {
     logout()
   }
 };
+
+const adminMenuNavbar = computed(() => {
+  if (role.value != "boss") {
+    return menuNavBar
+  }
+  else {
+    return [...menuNavBar,
+    {
+      icon: mdiAccountCancel,
+      label: "مدیریت کاربران",
+      to: { name: "AccountsTable" },
+    },
+    ]
+  }
+})
 </script>
 
 <template>
@@ -144,7 +159,7 @@ const menuClick = (event, item) => {
   }">
     <div :class="[layoutAsidePadding, { 'ml-60 lg:ml-0': isAsideMobileExpanded }]"
       class="pt-14 min-h-screen w-screen transition-position lg:w-auto bg-gray-50 dark:bg-slate-800 dark:text-slate-100">
-      <NavBar :menu="menuNavBar" :class="[
+      <NavBar :menu="adminMenuNavbar" :class="[
         layoutAsidePadding,
         { 'ml-60 lg:ml-0': isAsideMobileExpanded },
       ]" @menu-click="menuClick">
@@ -155,8 +170,8 @@ const menuClick = (event, item) => {
           <BaseIcon :path="mdiMenu" size="24" />
         </NavBarItemPlain>
       </NavBar>
-      <AsideMenu :is-aside-mobile-expanded="isAsideMobileExpanded" :is-aside-lg-active="isAsideLgActive"
-        :menu="menuAside" @menu-click="menuClick" @aside-lg-close-click="isAsideLgActive = false" />
+      <AsideMenu :is-aside-mobile-expanded="isAsideMobileExpanded" :is-aside-lg-active="isAsideLgActive" :menu="menuAside"
+        @menu-click="menuClick" @aside-lg-close-click="isAsideLgActive = false" />
       <slot />
       <FooterBar>
       </FooterBar>

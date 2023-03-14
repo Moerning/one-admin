@@ -9,19 +9,28 @@ let buildingIndex = 0
 let nodeIndex = 0
 let controllerIndex = 0
 
-const yMarginDefault = 100
+// const yMarginDefault = 1200
+// const yMarginControllers = 1 * yMarginDefault
+// const yMarginNodes = 2 * yMarginDefault
+
+// const xMarginDefault = 1000
+// const xMarginControllers = 2 * xMarginDefault
+// const xMarginNodes = 3 * xMarginDefault
+
+const yMarginDefault = 1200
 const yMarginControllers = 1 * yMarginDefault
 const yMarginNodes = 2 * yMarginDefault
 
-const xMarginDefault = 100
+const xMarginDefault = 450
 const xMarginControllers = 2 * xMarginDefault
 const xMarginNodes = 3 * xMarginDefault
 
 const createBuildingNode = (building, numberOfBuildings, index) => {
     let id = Math.floor(Math.random() * 100)
-    let buidlingXMargin = xMarginDefault * buildingIndex
+    let buidlingXMargin = xMarginDefault
+    let buildingYMargin = yMarginDefault * buildingIndex
     buildingIndex++
-    return { id: id + "" , type: 'building', label: building.name , position: { x: buidlingXMargin  , y: 0 }, class: 'light', data:building }  
+    return { id: id + "" , type: 'building', label: building.name , position: { x: buidlingXMargin  , y: buildingIndex }, class: 'light', data:building }  
 }
 
 const createControllerNode = (controller, buildingNodeId ,numberOfControllers, index) => {
