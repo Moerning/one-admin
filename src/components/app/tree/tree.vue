@@ -87,7 +87,7 @@ const zoomOnMe = (node) => {
 
 <template>
   <div class="w-[1500px] h-[800px]">
-    <VueFlow v-model="elements" :class="{ dark }" class="basicflow" :default-zoom="0.1" :max-zoom="4" :min-zoom="0.1">
+    <VueFlow v-model="elements" :class="{ dark }" class="basicflow" :default-zoom="0.1" :max-zoom="4" :min-zoom="0.1" :style="{ backgroundColor: '#1A192B' }">
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
       <Controls />
@@ -234,20 +234,20 @@ const zoomOnMe = (node) => {
 .building-node {
   @apply  flex flex-col justify-around items-center gap-1 transition-all relative z-10 rounded-[48px] border h-[325px] w-[525px] text-[40px] bg-white flex items-center justify-center gap-1 px-1;
   /* background-color: #7E627B; */
-  background-color: #5BA0BF;
+  /* background-color: #5BA0BF; */
   color: white;
   border-color: #012442;
   color: white;
   font-weight: 600;
-  border:5px solid #012442;
+  border:25px solid #5BA0BF;
 }
 
 .building-icon{
-  @apply  bg-zinc-300 rounded-full w-28 h-28 flex justify-center items-center;
+  @apply  bg-transparent rounded-full w-28 h-28 flex justify-center items-center;
   position: absolute;
-  top:-100px;
-  left:-100px;
-  color:#012442;
+  top:-120px;
+  left:-120px;
+  color:#5BA0BF;
   border:5px solid #012442;
 }
 
@@ -262,6 +262,7 @@ const zoomOnMe = (node) => {
 
 .building-text {
   @apply max-w-[325px] text-[48px] ;
+  color: #5BA0BF;
 }
 
 .building-node:hover .building-text{
