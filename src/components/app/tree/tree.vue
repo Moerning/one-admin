@@ -101,24 +101,28 @@ const zoomOnMe = (node) => {
             <BaseButton
               color="info"
               :icon="mdiEye"
-              :iconSize="24"
-              class="w-[60px] h-[60px] mr-1"
+              :iconSize="48"
+              class="w-28 h-28 mr-1"
+              iconHeight="h-20"
+              iconWidth="h-20"
               @click="$router.push(`/buildings/show/${data.id}`)"
               small
             />
-            <BaseButton
+            <!-- <BaseButton
               color="danger"
               :icon="mdiEye"
               :iconSize="24"
               class="w-[60px] h-[60px] mr-1"
               @click="() => showControllerForm = !showControllerForm"
               small
-            />
+            /> -->
             <BaseButton
               color="success"
               :icon="mdiPencil"
-              :iconSize="24"
-              class="w-[60px] h-[60px]"
+              :iconSize="48"
+              class="w-28 h-28 mr-1"
+              iconWidth="h-20"
+              iconHeight="h-20"
               small
               @click="zoomOnMe(id)"
             />
@@ -129,54 +133,61 @@ const zoomOnMe = (node) => {
         </div>
       </template>
       <template #node-node="{ data }">
-        <div @click="e => buildingClicked(props)" class="node-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded-[20px] border h-[150px] w-[150px] text-[16px] bg-white flex items-center justify-center gap-1 px-1">
+        <div @click="e => buildingClicked(props)" class="node-node">
           <span v-if="data?.id" class="max-w-[325px] text-[40px] node-text">{{data.id}}</span>
           <span class="node-tools justify-around mt-1 w-full">
             <BaseButton
               color="info"
               :icon="mdiEye"
-              :iconSize="4"
-              class="w-[10px] h-[10px] mr-1"
+              :iconSize="48"
+              class="w-28 h-28 mr-1"
+              iconWidth="h-20"
+              iconHeight="h-20"
               @click="$router.push({ name:'NodeShowId' ,params: { id:data.id } })"
               small
             />
             <BaseButton
               color="success"
               :icon="mdiPencil"
-              :iconSize="4"
-              class="w-[10px] h-[10px]"
+              :iconSize="48"
+              class="w-28 h-28 mr-1"
+              iconWidth="h-20"
+              iconHeight="h-20"
               small
             />
           </span>
-          <BaseIcon :path="mdiAccessPoint" :size="10" class="node-icon"/>
+          <span class="node-icon">
+            <BaseIcon :size="400" w="w-20" h="h-20" :path="mdiAccessPoint"/>
+          </span>
         </div>
       </template>
       <template #node-controller="{ data }">
-        <div @click="e => buildingClicked(props)" class="controller-node flex flex-col justify-center items-center gap-1 transition-all relative z-10 rounded-[20px] border h-[300px] w-[400px] text-[40px] bg-white flex items-center justify-center gap-1 px-1">
+        <div @click="e => buildingClicked(props)" class="controller-node">
           <span v-if="data?.mac_address" class="max-w-[325px] text-[40px] controller-text">{{data.mac_address}}</span>
-          <div>
-            <form>
-              <input class="w-[10px] h-[1px]" type="text">
-            </form>
-          </div>
           <span class="controller-tools justify-around mt-1 w-full">
             <BaseButton
               color="info"
               :icon="mdiEye"
-              :iconSize="4"
-              class="w-[10px] h-[10px] mr-1"
+              :iconSize="48"
+              class="w-28 h-28 mr-1"
+              iconWidth="h-20"
+              iconHeight="h-20"
               @click="$router.push({ name:'ControllerShow' ,params: { id:data.id } })"
               small
             />
             <BaseButton
               color="success"
               :icon="mdiPencil"
-              :iconSize="4"
-              class="w-[10px] h-[10px]"
+              :iconSize="48"
+              class="w-28 h-28 mr-1"
+              iconWidth="h-20"
+              iconHeight="h-20"
               small
             />
           </span>
-          <BaseIcon :path="mdiAlarmLight" :size="10" class="controller-icon"/>
+          <span class="controller-icon">
+            <BaseIcon :size="400" w="w-20" h="h-20" :path="mdiAlarmLight"/>
+          </span>
         </div>
       </template>
       <Panel :position="PanelPosition.TopRight" class="controls">
@@ -256,8 +267,7 @@ const zoomOnMe = (node) => {
 }
 
 .building-node:hover {
-  height: 800px;
-  width: 400px;
+  @apply h-[625px] w-[675px];
 }
 
 .building-text {
@@ -266,8 +276,8 @@ const zoomOnMe = (node) => {
 }
 
 .building-node:hover .building-text{
-  font-size: 24px;
-  max-width: 325px;
+  font-size: 50px;
+  max-width: 525px;
 }
 
 .building-node:hover .building-tools{
@@ -276,26 +286,44 @@ const zoomOnMe = (node) => {
 
 /* controller */
 .controller-node {
-  background-color: #BC2041;
+  @apply  flex flex-col justify-around items-center gap-1 transition-all relative z-10 rounded-[48px] border h-[325px] w-[525px] text-[40px] bg-white flex items-center justify-center gap-1 px-1;
+  color: white;
+  border-color: #012442;
+  color: white;
+  font-weight: 600;
+  border:25px solid #564C55;
+  /* background-color: #BC2041;
   color: white;
   border-color: #564C55;
-  color: white;
+  color: white; */
 }
 
 .controller-icon{
+  @apply  bg-transparent rounded-full w-28 h-28 flex justify-center items-center;
   position: absolute;
-  top:-16px;
-  left:-16px;
+  top:-120px;
+  left:-120px;
   color:#564C55;
+  /* border:5px solid #564C55; */
 }
+
 
 .controller-tools {
   display: none;
 }
 
+.controller-text{
+  color: #564C55;
+}
+
 .controller-node:hover {
-  height: 400px;
-  width: 400px;
+  height: 700px;
+  width: 700px;
+}
+
+.controller-node:hover .controller-text{
+  font-size: 50px;
+  max-width: 525px;
 }
 
 .controller-node:hover .controller-tools{
@@ -305,17 +333,36 @@ const zoomOnMe = (node) => {
 /* Node */
 
 .node-node {
-  background-color: #5061C5;
+  @apply  flex flex-col justify-around items-center gap-1 transition-all relative z-10 rounded-[48px] border h-[325px] w-[525px] text-[40px] bg-white flex items-center justify-center gap-1 px-1;
+  color: white;
+  border-color: #012442;
+  color: white;
+  font-weight: 600;
+  border:25px solid #5061C5;
+  /* background-color: #5061C5;
   color: white;
   border-color: #271B80;
-  color: white;
+  color: white; */
 }
 
-.node-icon{
+.node-text{
+  color: #5061C5;
+}
+
+/* .node-icon{
   position: absolute;
   top:-16px;
   left:-16px;
   color:#271B80;
+} */
+
+.node-icon{
+  @apply  bg-transparent rounded-full w-28 h-28 flex justify-center items-center;
+  position: absolute;
+  top:-120px;
+  left:-120px;
+  color:#5061C5;
+  /* border:5px solid #564C55; */
 }
 
 .node-tools {
@@ -323,8 +370,13 @@ const zoomOnMe = (node) => {
 }
 
 .node-node:hover {
-  height: 45px;
-  width: 45px;
+  /* height: 45px; */
+  width: 745px;
+}
+
+.node-node:hover .node-text{
+  font-size: 50px;
+  max-width: 525px;
 }
 
 .node-node:hover .node-tools{
