@@ -137,7 +137,7 @@ const menuClick = (event, item) => {
 };
 
 const adminMenuNavbar = computed(() => {
-  if (role.value != "boss") {
+  if (role.value != "boss" && role.value != "admin") {
     return menuNavBar
   }
   else {
