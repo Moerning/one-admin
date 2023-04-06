@@ -57,7 +57,7 @@ export const useAccount = () => {
         if (user.password == options.password) {
           cookieStorage.setItem('_account', user.username)
           cookieStorage.setItem('_account_id', user.id)
-          //boss or clien
+          //boss-admin or client
           cookieStorage.setItem('_account_role', user.role)
           setUsername(user.username)
           setUserId(user.id)

@@ -12,6 +12,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  inputHeight:{
+    type: String,
+    default: null,
+  },
   autocomplete: {
     type: String,
     default: null,
@@ -59,7 +63,7 @@ const inputElClass = computed(() => {
   const base = [
     "px-3 py-2 max-w-full focus:ring focus:outline-none border-gray-700 rounded w-full",
     "dark:placeholder-gray-400",
-    computedType.value === "textarea" ? "h-24" : "h-12",
+    computedType.value === "textarea" ? "h-24" : (props.inputHeight ? props.inputHeight : "h-12"),
     props.borderless ? "border-0" : "border",
     props.transparent ? "bg-transparent" : "bg-white dark:bg-slate-800",
   ];

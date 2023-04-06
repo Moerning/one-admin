@@ -11,7 +11,9 @@ import {
   mdiChartPie,
   mdiOfficeBuilding,
   mdiAlarm,
-  mdiAccessPoint
+  mdiAccessPoint,
+  mdiHome,
+  mdiAlarmLight
 } from "@mdi/js";
 import * as chartConfig from "@/components/Charts/chart.config.js";
 import LineChart from "@/components/Charts/LineChart.vue";
@@ -72,9 +74,9 @@ const transactionBarItems = computed(() => mainStore.history);
 
 const mainSections = computed(()=>{
   return [
-    { name:'ساختمان ها',icon:mdiOfficeBuilding,to:{ name:'buildings' }, count:buildingsCount.value },
-    { name:'نود ها',icon:mdiAccessPoint,to:{ name:'buildings' }, count: nodesCount.value },
-    { name:'کنترلر ها',icon:mdiAlarm,to:{ name:'buildings' }, count: controllersCount.value },
+    { name:'ساختمان ها',icon:mdiHome,to:{ name:'buildings' }, count:buildingsCount.value },
+    { name:'نود ها',icon:mdiAlarmLight,to:{ name:'buildings' }, count: nodesCount.value },
+    { name:'کنترلر ها',icon:mdiAccessPoint,to:{ name:'buildings' }, count: controllersCount.value },
   ]
 })
 </script>

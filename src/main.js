@@ -1,7 +1,4 @@
 import { createApp, provide, h } from "vue"
-
-import { DefaultApolloClient } from "@vue/apollo-composable"
-import { apolloClient } from "./apollo-client"
 import { createPinia } from "pinia";
 
 import App from "./App.vue";
@@ -9,6 +6,8 @@ import router from "./router";
 import { useMainStore } from "@/stores/main.js";
 import { useStyleStore } from "@/stores/style.js";
 import { darkModeKey, styleKey } from "@/config.js";
+import { DefaultApolloClient } from "@vue/apollo-composable"
+import { apolloClient } from "./apollo-client"
 
 import "./css/main.css";
 
