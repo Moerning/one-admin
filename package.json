@@ -8,15 +8,15 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.1",
+    "@apollo/client": "^3.7.11",
     "@mdi/js": "^7.0.96",
     "@rushstack/eslint-patch": "^1.1.4",
     "@vue-flow/background": "^1.0.4",
     "@vue-flow/controls": "^1.0.3",
     "@vue-flow/core": "^1.14.3",
     "@vue-flow/minimap": "^1.0.3",
-    "@vue/apollo-composable": "^4.0.0-beta.1",
-    "@vue/apollo-util": "^4.0.0-alpha.18",
+    "@vue/apollo-composable": "^4.0.0-beta.4",
+    "@vue/apollo-util": "^4.0.0-beta.4",
     "apollo-boost": "^0.4.9",
     "axios": "^1.2.0",
     "chart.js": "^3.6.0",
@@ -26,6 +26,7 @@
     "numeral": "^2.0.6",
     "pinia": "^2.0.13",
     "secure-ls": "^1.2.6",
+    "subscriptions-transport-ws": "^0.11.0",
     "vue": "^3.0.0",
     "vue-apollo": "^3.1.0",
     "vue-router": "^4.0.13"

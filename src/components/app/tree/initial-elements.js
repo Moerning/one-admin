@@ -39,7 +39,7 @@ const createNodeNodes = (node, controllerNodeId , numberOfNodes, index) => {
     let id = Math.floor(Math.random() * 100)
     let buidlingXMargin = xMarginDefault * nodeIndex
     nodeIndex++
-    let edge = { id: (id * 10) + "" , target: id + "" , source: controllerNodeId, markerEnd: MarkerType.ArrowClosed, animated:true }
+    let edge = { id: (id * 10) + "" + controllerNodeId , target: id + "" , source: controllerNodeId, markerEnd: MarkerType.ArrowClosed, animated:true, style:{stroke:'red','stroke-width':'10px','stroke-dasharray':'25'} }
 
     let nodeNode = { id: id + "" , type: 'node', label: node.id , position: { x: buidlingXMargin  , y: yMarginNodes }, class: 'light', data: node }  
     return [ nodeNode, edge ]

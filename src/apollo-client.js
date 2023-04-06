@@ -1,4 +1,5 @@
-import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client/core"
+import { ApolloClient, split, InMemoryCache, HttpLink } from "@apollo/client/core"
+import { WebSocketLink } from "@apollo/client/link/ws"
 import { getMainDefinition } from "@apollo/client/utilities"
 import { onError } from "@apollo/client/link/error"
 import { logErrorMessages } from "@vue/apollo-util"
@@ -18,6 +19,20 @@ const httpLink = new HttpLink({
     },
 })
 
+// Create a WebSocket link:
+const wsLink = new WebSocketLink({
+    uri: "ws://185.231.181.50:8080/v1/graphql",
+    options: {
+        reconnect: true,
+        lazy: true,
+        timeout: 30000,
+        inactivityTimeout: 30000,
+        connectionParams: () => {
+            return { headers: getHeaders() }
+        },
+    },
+})
+
 const errorLink = onError((error) => {
     if (process.env.NODE_ENV !== "production") {
         logErrorMessages(error)
@@ -27,5 +42,18 @@ const errorLink = onError((error) => {
 // Create the apollo client
 export const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
-    link: errorLink.concat(httpLink),
+    link: errorLink.concat(
+        split(
+            // split based on operation type
+            ({ query }) => {
+                const definition = getMainDefinition(query)
+                return (
+                    definition.kind === "OperationDefinition" &&
+                    definition.operation === "subscription"
+                )
+            },
+            wsLink,
+            httpLink
+        )
+    ),
 })
