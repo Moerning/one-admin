@@ -10,7 +10,7 @@ import { DefaultApolloClient } from "@vue/apollo-composable"
 import { apolloClient } from "./apollo-client"
 
 import "./css/main.css";
-
+import "@vueform/toggle/themes/default.css"
 
 /* Init Pinia */
 const pinia = createPinia();

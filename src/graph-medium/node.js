@@ -3,7 +3,7 @@ import { reactive, toRefs } from "vue";
 import { useAccount } from "./account";
 
 const state = reactive({
-    nodes:[]
+    nodes: []
 })
 
 export const useNode = () => {
@@ -23,10 +23,10 @@ export const useNode = () => {
                     status
                 }
               }`
-      })
+        })
     }
 
-    const pushToNodes = (value)=> {
+    const pushToNodes = (value) => {
         state.nodes.push(value)
     }
 
@@ -35,14 +35,14 @@ export const useNode = () => {
         for (let index = 0; index < controllers.length; index++) {
             try {
                 const nodes = await fetchControllerNodes(controllers[index].id)
-                if(nodes.data.data.node.length)
+                if (nodes.data.data.node.length)
                     pushToNodes(...nodes.data.data.node)
             } catch (error) {
                 gotAll = false
                 console.log('failed to fetch nodes')
             }
         }
-        if(gotAll)
+        if (gotAll)
             return Promise.resolve(state.nodes)
         return Promise.reject(null)
     }
@@ -62,7 +62,7 @@ export const useNode = () => {
                     status
                 }
               }`
-      })
+        })
     }
 
     const fetchNodeChannels = (id) => {
@@ -74,18 +74,18 @@ export const useNode = () => {
                     number
                 }
               }`
-      })
+        })
     }
 
     const emptyNodes = () => {
         state.nodes = []
     }
 
-    const createNode = async ( params ) => {
+    const createNode = async (params) => {
         const { userId } = useAccount()
         return axe.post(
-          '', {
-              query: `mutation InsertNode {
+            '', {
+            query: `mutation InsertNode {
                 insert_node(objects: {controller_id: "${params.controller_id}",status: "test-${params.status}",id: "test-${params.model}", description: "${params.description}", account_id: "${userId.value}", model: "${params.model}", ip_local: "${params.ip_local}"}) {
                   affected_rows
                   returning {
@@ -94,7 +94,22 @@ export const useNode = () => {
                 }
               }`
         })
-      }
+    }
+
+    const updateNodeStatus = async (id, status) => {
+        return axe.post(
+            '', {
+            query: `mutation NodeStatus {
+                update_node(where: {id: {_eq: "${id}"}}, _set: {status: "${status}"}) {
+                  affected_rows
+                  returning {
+                    status
+                    id
+                  }
+                }
+              }`
+        })
+    }
 
     return {
         pushToNodes,
@@ -104,6 +119,7 @@ export const useNode = () => {
         emptyNodes,
         fetchNodeChannels,
         createNode,
+        updateNodeStatus,
         ...toRefs(state)
     }
 }

@@ -29,7 +29,7 @@ const createControllerNode = (controller, buildingNodeId ,numberOfControllers, i
     
     let buidlingXMargin = (xMarginDefault * controllerIndex) + 25
     controllerIndex++
-    let edge = { id: (id * 10) + "" , target: id + "" , source: buildingNodeId, markerEnd: MarkerType.ArrowClosed }
+    let edge = { id: (id * 10) + "" , target: id + "" , source: buildingNodeId, markerEnd: MarkerType.ArrowClosed, style:{stroke:'green','stroke-width':'10px','stroke-dasharray':'25'} }
 
     let controllerNode = { id: id + "" , type: 'controller', label: controller.mac_address , position: { x: buidlingXMargin  , y: yMarginControllers }, class: 'light', data:controller }  
     return [ controllerNode, edge ]
@@ -39,7 +39,7 @@ const createNodeNodes = (node, controllerNodeId , numberOfNodes, index) => {
     let id = Math.floor(Math.random() * 100)
     let buidlingXMargin = xMarginDefault * nodeIndex
     nodeIndex++
-    let edge = { id: (id * 10) + "" + controllerNodeId , target: id + "" , source: controllerNodeId, markerEnd: MarkerType.ArrowClosed, animated:true, style:{stroke:'red','stroke-width':'10px','stroke-dasharray':'25'} }
+    let edge = { id: (id * 10) + "" + controllerNodeId , target: id + "" , source: controllerNodeId, markerEnd: MarkerType.ArrowClosed, animated:false, style:{stroke:'green','stroke-width':'10px','stroke-dasharray':'25'} }
 
     let nodeNode = { id: id + "" , type: 'node', label: node.id , position: { x: buidlingXMargin  , y: yMarginNodes }, class: 'light', data: node }  
     return [ nodeNode, edge ]
