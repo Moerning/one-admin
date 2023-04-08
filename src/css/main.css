@@ -12,6 +12,12 @@
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
 
+:root{
+  --toggle-width: 12rem;
+  --toggle-height: 3.75rem;
+  --toggle-border: 1rem;
+  --toggle-ring-width: 3px;
+}
 
 .rtl{
   direction: rtl;
