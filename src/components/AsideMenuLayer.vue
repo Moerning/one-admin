@@ -50,7 +50,9 @@ const asideLgCloseClick = (event) => {
           class="text-center flex-1 lg:text-left lg:pl-6 xl:text-center xl:pl-0"
         >
           <b class="font-black">
-          <img src="../../public/logo.png" class="inline-flex justify-center items-center w-18 h-14 flex-none bg-gray-200">
+            <router-link :to="`/`">
+              <img src="../../public/logo.png" class="inline-flex justify-center items-center w-18 h-14 flex-none bg-gray-200">
+            </router-link>
           </b>
         </div>
         <button
