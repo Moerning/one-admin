@@ -253,6 +253,13 @@ const changeNodeStatus = (id,value) => {
   </div>
 </template>
 <style>
+:root{
+  --toggle-width: 12rem;
+  --toggle-height: 3.75rem;
+  --toggle-border: 1rem;
+  --toggle-ring-width: 3px;
+}
+
 .inactive-building {
   opacity: 0.3;
 }

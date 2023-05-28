@@ -3,6 +3,7 @@ import {
   mdiCogOutline,  
   mdiLogout,
   mdiThemeLightDark,
+  mdiAppleKeyboardCommand
 } from "@mdi/js";
 
 export default [
@@ -17,6 +18,11 @@ export default [
       {
         icon: mdiCogOutline,
         label: "تنظیمات",
+      },
+      {
+        icon: mdiAppleKeyboardCommand,
+        label: "دستور ها",
+        to: "/rules/add",
       },
       {
         isDivider: true,
