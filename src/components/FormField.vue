@@ -14,6 +14,10 @@ defineProps({
     type: String,
     default: null,
   },
+  marginBottom:{
+    type: String,
+    default: "mb-6 last:mb-0",
+  }
 });
 
 const slots = useSlots();
@@ -35,7 +39,7 @@ const wrapperClass = computed(() => {
 </script>
 
 <template>
-  <div class="mb-6 last:mb-0">
+  <div :class="marginBottom">
     <label v-if="label" :for="labelFor" class="block font-bold mb-2">{{
       label
     }}</label>

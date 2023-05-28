@@ -223,6 +223,24 @@ const routes = [
   },
   {
     meta: {
+      title: "Manage Rules",
+    },
+    path: "/rules/add",
+    name: "AddRuleForm",
+    component: () => import("@/views/app/FormsView.vue"),
+    children:[
+      {
+        path: "",
+        name: "AddRuleForm",
+        component: () => import('@/components/app/rule/RuleIndex.vue'),
+        meta:{
+          view: 'Rule'
+        }
+      },
+    ]
+  },
+  {
+    meta: {
       title: "Add Controller Node",
     },
     path: "/controllers/:controller_id/node/add",

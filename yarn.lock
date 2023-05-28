@@ -2073,6 +2073,11 @@ vue-router@^4.0.13:
   dependencies:
     "@vue/devtools-api" "^6.0.0"
 
+vue3-treeselect@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/vue3-treeselect/-/vue3-treeselect-0.1.10.tgz#d464ac780a55bc0357f49a345851a32705ba7111"
+  integrity sha512-QawdAbzmlZ7T3uBdSU4FRnrnmcV0Q9Jrph5hUBQJcXmM9OZ8lULQo7O7YbKxkOyuDX9Yx2rGjs6L5FKcL1FeXA==
+
 vue@^3.0.0:
   version "3.2.45"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.45.tgz#94a116784447eb7dbd892167784619fef379b3c8"
