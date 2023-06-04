@@ -28,26 +28,49 @@ const state = reactive({
     buildings: [],
 })
 
+const getAdminQuery = () => {
+  return `{
+    building{
+      address
+      name
+      type
+      lat
+      long
+      status
+      created_at
+      id
+    }
+  }`
+}
+
+const getUserQuery = (id) => {
+  return `{
+    building(where: {account_id: {_eq: "${id}"}}){
+      address
+      name
+      type
+      lat
+      long
+      status
+      created_at
+      id
+    }
+  }`
+}
+
 export const useBuilding = () => {
 
     state.buildingsTree = cookieStorage.getItem('_buildings')
 
-    const getAllBuildings = async () => {
+    const getAllBuildings = async (options) => {
+            let query = getUserQuery(userId.value)
+            if(options?.admin){
+              query = getAdminQuery()
+            }
             try {
               const res = await axe.post(
                 '', {
-                    query: `{
-                        building(where: {account_id: {_eq: "${userId.value}"}}){
-                          address
-                          name
-                          type
-                          lat
-                          long
-                          status
-                          created_at
-                          id
-                        }
-                      }`
+                    query
               })
               let list = res.data.data.building
               emptyNodes()

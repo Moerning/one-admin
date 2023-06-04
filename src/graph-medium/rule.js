@@ -1,6 +1,7 @@
 import { axe } from "./api";
 import { reactive, toRefs } from "vue";
 import { useAccount } from "./account";
+const { username,userId } = useAccount()
 
 const state = reactive({
   rules: []
@@ -11,7 +12,7 @@ export const useRule = () => {
   const getAllRules = async () => {
     const { data } = await axe.post('', {
       query: `query RuleIndex {
-                rule {
+                rule(where: {account_id: {_eq: "${userId.value}"}}) {
                   desired_source_channel_value
                   desired_target_channel_value
                   id
@@ -46,7 +47,7 @@ export const useRule = () => {
     return axe.post(
       '', {
       query: `mutation InsertRule {
-                insert_rule(objects: {id: "${params.id}",condition: "${params.condition}",desired_source_channel_value: "${params.source_channel_value}",desired_target_channel_value: "${params.target_channel_value}", source_channel_id: "${params.source_channel}", target_channel_id: "${params.target_channel}", status: "${params.status}"}) {
+                insert_rule(objects: {id: "${params.id}",condition: "${params.condition}",account_id: "${userId.value}",desired_source_channel_value: "${params.source_channel_value}",desired_target_channel_value: "${params.target_channel_value}", source_channel_id: "${params.source_channel}", target_channel_id: "${params.target_channel}", status: "${params.status}"}) {
                   affected_rows
                   returning {
                     id

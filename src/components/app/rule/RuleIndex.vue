@@ -1,10 +1,10 @@
 <script setup>
-import { onErrorCaptured, reactive, ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
 import CardBox from "@/components/CardBox.vue";
 import { useRule } from "../../../graph-medium/rule";
 import RuleForm from "./RuleForm.vue";
 import BaseButton from "@/components/BaseButton.vue";
-
+import { mdiPlus } from '@mdi/js'
 const { getAllRules, rules } = useRule()
 
 getAllRules()
@@ -27,7 +27,8 @@ watch(rules , (v)=>{
 <template>
   <CardBox>
     <div class="flex flex-col items-start gap-y-4">
-        <div class="flex justify-end w-full p-5">
+        <div class="flex justify-between items-start w-full p-5 gap-10">
+          <BaseButton :icon="mdiPlus" small roundedFull color="success" label="افزودن" @click="addNew" />
           <h2 class="text-[16px] font-[600]">دستور ها</h2>
         </div>
         <template v-if="!loading">
@@ -37,9 +38,6 @@ watch(rules , (v)=>{
         </template>
         <div v-show="adding && !loading" class="w-full">
           <RuleForm key="add-new"/>
-        </div>
-        <div class="flex justify-end">
-          <BaseButton roundedFull color="success" label="افزودن" @click="addNew" />
         </div>
     </div>
   </CardBox>

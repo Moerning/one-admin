@@ -1,6 +1,6 @@
 <script setup>
 import { mdiForwardburger, mdiBackburger, mdiMenu, mdiArrowRight, mdiAccountCancel } from "@mdi/js";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watchEffect, watch } from "vue";
 import { useRouter } from "vue-router";
 import menuNavBar from "@/menuNavBar.js";
 import { useMainStore } from "@/stores/main.js";
@@ -25,6 +25,27 @@ const { nodes } = useNode()
 
 const buildingsMenu = ref([])
 const nodesMenu = ref([])
+
+watchEffect(()=>{
+  if(role.value){
+    switch (role.value) {
+      case "boss":
+        getAllBuildings({ admin: true })
+        break;
+
+      case "admin":
+        getAllBuildings({ admin: true })
+        break;
+
+      case "client":
+        getAllBuildings()
+        break;
+
+      default:
+        break;
+    }
+  }
+})
 
 getAllBuildings()
 
