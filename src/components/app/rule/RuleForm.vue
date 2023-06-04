@@ -206,9 +206,11 @@ const changeRuleStatus = () => {
       </div>
       <div class="flex justify-end flex-grow gap-2">
         <Toggle :value="formRule.status" @change="(v)=>changeRuleStatus()">
-          <!-- <template v-slot:label="{ checked, classList }">
-            <span :class="classList.label" class="text-[15px]">{{ checked ? 'روشن' : 'خاموش' }}</span>
-          </template> -->
+          <template v-slot:label="{ checked, classList }">
+            <span :class="classList.label + ` ${checked ? 'left-[2px]' : 'right-[2px]'}`" class="text-[12px] ltr absolute left-1 top-[50%] translate-y-[-50%]"
+              
+            >{{ checked ? 'فعال' : 'غیرفعال' }}</span>
+          </template>
         </Toggle>
         <BaseButtons>
           <BaseButton type="submit" class="py-1 text-[14px] px-3" color="info" label="ذخیره" @click="submit" roundedFull/>
@@ -219,7 +221,7 @@ const changeRuleStatus = () => {
 <style>
 
 :root{
-  --toggle-width: 4rem;
+  --toggle-width: 5rem;
   --toggle-height: 2rem;
   --toggle-border: .25rem;
   --toggle-ring-width: 0px;
