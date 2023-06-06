@@ -18,69 +18,20 @@ const props = defineProps({
     type: [String, Number],
     default: null,
   },
-})
-
-const { fetchRule, createRule, updateRule, getAllRules } = useRule()
-
-const { fetchNodeChannels } = useNode()
-const showSelect = ref(false)
-const loading = ref(false)
-
-const { buildingsTree, getAllControllers } = useBuilding()
-const selectTreeOptions = ref([])
-watch(() => buildingsTree.value, (n, o) => {
-  if (o != n) {
-    showSelect.value = false
-    selectTreeOptions.value = []
-    let controllerOptions = []
-    for (let index = 0; index < n.length; index++) {
-      const element = n[index];
-      let controllers = element?.controllers
-      if (controllers && controllers.length) {
-        for (let i = 0; i < controllers.length; i++) {
-          let nodeOptions = []
-          const controller = controllers[i];
-          let nodes = controller?.nodes
-          let optionController = { id: controller.id, label: controller.id, isDisabled: true }
-          if (nodes && nodes.length) {
-            for (let j = 0; j < nodes.length; j++) {
-              showSelect.value = false
-              let channelOptions = []
-              const node = nodes[j];
-              loading.value = true
-              let optionNode = { id: node.id, label: node.id, isDisabled: true }
-              fetchNodeChannels(node.id).then((res) => {
-                // showSelect.value = false
-                let channels = res?.data?.data?.channel
-                if (channels?.length) {
-                  channels.forEach((ch) => {
-                    let optionChannel = { id: ch.type, label: ch.type, isDisabled: false }
-                    channelOptions.push(optionChannel)
-                  })
-                  optionNode['children'] = [...channelOptions]
-                }
-                nodeOptions.push(optionNode)
-                optionController['children'] = [...nodeOptions]
-              }).finally(() => {
-                setTimeout(() => {
-                  loading.value = false
-                }, 300)
-              })
-            }
-          }
-          controllerOptions.push(optionController)
-        }
-      }
-    }
-    selectTreeOptions.value = [...controllerOptions]
-    showSelect.value = true
+  channelTreeOptions:{
+    default:[]
   }
 })
+
+const { fetchRule, createRule, updateRule } = useRule()
+
+const showSelect = ref(true)
+const loading = ref(false)
 
 const editableRule = ref()
 
 const getEditableRule = () => {
-  // loading.value = true
+  loading.value = true
   fetchRule(props.editableRuleId).then((res) => {
     let rule = res?.data?.data?.rule
     editableRule.value = rule[0]
@@ -90,6 +41,7 @@ const getEditableRule = () => {
     formRule.target = editableRule.value['target_channel_id']
     formRule.status = editableRule.value['status']
     formRule.condition = editableRule.value['condition']
+    loading.value = false
   }).finally(()=>{
     // loading.value = false
   })
@@ -111,7 +63,6 @@ const prepareParams = () => {
 
 const add = () => {
   let params = prepareParams()
-  debugger
   createRule({ ...params }).then(() => {
     location.reload();
   }).catch((e) => {
@@ -131,12 +82,7 @@ const edit = () => {
   })
 }
 
-const update = () => {
-
-}
-
 const submit = () => {
-  console.log('zzz',props.editableRuleId)
   if(!props.editableRuleId)
     add()
   else
@@ -184,7 +130,7 @@ const changeRuleStatus = () => {
         <span class="h-8 flex items-center">اگر مقدار</span>
         <div class="w-[10rem] h-8 flex items-center" >
           <template v-if="showSelect && !loading">
-            <treeselect placeholder="کانال مبدا" :flat="true" v-model="formRule.source" :multiple="false" :options="selectTreeOptions" />
+            <treeselect placeholder="کانال مبدا" :flat="true" v-model="formRule.source" :multiple="false" :options="props.channelTreeOptions" />
           </template>
         </div>
         <!-- <span class="h-8 flex items-center">IS</span> -->
@@ -197,7 +143,7 @@ const changeRuleStatus = () => {
         <span class="h-8 flex items-center">بود، آنگاه مقدار</span>
         <div class="w-[10rem] h-8 flex items-center">
           <template v-if="showSelect && !loading">
-            <treeselect placeholder="کانال مقصد" :flat="true" v-model="formRule.target" :multiple="false" :options="selectTreeOptions" />
+            <treeselect placeholder="کانال مقصد" :flat="true" v-model="formRule.target" :multiple="false" :options="props.channelTreeOptions" />
           </template>
         </div>
         <span class="h-8 flex items-center">=</span>
@@ -206,9 +152,11 @@ const changeRuleStatus = () => {
       </div>
       <div class="flex justify-end flex-grow gap-2">
         <Toggle :value="formRule.status" @change="(v)=>changeRuleStatus()">
-          <!-- <template v-slot:label="{ checked, classList }">
-            <span :class="classList.label" class="text-[15px]">{{ checked ? 'روشن' : 'خاموش' }}</span>
-          </template> -->
+          <template v-slot:label="{ checked, classList }">
+            <span :class="classList.label + ` ${checked ? 'left-[2px]' : 'right-[2px]'}`" class="text-[12px] ltr absolute left-1 top-[50%] translate-y-[-50%]"
+              
+            >{{ checked ? 'فعال' : 'غیرفعال' }}</span>
+          </template>
         </Toggle>
         <BaseButtons>
           <BaseButton type="submit" class="py-1 text-[14px] px-3" color="info" label="ذخیره" @click="submit" roundedFull/>
@@ -219,7 +167,7 @@ const changeRuleStatus = () => {
 <style>
 
 :root{
-  --toggle-width: 4rem;
+  --toggle-width: 5rem;
   --toggle-height: 2rem;
   --toggle-border: .25rem;
   --toggle-ring-width: 0px;

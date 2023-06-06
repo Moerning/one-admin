@@ -69,6 +69,7 @@ export const useNode = () => {
         return axe.post('', {
             query: `{
                 channel(where: {node_id: {_eq: "${id}"}}) {
+                    id
                     value
                     type
                     number

@@ -55,6 +55,8 @@ const form = reactive({
   ip_local: "",
   model: "",
   controller:"",
+  lat:"",
+  long:"",
   status:0
 });
 

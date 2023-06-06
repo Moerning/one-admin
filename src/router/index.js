@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/HomeView.vue";
 import SecureLS from "secure-ls";
 import { useAccount } from "../graph-medium/account";
+import { mdiHome, mdiEye, mdiPencil, mdiAlarmLight, mdiAccessPoint } from "@mdi/js";
 
 const { setUsername,setUserId, username , setUserRole} = useAccount()
 
@@ -71,6 +72,7 @@ const routes = [
         component: () => import('@/components/app/building/BuildingsTable.vue'),
         meta: {
           table: "ساختمان‌ها",
+          icon:mdiHome
         },
       },
     ]
@@ -89,6 +91,7 @@ const routes = [
         component: () => import('@/components/app/node/NodesTable.vue'),
         meta: {
           table: "Nodes",
+          icon:mdiAlarmLight
         },
       },
     ]
@@ -106,7 +109,8 @@ const routes = [
         name: "BuildingShowId",
         component: () => import('@/components/app/building/BuildingShow.vue'),
         meta:{
-          view: 'Building'
+          view: 'ساختمان',
+          icon:mdiHome
         }
       },
     ]
@@ -156,13 +160,18 @@ const routes = [
     path: "/nodes/show/:id",
     name: "NodeShow",
     component: () => import("@/views/app/SimpleView.vue"),
+    meta:{
+          view: 'نود',
+          icon:mdiAlarmLight
+    },
     children:[
       {
         path: "",
         name: "NodeShowId",
         component: () => import('@/components/app/node/NodeShow.vue'),
         meta:{
-          view: 'Node'
+          view: 'نود',
+          icon:mdiAlarmLight
         }
       },
     ]
@@ -180,7 +189,7 @@ const routes = [
         name: "NodeEventForm",
         component: () => import('@/components/app/event/EventForm.vue'),
         meta:{
-          view: 'Node'
+          view: 'نود'
         }
       },
     ]
@@ -198,7 +207,7 @@ const routes = [
         name: "BuildingControllerForm",
         component: () => import('@/components/app/controller/ControllerForm.vue'),
         meta:{
-          view: 'Node'
+          view: 'نود'
         }
       },
     ]
@@ -216,7 +225,7 @@ const routes = [
         name: "AddSimpleNodeForm",
         component: () => import('@/components/app/node/NodeForm.vue'),
         meta:{
-          view: 'Node'
+          view: 'نود'
         }
       },
     ]
@@ -234,7 +243,7 @@ const routes = [
         name: "AddRuleForm",
         component: () => import('@/components/app/rule/RuleIndex.vue'),
         meta:{
-          view: 'Rule'
+          view: 'دستور'
         }
       },
     ]
@@ -252,7 +261,7 @@ const routes = [
         name: "ControllerNodeForm",
         component: () => import('@/components/app/node/NodeForm.vue'),
         meta:{
-          view: 'Node'
+          view: 'نود'
         }
       },
     ]
@@ -270,7 +279,7 @@ const routes = [
         name: "ControllerShow",
         component: () => import('@/components/app/controller/ControllerShow.vue'),
         meta:{
-          view:'Controller'
+          view:'کنترلر'
         }
       },
     ]

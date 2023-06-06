@@ -6,8 +6,8 @@
       </div>
     </div>
     <CardBox>
-      <div class="p-10">
-        <div class="flex flex-col items-start rtl bg-gray-100 rounded-2xl p-10" v-if="controller?.id">
+      <div class="px-4 md:px-8 min-h-[50vh]">
+        <div class="grid grid-cols-2 md:grid-cols-4 rtl bg-gray-100 rounded-2xl px-4 py-3" v-if="controller?.id">
           <div class="flex flex-col items-start py-4 gap-2">
             <span class="font-bold text-gray-400">مدل :</span>
             <span>{{ controller.model }}</span>
@@ -20,38 +20,43 @@
             <span class="font-bold text-gray-400">آیدی :</span>
             <span>{{ controller.id }}</span>
           </div>
+          <div class="flex items-center justify-end w-full">
+            <BaseButton :icon="mdiPlus" small roundedFull color="success" label="افزودن نود"
+              @click="$router.push(`/controllers/${route.params.id}/node/add`)" />
+          </div>
         </div>
-        <div class="flex justify-center bg-gray-100 rounded-xl p-10 mt-10" v-if="chartData">
-          <div v-if="chartData">
+        <div class="grid grid-cols-12 px-8 py-10 bg-gray-100 rounded-xl mt-10" v-if="chartData">
+          <div class="col-span-2">
+          </div>
+          <div v-if="chartData" class="col-span-8">
             <line-chart :data="chartData" class="h-96" />
           </div>
-          <div class="flex justify-end px-12">
-            <FormField label="Time Range">
-              <FormControl class="w-28 text-sm" v-model="time" :options="selectOptions" />
-            </FormField>
+          <div class="flex justify-end col-span-2 h-[3rem]">
+            <div class="w-full">
+              <treeselect placeholder="بازه زمانی" label="بازه زمانی" v-model="time" :multiple="false" :options="selectOptions" />
+            </div>
+            <!-- <FormField label="بازه زمانی" class="w-full rtl">
+              <FormControl v-model="time" :options="selectOptions"  class="w-[20rem] !px-0"/>
+            </FormField> -->
           </div>
         </div>
-      </div>
-      <div class="gap-6 w-full mb-6 p-5 bg-gray-100 rounded-2xl mt-10">
-        <BaseButton :icon="mdiPlus" class="rounded-2xl w-full text-[12px]" type="submit" color="info" label="افزودن نود"
-          @click="$router.push(`/controllers/${route.params.id}/node/add`)" />
       </div>
     </CardBox>
   </div>
 </template>
 <script setup>
-import { onMounted, ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useController } from '../../../graph-medium/controller';
 import { useRoute } from 'vue-router';
 import LineChart from '../../Charts/LineChart.vue';
 import { useLog } from "../../../graph-medium/log";
-import FormField from "@/components/FormField.vue";
-import FormControl from "@/components/FormControl.vue";
 import CardBox from "@/components/CardBox.vue"
 import BaseButton from "@/components/BaseButton.vue";
 import {
   mdiPlus,
 } from "@mdi/js";
+import Treeselect from 'vue3-treeselect';
+import 'vue3-treeselect/dist/vue3-treeselect.css';
 
 const route = useRoute()
 
@@ -59,77 +64,20 @@ const { fetchController, fetchControllerNodes, fetchLogsInterval } = useControll
 const { fetchLog } = useLog()
 
 const selectOptions = [
-  { id: 1, label: "Monthly" },
-  { id: 2, label: "Weekly" },
-  { id: 3, label: "Daily" },
+  { id: 4, label: "سالانه" },
+  { id: 1, label: "ماهانه" },
+  { id: 2, label: "هفتگی" },
+  { id: 3, label: "روزانه" },
 ];
 
 const controller = ref()
 const nodes = ref()
 
 const log = ref()
-const time = ref(selectOptions[0])
+const time = ref(selectOptions[0].id)
 
 const time_from = ref(new Date().toISOString())
 const time_to = ref()
-
-watchEffect(() => {
-  if (nodes.value) {
-    if (time.value.id == 1) {
-      time_to.value = new Date().toISOString()
-      var d = new Date();
-
-      // Set it to one month ago
-      d.setMonth(d.getMonth() - 2);
-
-      // // Zero the time component
-      // d.setHours(0, 0, 0, 0);
-
-      // Get the time value in milliseconds and convert to seconds
-      time_from.value = d.toISOString()
-
-    } else if (time.value.id == 2) {
-      time_to.value = new Date().toISOString()
-      var d = new Date();
-
-      // Set it to one week ago
-      d.setDate(d.getDate() - 7);
-
-      // // Zero the time component
-      // d.setHours(0, 0, 0, 0);
-
-      // Get the time value in milliseconds and convert to seconds
-      time_from.value = d.toISOString()
-    } else if (time.value.id == 3) {
-      time_to.value = new Date().toISOString()
-      var d = new Date();
-
-      // Set it to one day ago
-      d.setDate(d.getDate() - 1);
-
-      // // Zero the time component
-      // d.setHours(0, 0, 0, 0);
-
-      // Get the time value in milliseconds and convert to seconds
-      time_from.value = d.toISOString()
-    }
-    fetchLogsInterval(time_to.value, time_from.value, nodes.value.id).then((resp) => {
-      log.value = resp.data.data.log
-      console.log('log: ', log.value)
-      fillChartData(log.value)
-    })
-  }
-})
-
-onMounted(() => {
-  fetchController(route.params.id).then((resp) => {
-    controller.value = resp.data.data.controller[0]
-    fetchControllerNodes(controller.value.id).then((resp) => {
-      nodes.value = resp.data.data.node[0]
-    })
-  })
-})
-
 
 //chart data
 const chartData = ref(null);
@@ -200,9 +148,95 @@ const sampleChartData = (points) => {
   };
 };
 
+watchEffect(() => {
+  if (nodes.value) {
+    if (time.value == 1) {
+      time_to.value = new Date().toISOString()
+      var d = new Date();
+
+      // Set it to one month ago
+      d.setMonth(d.getMonth() - 2);
+
+      // // Zero the time component
+      // d.setHours(0, 0, 0, 0);
+
+      // Get the time value in milliseconds and convert to seconds
+      time_from.value = d.toISOString()
+
+    } else if (time.value == 2) {
+      time_to.value = new Date().toISOString()
+      var d = new Date();
+
+      // Set it to one week ago
+      d.setDate(d.getDate() - 7);
+
+      // // Zero the time component
+      // d.setHours(0, 0, 0, 0);
+
+      // Get the time value in milliseconds and convert to seconds
+      time_from.value = d.toISOString()
+    } else if (time.value == 3) {
+      time_to.value = new Date().toISOString()
+      var d = new Date();
+
+      // Set it to one day ago
+      d.setDate(d.getDate() - 1);
+
+      // // Zero the time component
+      // d.setHours(0, 0, 0, 0);
+
+      // Get the time value in milliseconds and convert to seconds
+      time_from.value = d.toISOString()
+    } else if (time.value == 4) {
+      time_to.value = new Date().toISOString()
+      var d = new Date();
+
+      // Set it to one year ago
+      d.setYear(d.getYear() - 1);
+
+      // // Zero the time component
+      // d.setHours(0, 0, 0, 0);
+
+      // Get the time value in milliseconds and convert to seconds
+      time_from.value = d.toISOString()
+    }
+    fetchLogsInterval(time_to.value, time_from.value, nodes.value.id).then((resp) => {
+      log.value = resp.data.data.log
+      console.log('log: ', log.value)
+      fillChartData(log.value)
+    })
+  }
+  else{
+    chartData.value = false
+  }
+})
+
+watchEffect(()=>{
+  if(route.params.id){
+    fetchController(route.params.id).then((resp) => {
+      controller.value = resp.data.data.controller[0]
+      fetchControllerNodes(controller.value.id).then((resp) => {
+        nodes.value = resp.data.data.node[0]
+      })
+    })
+  }
+})
+
+
 </script>
 <style>
 .rtl {
   direction: rtl;
+}
+.vue-treeselect{
+  text-align: right;
+}
+
+.vue-treeselect__control{
+  direction: rtl;
+}
+
+.vue-treeselect__input:focus {
+  @apply outline-transparent border-transparent ring-0;
 }
 </style>
