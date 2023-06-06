@@ -13,12 +13,13 @@ import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
+
 </script>
 
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiTableBorder" :title="`View ${$route.meta.view}`" main>
+      <SectionTitleLineWithButton :icon="$route?.meta?.icon ? $route.meta.icon : mdiTableBorder" :title="`مشاهده ${$route.meta.view}`" main>
       </SectionTitleLineWithButton>
 
       <CardBox class="mb-6" has-table>

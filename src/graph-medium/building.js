@@ -88,7 +88,10 @@ export const useBuilding = () => {
                             return c.id == node.controller_id
                           })
                           if(element.controllers[nodeController] && element.controllers[nodeController].nodes){
-                            element.controllers.nodes.push(node)
+                            if(Array.isArray( element.controllers.nodes ))
+                              element.controllers.nodes.push(node)
+                            else
+                              element.controllers.nodes = [node]
                           }
                           else if(element.controllers[nodeController]){
                             element.controllers[nodeController].nodes = [node]
@@ -108,11 +111,11 @@ export const useBuilding = () => {
             }
     }
 
-    const createBuilding = async ( id, name, address, lat, long) => {
+    const createBuilding = async ( name, address, lat, long) => {
       return axe.post(
         '', {
             query: `mutation MyMutation {
-              insert_building(objects: {name: "${name}", id: "${id}", account_id: "${userId.value}", address: "${address}", lat: "${lat}", long: "${long}"}, on_conflict: {constraint: building_pkey, update_columns: account_id}) {
+              insert_building(objects: {name: "${name}", account_id: "${userId.value}", address: "${address}", lat: "${lat}", long: "${long}"}, on_conflict: {constraint: building_pkey, update_columns: account_id}) {
                 affected_rows
                 returning {
                   address

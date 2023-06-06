@@ -37,7 +37,7 @@ const add = () => {
 const update = () => {
   const { updateBuilding } = useBuilding()
 
-  updateBuilding( form.id, form.name, form.address, form.lat, form.long ).then(()=>{
+  updateBuilding( form.name, form.address, form.lat, form.long ).then(()=>{
     alert('Successful Operation')
   }).catch(()=>{
     alert('Operation Failed!')
@@ -46,7 +46,6 @@ const update = () => {
 
 
 const form = reactive({
-  id: "",
   name: "",
   type: "",
   address: "",
@@ -70,7 +69,6 @@ const submit = () => {
       <CardBox form @submit.prevent="submit">
         <FormField label="Enter Building Info">
           <FormControl v-model="form.name" placeholder="Name" type="text" :icon="mdiAccount" />
-          <FormControl v-model="form.id" placeholder="Id" type="text" />
           <FormControl v-model="form.address" placeholder="Address" type="text" />
           <FormControl v-model="form.lat" placeholder="Latitude" type="text" />
           <FormControl v-model="form.long" placeholder="Longitude" type="text" />

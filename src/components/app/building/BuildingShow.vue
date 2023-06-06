@@ -7,13 +7,13 @@
         </div>
         <CardBox>
             <div class="p-10">
-                <div class="flex flex-col items-srart rtl p-10 bg-gray-100 rounded-2xl" v-if="building?.name">
+                <div class="grid grid-cols-2 md:grid-cols-4 rtl p-10 bg-gray-100 rounded-2xl" v-if="building?.name">
                     <div class="flex flex-col items-start py-4 gap-2">
                         <span class="font-bold text-gray-400">نام :</span>
                         <span>{{ building.name }}</span>
                     </div>
                     <div class="flex flex-col items-start py-4 gap-2">
-                        <span class="font-bold text-gray-400">نشانی :</span>
+                        <span class="font-bold text-gray-400">آدرس :</span>
                         <span>{{ building.address }}</span>
                     </div>
                     <div class="flex flex-col items-start py-4 gap-2">
@@ -25,8 +25,14 @@
                         <span>{{ building.lat ? `${building.lat}, ${building.long}` : 'TBD' }}</span>
                     </div>
                 </div>
-                <div class="mt-4 pt-8 border-t border-zinc-300 w-full">
-                    <span class="font-bold text-gray-400">کنترلرهای مرکزی :</span>
+                <div class="mt-4 pt-8 border-t border-zinc-300 w-full rtl">
+                    <div class="flex justify-between w-full items-start">
+                        <span class="font-bold text-gray-400">کنترلرهای مرکزی :</span>
+                        <div>
+                            <BaseButton :icon="mdiPlus" small roundedFull color="success" label="افزودن کنترلر"
+                                @click="$router.push(`/buildings/${$route.params.id}/controller/add`)" />
+                        </div>
+                    </div>
                     <div class="flex justify-start items-start gap-4 mt-5">
                         <div v-for="controller in controllers">
                             <router-link :to="`/controller/${controller.id}`" as="a">
@@ -36,10 +42,6 @@
                                 </div>
                             </router-link>
                         </div>
-                    </div>
-                    <div class="w-full mt-10">
-                        <BaseButton color="info" class="w-full" label="Add Controller"
-                            @click="$router.push(`/buildings/${$route.params.id}/controller/add`)" />
                     </div>
                 </div>
             </div>
@@ -55,6 +57,7 @@ import { useBuilding } from "../../../graph-medium/building";
 import { useRoute } from "vue-router";
 import { useController } from "../../../graph-medium/controller";
 import BaseButton from "@/components/BaseButton.vue";
+import { mdiPlus } from "@mdi/js";
 
 const { fetchBuildingControllers } = useController()
 const { fetchBuilding, getBuildingFromLs } = useBuilding()

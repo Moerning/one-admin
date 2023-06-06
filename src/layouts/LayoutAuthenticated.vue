@@ -15,16 +15,13 @@ import { useBuilding } from "../graph-medium/building";
 import {
   mdiViewList,
 } from "@mdi/js";
-import { useNode } from "../graph-medium/node";
 import { useAccount } from "../graph-medium/account";
 
 const { username, logout, role } = useAccount()
 
 const { buildingsTree, getAllBuildings } = useBuilding()
-const { nodes } = useNode()
 
 const buildingsMenu = ref([])
-const nodesMenu = ref([])
 
 watchEffect(()=>{
   if(role.value){
@@ -69,7 +66,7 @@ watch(buildingsTree, async (newTree) => {
       let controllerNodesMenu = [{
         to: { name: "ControllerShow", params: { id: element?.id } },
         label: "View Controller",
-        color: "success",
+        color: "successLight",
         icon: mdiArrowRight
       }]
       if (element.nodes?.length) {

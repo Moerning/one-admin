@@ -23,13 +23,13 @@ const hasSlot = computed(() => useSlots().default);
 <template>
   <section
     :class="{ 'pt-6': !main }"
-    class="mb-6 flex items-center justify-between"
+    class="mb-6 flex items-start justify-between rtl"
   >
-    <div class="flex items-center justify-start">
+    <div class="flex items-start justify-start text-gray-500">
       <IconRounded
         v-if="icon && main"
         :icon="icon"
-        color="light"
+        color="dark"
         class="mr-3"
         bg
       />
