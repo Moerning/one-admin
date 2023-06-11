@@ -1,74 +1,74 @@
 <template>
-    <div class="py-5">
-        <CardBox>
-            <div class="px-10 py-4 bg-gray-100 rounded-2xl rtl">
-                <div class="grid grid-cols-2 lg:grid-cols-4" v-if="node?.id">
-                    <div class="flex flex-col gap-y-3 items-start py-4">
-                        <span class="font-bold text-gray-400 text-lg">مدل :</span>
-                        <span>{{ node.model }}</span>
-                    </div>
-                    <div class="flex flex-col gap-y-3 items-start py-4">
-                        <span class="font-bold text-gray-400 text-lg">وضعیت :</span>
-                        <span>{{ node.status }}</span>
-                    </div>
-                    <div class="flex flex-col gap-y-3 items-start py-4">
-                        <span class="font-bold text-gray-400 text-lg">کنترلر :</span>
-                        <span>{{ node.controller_id }}</span>
-                    </div>
-                    <div class="flex flex-col gap-y-3 items-start py-4">
-                        <span class="font-bold text-gray-400 text-lg">توضیحات :</span>
-                        <span>{{ node.description }}</span>
-                    </div>
-                </div>
-            </div>
-        </CardBox>
-        <CardBox>
-            <SectionTitleLineWithButton :icon="mdiTableBorder" title="چنل ها" main>
-            </SectionTitleLineWithButton>
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6 p-5 bg-gray-100 rounded-2xl rtl">
-                <template v-if="channels.length">
-                    <CardBoxWidget :trend="channel.type" trend-type="alert" color="text-red-500"
-                        :icon="mdiChartTimelineVariant" :number="channel.value"
-                        :suffix="channel.type == 'Temperature' ? '℃' : null"
-                        :label="channel.type == 'Temperature' ? 'دما' : channel.type == 'Humidity' ? 'رطوبت' : channel.type"
-                        v-for="channel in channels" />
-                </template>
-                <div v-else>
-                    <p>چنلی ثبت نشده است.</p>
-                </div>
-            </div>
-            <!-- <div class="p-5 bg-gray-100 rounded-2xl flex w-full justify-end">
-                <BaseButton :icon="mdiPlus" type="submit" color="success" label="Add Event"  @click="$router.push(`/nodes/${route.params.id}/events/add`)"/>
-            </div> -->
-            <div class="grid grid-cols-12 px-8 py-10 bg-gray-100 rounded-xl mt-10" v-if="chartData">
-                <div class="col-span-2">
-                </div>
-                <div v-if="chartData" class="col-span-8">
-                    <line-chart :data="chartData" class="h-96" />
-                </div>
-                <div class="flex justify-end col-span-2 h-[3rem] rtl">
-                    <div class="w-full">
-                        <treeselect placeholder="بازه زمانی" label="بازه زمانی" v-model="time" :multiple="false"
-                            :options="selectOptions" />
-                    </div>
-                    <!-- <FormField label="بازه زمانی" class="w-full rtl">
-              <FormControl v-model="time" :options="selectOptions"  class="w-[20rem] !px-0"/>
-            </FormField> -->
-                </div>
-            </div>
-        </CardBox>
-    </div>
+  <div class="py-5">
+    <CardBox>
+      <div class="px-10 py-4 bg-gray-100 rounded-2xl rtl">
+        <div class="grid grid-cols-2 lg:grid-cols-4" v-if="node?.id">
+          <div class="flex flex-col gap-y-3 items-start py-4">
+            <span class="font-bold text-gray-400 text-lg">مدل :</span>
+            <span>{{ node.model }}</span>
+          </div>
+          <div class="flex flex-col gap-y-3 items-start py-4">
+            <span class="font-bold text-gray-400 text-lg">وضعیت :</span>
+            <span>{{ node.status }}</span>
+          </div>
+          <div class="flex flex-col gap-y-3 items-start py-4">
+            <span class="font-bold text-gray-400 text-lg">کنترلر :</span>
+            <span>{{ node.controller_id }}</span>
+          </div>
+          <div class="flex flex-col gap-y-3 items-start py-4">
+            <span class="font-bold text-gray-400 text-lg">توضیحات :</span>
+            <span>{{ node.description }}</span>
+          </div>
+        </div>
+      </div>
+    </CardBox>
+    <CardBox>
+      <SectionTitleLineWithButton :icon="mdiTableBorder" title="چنل ها" main>
+      </SectionTitleLineWithButton>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6 p-5 bg-gray-100 rounded-2xl rtl">
+        <template v-if="onlineChannels && onlineChannels.length">
+          <CardBoxWidget :trend="channel.type" trend-type="alert" color="text-red-500" :icon="mdiChartTimelineVariant"
+            :number="channel.value" :suffix="channel.type == 'Temperature' ? '℃' : null"
+            :label="channel.type == 'Temperature' ? 'دما' : channel.type == 'Humidity' ? 'رطوبت' : channel.type"
+            v-for="channel in onlineChannels" />
+        </template>
+        <div v-else>
+          <p>چنلی ثبت نشده است.</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 px-8 py-10 bg-gray-100 rounded-xl mt-10" v-if="chartData">
+        <div class="col-span-2">
+        </div>
+        <div v-if="chartData" class="col-span-8">
+          <line-chart :data="chartData" class="h-96" />
+        </div>
+        <div class="flex justify-end col-span-2 h-[3rem] rtl">
+          <div class="w-full">
+            <treeselect placeholder="بازه زمانی" label="بازه زمانی" v-model="time" :multiple="false"
+              :options="selectOptions" />
+          </div>
+        </div>
+      </div>
+      <div class="px-8 py-10 bg-gray-100 rounded-xl mt-10">
+        <div class="flex justify-center">
+          <div id="container">
+            <div id="nodeMapContainer"></div>
+          </div>
+        </div>
+      </div>
+    </CardBox>
+  </div>
 </template>
-<script setup async>
+<script setup>
 import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox.vue";
-import { ref, onMounted, watchEffect } from "vue";
+import { ref, onMounted, watchEffect, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useNode } from "../../../graph-medium/node";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import {
-    mdiTableBorder,
-    mdiPlus
+  mdiTableBorder,
+  mdiPlus
 } from "@mdi/js";
 import BaseButton from "@/components/BaseButton.vue"
 import LineChart from '../../Charts/LineChart.vue';
@@ -76,19 +76,73 @@ import { useController } from "../../../graph-medium/controller";
 import { useLog } from "../../../graph-medium/log";
 import Treeselect from 'vue3-treeselect';
 import 'vue3-treeselect/dist/vue3-treeselect.css';
+import { useSubscription } from "@vue/apollo-composable";
+import gql from 'graphql-tag';
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+
+const route = useRoute()
+
+const SUBSCRIPTION_CHANNELS = (id) => {
+  return gql`
+   subscription getChannelValues {
+    channel(where: {node_id: {_eq: "${id}"}}) {
+       id
+       value
+       type
+       number
+     }
+   }
+ `;
+}
+
+const SUBSCRIPTION_NODES = (id) => {
+  return gql`
+   subscription getChannelValues {
+    node(where: {id: {_eq: "${id}"}}) {
+       id
+       lat
+       long
+     }
+   }
+ `;
+}
+
+const onlineChannelsubscription = useSubscription(SUBSCRIPTION_CHANNELS(route.params.id))
+const onlineNodesubscription = useSubscription(SUBSCRIPTION_NODES(route.params.id))
+
+// const onlineChannels = useResult(onlineChannelsubscription.result, [], (data) => data.nodes)
+const onlineChannels = computed(() => {
+  return (onlineChannelsubscription && onlineChannelsubscription.result && onlineChannelsubscription.result.value && onlineChannelsubscription.result.value.channel) ? onlineChannelsubscription.result.value.channel : 'empty'
+})
+
+const onlineNodes = computed(() => {
+  return (onlineNodesubscription && onlineNodesubscription.result && onlineNodesubscription.result.value && onlineNodesubscription.result.value.node) ? onlineNodesubscription.result.value.node : 'empty'
+})
+
+watch(()=>onlineNodes.value,(v)=>{
+  if(v && v!="empty"){
+    let node = v[0]
+    if(node && node.lat && node.long){
+      setupLeafletMap([node.lat , node.long], `node-${route.params.id}`)
+    }
+  }
+})
+
 
 const { fetchNode, fetchNodeChannels } = useNode()
 const { fetchController, fetchControllerNodes, fetchLogsInterval } = useController()
 const { fetchLog } = useLog()
 
-const route = useRoute()
+
 const node = ref()
 const channels = ref([])
 
 const channelHeaders = [
-    { label: 'Number' },
-    { label: 'Value' },
-    { label: 'Type' },
+  { label: 'Number' },
+  { label: 'Value' },
+  { label: 'Type' },
 ]
 
 const selectOptions = [
@@ -162,23 +216,23 @@ const sampleChartData = (points) => {
     labels.push(`${points[i].created_at}`);
   }
   let types = ["Temperature", "Fire", "Humidity"]
-  if(channels.value){
+  if (channels.value) {
     types = []
     for (let index = 0; index < channels.value.length; index++) {
-        const element = channels.value[index];
-        types.push(element.type)
+      const element = channels.value[index];
+      types.push(element.type)
     }
   }
-  let colors = ["primary","danger","info"]
-  let dataSets =[]
+  let colors = ["primary", "danger", "info"]
+  let dataSets = []
   for (let index = 0; index < types.length; index++) {
     const type = types[index];
     const color = colors[index] ? colors[index] : "primary"
-    dataSets.push(datasetObject(color,points,type))
+    dataSets.push(datasetObject(color, points, type))
   }
   return {
     labels,
-    datasets:[...dataSets]
+    datasets: [...dataSets]
   };
 };
 
@@ -239,29 +293,62 @@ watchEffect(() => {
       fillChartData(log.value)
     })
   }
-  else{
+  else {
     chartData.value = false
   }
 })
 
 onMounted(() => {
-    fetchNode(route.params.id).then((res) => {
-        node.value = res?.data?.data?.node.length ? res?.data?.data?.node[0] : {}
-    })
+  fetchNode(route.params.id).then((res) => {
+    node.value = res?.data?.data?.node.length ? res?.data?.data?.node[0] : {}
+  }).catch(e => console.log({ e }))
 
-    fetchNodeChannels(route.params.id).then((res) => {
-        channels.value = res?.data?.data?.channel.length ? res?.data?.data?.channel : {}
-    })
+  fetchNodeChannels(route.params.id).then((res) => {
+    channels.value = res?.data?.data?.channel.length ? res?.data?.data?.channel : {}
+  })
 })
 
+//map
+
+let map = null;
+
+const setupLeafletMap = (center, name = "") => {
+    console.log('creating map...')
+    var mapOptions = {
+        center: center,
+        zoom: 12
+    }
+    // Remove existing 
+    if (!!map) {
+        map.off()
+        map.remove()
+    }
+    if (center.length) {
+        // Creating a map object
+        map = new L.map('nodeMapContainer', mapOptions);
+
+        // Creating a Layer object
+        var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+        // Adding layer to the map
+        map.addLayer(layer);
+
+        // Creating a marker
+        var marker = L.marker(center);
+        marker.bindTooltip(name).openTooltip();
+        // Adding marker to the map
+        marker.addTo(map);
+    }
+}
 
 </script>
 
 <style scoped>
-#mapContainer {
-    width: 600px;
-    height: 300px;
+#nodeMapContainer {
+  width: 600px;
+  height: 300px;
 }
+
 .rtl {
   direction: rtl;
 }

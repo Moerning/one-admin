@@ -73,6 +73,8 @@ export const useNode = () => {
                     model
                     settings
                     status
+                    lat
+                    long
                 }
               }`
         })
