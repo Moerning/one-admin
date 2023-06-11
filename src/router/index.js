@@ -56,6 +56,15 @@ const routes = [
           table: "کاربران",
         },
       },
+      {
+        path: "building-account",
+        name: "BuildingsAccountsTable",
+        component: () => import('@/components/app/account/AccountsAndBuildings.vue'),
+        meta: {
+          table: "ساختمان ها",
+        },
+      },
+      
     ]
   },
   {

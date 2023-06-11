@@ -183,6 +183,19 @@ export const useBuilding = () => {
         })
     }
 
+    const fetchBuildingAccounts = (id) => {
+      return axe.post(
+          '', {
+            query: `{
+              building {
+                account_id
+                name
+                id
+              }
+            }`
+        })
+    }
+
     const getBuildingFromLs = (id) => {
       let tree = state.buildingsTree
       let result = null
@@ -215,6 +228,7 @@ export const useBuilding = () => {
         fetchBuilding,
         getBuildingFromLs,
         updateBuilding,
+        fetchBuildingAccounts,
         getAllControllers
     }
 }

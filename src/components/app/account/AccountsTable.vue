@@ -93,10 +93,10 @@ const deleteBuilding = (building) => {
           {{ account.name }}
         </td>
         <td data-buildings="Buildings">
-            <span v-for="building in account.buildings" @click="() => deleteBuilding(building)">
+            <span v-for="building in account.buildings" @click="() => deleteBuilding(building)" class="cursor-pointer">
                 <PillTag :icon="mdiClose" :label="building" color="success" :key="building" class="mx-1" />
             </span>
-            <span @click="() => openModal(account)">
+            <span @click="() => openModal(account)" class="cursor-pointer">
                 <PillTag :icon="mdiPlus" label="افزودن دسترسی" color="info"/>
             </span>
         </td>

@@ -84,6 +84,17 @@ import L from "leaflet";
 
 const route = useRoute()
 
+const SUBSCRIPTION_LOG = (id) => {
+  return gql`
+   subscription getChannelValues {
+    log(where: {node_id: {_eq: "${id}"}}) {
+      log
+      created_at
+     }
+   }
+ `;
+}
+
 const SUBSCRIPTION_CHANNELS = (id) => {
   return gql`
    subscription getChannelValues {
@@ -111,6 +122,7 @@ const SUBSCRIPTION_NODES = (id) => {
 
 const onlineChannelsubscription = useSubscription(SUBSCRIPTION_CHANNELS(route.params.id))
 const onlineNodesubscription = useSubscription(SUBSCRIPTION_NODES(route.params.id))
+const onlineLogsubscription = useSubscription(SUBSCRIPTION_LOG(route.params.id))
 
 // const onlineChannels = useResult(onlineChannelsubscription.result, [], (data) => data.nodes)
 const onlineChannels = computed(() => {
@@ -119,6 +131,10 @@ const onlineChannels = computed(() => {
 
 const onlineNodes = computed(() => {
   return (onlineNodesubscription && onlineNodesubscription.result && onlineNodesubscription.result.value && onlineNodesubscription.result.value.node) ? onlineNodesubscription.result.value.node : 'empty'
+})
+
+const onlineLogs = computed(() => {
+  return (onlineLogsubscription && onlineLogsubscription.result && onlineLogsubscription.result.value && onlineLogsubscription.result.value.log) ? onlineLogsubscription.result.value.log : 'empty'
 })
 
 watch(()=>onlineNodes.value,(v)=>{
@@ -130,9 +146,15 @@ watch(()=>onlineNodes.value,(v)=>{
   }
 })
 
+watch(()=>onlineLogs.value,(v)=>{
+  if(v && v!="empty"){
+    setupChart()
+  }
+})
+
 
 const { fetchNode, fetchNodeChannels } = useNode()
-const { fetchController, fetchControllerNodes, fetchLogsInterval } = useController()
+const { fetchLogsInterval } = useController()
 const { fetchLog } = useLog()
 
 
@@ -171,10 +193,10 @@ const getChartData = (data, channelType = "Temperature") => {
   for (let i = 0; i < data.length; i++) {
     let logData = data[i]
     if (logData.log?.channels) {
-      let temperatureSensor = logData.log.channels.filter((channel) => {
+      let sensor = logData.log.channels.filter((channel) => {
         return channel.type == channelType
       })
-      dataValue.push(temperatureSensor[0]?.value)
+      dataValue.push(sensor[0]?.value)
     }
   }
 
@@ -236,9 +258,8 @@ const sampleChartData = (points) => {
   };
 };
 
-watchEffect(() => {
-  if (node.value) {
-    if (time.value == 1) {
+const setupChart = () => {
+  if (time.value == 1) {
       time_to.value = new Date().toISOString()
       var d = new Date();
 
@@ -292,6 +313,11 @@ watchEffect(() => {
       log.value = resp.data.data.log
       fillChartData(log.value)
     })
+}
+
+watchEffect(() => {
+  if (node.value) {
+    setupChart()
   }
   else {
     chartData.value = false
