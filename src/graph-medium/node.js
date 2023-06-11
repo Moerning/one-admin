@@ -31,20 +31,33 @@ export const useNode = () => {
     }
 
     const fetchNodes = async (controllers) => {
-        let gotAll = true
+        // let gotAll = false
+        // for (let index = 0; index < controllers.length; index++) {
+        //     try {
+        //         const nodes = await fetchControllerNodes(controllers[index].id)
+        //         if (nodes.data.data.node.length){
+        //             pushToNodes(...nodes.data.data.node)
+        //         }
+        //         if(index === controllers.length - 1){
+        //             gotAll = true
+        //         }
+        //     } catch (error) {
+        //         gotAll = false
+        //         console.log('failed to fetch nodes')
+        //     }
+        // }
+        // if (gotAll){
+        //     console.log('result:')
+        //     console.log(state.nodes)
+        //     return Promise.resolve(state.nodes)
+        // }
+        // return Promise.reject(null)
+        let controllerArray = [...controllers]
+        let nodeArray = []
         for (let index = 0; index < controllers.length; index++) {
-            try {
-                const nodes = await fetchControllerNodes(controllers[index].id)
-                if (nodes.data.data.node.length)
-                    pushToNodes(...nodes.data.data.node)
-            } catch (error) {
-                gotAll = false
-                console.log('failed to fetch nodes')
-            }
+            nodeArray.push(fetchControllerNodes(controllers[index].id))
         }
-        if (gotAll)
-            return Promise.resolve(state.nodes)
-        return Promise.reject(null)
+        return Promise.all(nodeArray)
     }
 
     const fetchNode = (id) => {
@@ -87,7 +100,7 @@ export const useNode = () => {
         return axe.post(
             '', {
             query: `mutation InsertNode {
-                insert_node(objects: {controller_id: "${params.controller_id}",status: "test-${params.status}",id: "test-${params.model}", description: "${params.description}", account_id: "${userId.value}", model: "${params.model}", ip_local: "${params.ip_local}"}) {
+                insert_node(objects: {controller_id: "${params.controller_id}",id: "${params.id}",status: "${params.status}", description: "${params.description}", account_id: "${userId.value}", model: "${params.model}", ip_local: "${params.ip_local}"}) {
                   affected_rows
                   returning {
                     id

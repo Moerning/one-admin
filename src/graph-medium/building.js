@@ -21,7 +21,7 @@ const cookieStorage = {
 };
 
 const { fetchBuildingControllers } = useController()
-const { fetchNodes, emptyNodes } = useNode()
+const { fetchNodes, emptyNodes, fetchControllerNodes } = useNode()
 
 const state = reactive({
     buildingsTree: [],
@@ -80,24 +80,36 @@ export const useBuilding = () => {
                     const controllers = await fetchBuildingControllers(element.id)
                     element.controllers = controllers.data.data.controller
                     if(element.controllers.length){
-                      let nodes = await fetchNodes(element.controllers)
-                      if(nodes.length){
-                        for (let index = 0; index < nodes.length; index++) {
-                          const node = nodes[index];
-                          let nodeController = element.controllers.findIndex((c)=>{
-                            return c.id == node.controller_id
-                          })
-                          if(element.controllers[nodeController] && element.controllers[nodeController].nodes){
-                            if(Array.isArray( element.controllers.nodes ))
-                              element.controllers.nodes.push(node)
-                            else
-                              element.controllers.nodes = [node]
-                          }
-                          else if(element.controllers[nodeController]){
-                            element.controllers[nodeController].nodes = [node]
-                          }
-                        }
+                      for (let index = 0; index < element.controllers.length; index++) {
+                        const controller = element.controllers[index];
+                        let nodesResp = await fetchControllerNodes(controller.id)
+                        element.controllers[index].nodes = nodesResp.data.data.node
                       }
+                      // fetchNodes(element.controllers).then((res)=>{
+                      //   let nodes = []
+                      //   for (let i = 0; i < res.length; i++) {
+                      //     const element = res[i];
+                      //     nodes = [...nodes, ...element.data.data.node]
+                      //   }
+                      //   console.log('nodes',nodes)
+                      //   if(nodes.length){
+                      //     for (let index = 0; index < nodes.length; index++) {
+                      //       const node = nodes[index];
+                      //       let nodeController = element.controllers.findIndex((c)=>{
+                      //         return c.id == node.controller_id
+                      //       })
+                      //       if(element.controllers[nodeController] && element.controllers[nodeController].nodes){
+                      //         if(Array.isArray( element.controllers.nodes ))
+                      //           element.controllers.nodes.push(node)
+                      //         else
+                      //           element.controllers.nodes = [node]
+                      //       }
+                      //       else if(element.controllers[nodeController]){
+                      //         element.controllers[nodeController].nodes = [node]
+                      //       }
+                      //     }
+                      //   }
+                      // })
                     }
                 } catch (error) {
                     console.log('err', error)      

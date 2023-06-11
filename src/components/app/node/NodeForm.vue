@@ -45,12 +45,13 @@ const controllerOptions = computed(()=>{
   return options
 })
 
-const statuses = () => [
+const statuses = [
   { id:0 , label :"ON" },
   { id:1 , label :"OFF" },
 ]
 
 const form = reactive({
+  id:"",
   description: "",
   ip_local: "",
   model: "",
@@ -80,6 +81,7 @@ const submit = () => {
 <template>
   <CardBox form @submit.prevent="submit" class="rtl">
     <FormField label="Enter Node Info">
+      <FormControl v-model="form.id" placeholder="ID" type="text" />
       <FormControl v-model="form.ip_local" placeholder="IP Local" type="text" />
       <FormControl v-model="form.model" placeholder="Model" type="text" />
       <FormControl v-model="form.description" placeholder="Description" type="text" />
