@@ -13,7 +13,10 @@
           </div>
           <div class="flex flex-col gap-y-3 items-start py-4">
             <span class="font-bold text-gray-400 text-lg">کنترلر :</span>
-            <span>{{ node.controller_id }}</span>
+            <!-- <span>{{ node.controller_id }}</span> -->
+            <span class="w-[12rem]" v-if="controllersOptions && node && formNode.source">
+              <treeselect placeholder="کنترلر مبدا" :flat="true" v-model="formNode.source" :multiple="false" :options="controllersOptions" />
+            </span>
           </div>
           <div class="flex flex-col gap-y-3 items-start py-4">
             <span class="font-bold text-gray-400 text-lg">توضیحات :</span>
@@ -62,7 +65,7 @@
 <script setup>
 import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox.vue";
-import { ref, onMounted, watchEffect, computed, watch } from "vue";
+import { ref, onMounted, watchEffect, computed, watch, reactive } from "vue";
 import { useRoute } from "vue-router";
 import { useNode } from "../../../graph-medium/node";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
@@ -80,7 +83,11 @@ import { useSubscription } from "@vue/apollo-composable";
 import gql from 'graphql-tag';
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useBuilding } from "../../../graph-medium/building";
 
+const formNode = reactive({})
+
+const { buildingsTree } = useBuilding()
 
 const route = useRoute()
 
@@ -153,7 +160,7 @@ watch(()=>onlineLogs.value,(v)=>{
 })
 
 
-const { fetchNode, fetchNodeChannels } = useNode()
+const { fetchNode, fetchNodeChannels, updateNodeController } = useNode()
 const { fetchLogsInterval } = useController()
 const { fetchLog } = useLog()
 
@@ -366,6 +373,40 @@ const setupLeafletMap = (center, name = "") => {
         marker.addTo(map);
     }
 }
+
+const createOptionTree = async (bTree) => {
+  let controllerOptions = []
+  for (let index = 0; index < bTree.length; index++) {
+    const building = bTree[index];
+    let controllers = building?.controllers
+    for (let i = 0; i < controllers.length; i++) {
+      const controller = controllers[i];
+      let optionController = { id: controller.id, label: controller.id }
+      controllerOptions.push(optionController)
+    }
+  }
+  controllersOptions.value = controllerOptions
+}
+
+const controllersOptions = ref([])
+
+watch(buildingsTree, (newVal,oldVal) => {
+  if(newVal !== oldVal){
+    createOptionTree(newVal)
+  }
+})
+
+watchEffect(()=>{
+  if(controllersOptions.value && node.value){
+      formNode.source = node.value.controller_id
+  }
+})
+
+watch(()=>formNode.source , (v) => {
+  if(v && node.value.id && v != node.value.controller_id){
+    updateNodeController(node.value.id, v)
+  }
+})
 
 </script>
 

@@ -23,7 +23,7 @@ const props = defineProps({
   }
 })
 
-const { fetchRule, createRule, updateRule } = useRule()
+const { fetchRule, createRule, updateRule, deleteRule } = useRule()
 
 const showSelect = ref(true)
 const loading = ref(false)
@@ -159,7 +159,10 @@ const changeRuleStatus = () => {
           </template>
         </Toggle>
         <BaseButtons>
-          <BaseButton type="submit" class="py-1 text-[14px] px-3" color="info" label="ذخیره" @click="submit" roundedFull/>
+          <div class="flex items-center gap-2">
+            <BaseButton type="submit" class="py-1 text-[12px] px-1" color="info" label="ذخیره" @click="submit" roundedFull/>
+            <BaseButton v-if="editableRuleId" type="submit" class="py-1 text-[12px] px-1" color="danger" label="حذف" @click="deleteRule(editableRuleId)" roundedFull/>
+          </div>
         </BaseButtons>
       </div>
     </div>

@@ -127,6 +127,21 @@ export const useNode = () => {
         })
     }
 
+    const updateNodeController = async (id, controller_id) => {
+        return axe.post(
+            '', {
+            query: `mutation NodeStatus {
+                update_node(where: {id: {_eq: "${id}"}}, _set: {controller_id: "${controller_id}"}) {
+                  affected_rows
+                  returning {
+                    controller_id
+                    id
+                  }
+                }
+              }`
+        })
+    }
+
     return {
         pushToNodes,
         fetchControllerNodes,
@@ -136,6 +151,7 @@ export const useNode = () => {
         fetchNodeChannels,
         createNode,
         updateNodeStatus,
+        updateNodeController,
         ...toRefs(state)
     }
 }

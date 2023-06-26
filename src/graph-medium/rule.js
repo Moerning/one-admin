@@ -77,11 +77,24 @@ export const useRule = () => {
     })
   }
 
+  const deleteRule = async (id) => {
+    return axe.post(
+      '', {
+      query: `mutation RuleDeleteMutation {
+        delete_rule(where: {id: {_eq: "${id}"}}) {
+          affected_rows
+        }
+      }`
+    })
+  }
+
+
   return {
     createRule,
     getAllRules,
     fetchRule,
     updateRule,
+    deleteRule,
     ...toRefs(state)
   }
 }
