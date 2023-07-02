@@ -15,7 +15,8 @@
             <span class="font-bold text-gray-400 text-lg">کنترلر :</span>
             <!-- <span>{{ node.controller_id }}</span> -->
             <span class="w-[12rem]" v-if="controllersOptions && node && formNode.source">
-              <treeselect placeholder="کنترلر مبدا" :flat="true" v-model="formNode.source" :multiple="false" :options="controllersOptions" />
+              <treeselect :clearable="false" placeholder="کنترلر مبدا" :flat="true" v-model="formNode.source"
+                :multiple="false" :options="controllersOptions" />
             </span>
           </div>
           <div class="flex flex-col gap-y-3 items-start py-4">
@@ -29,7 +30,7 @@
       <SectionTitleLineWithButton :icon="mdiTableBorder" title="چنل ها" main>
       </SectionTitleLineWithButton>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6 p-5 bg-gray-100 rounded-2xl rtl">
-        <template v-if="onlineChannels && onlineChannels.length">
+        <template v-if="onlineChannels && onlineChannels.length && onlineChannels != 'empty'">
           <CardBoxWidget :trend="channel.type" trend-type="alert" color="text-red-500" :icon="mdiChartTimelineVariant"
             :number="channel.value" :suffix="channel.type == 'Temperature' ? '℃' : null"
             :label="channel.type == 'Temperature' ? 'دما' : channel.type == 'Humidity' ? 'رطوبت' : channel.type"
@@ -47,7 +48,7 @@
         </div>
         <div class="flex justify-end col-span-2 h-[3rem] rtl">
           <div class="w-full">
-            <treeselect placeholder="بازه زمانی" label="بازه زمانی" v-model="time" :multiple="false"
+            <treeselect :clearable="false" placeholder="بازه زمانی" label="بازه زمانی" v-model="time" :multiple="false"
               :options="selectOptions" />
           </div>
         </div>
@@ -133,7 +134,15 @@ const onlineLogsubscription = useSubscription(SUBSCRIPTION_LOG(route.params.id))
 
 // const onlineChannels = useResult(onlineChannelsubscription.result, [], (data) => data.nodes)
 const onlineChannels = computed(() => {
-  return (onlineChannelsubscription && onlineChannelsubscription.result && onlineChannelsubscription.result.value && onlineChannelsubscription.result.value.channel) ? onlineChannelsubscription.result.value.channel : 'empty'
+  const array = (onlineChannelsubscription && onlineChannelsubscription.result && onlineChannelsubscription.result.value && onlineChannelsubscription.result.value.channel) ? onlineChannelsubscription.result.value.channel : 'empty'
+  if (Array.isArray(array) && array != 'empty') {
+    array.sort(function (a, b) {
+      if (a.number > b.number) return 1;
+      if (a.number < b.number) return -1;
+      return 0;
+    });
+  }
+  return array
 })
 
 const onlineNodes = computed(() => {
@@ -144,17 +153,17 @@ const onlineLogs = computed(() => {
   return (onlineLogsubscription && onlineLogsubscription.result && onlineLogsubscription.result.value && onlineLogsubscription.result.value.log) ? onlineLogsubscription.result.value.log : 'empty'
 })
 
-watch(()=>onlineNodes.value,(v)=>{
-  if(v && v!="empty"){
+watch(() => onlineNodes.value, (v) => {
+  if (v && v != "empty") {
     let node = v[0]
-    if(node && node.lat && node.long){
-      setupLeafletMap([node.lat , node.long], `node-${route.params.id}`)
+    if (node && node.lat && node.long) {
+      setupLeafletMap([node.lat, node.long], `node-${route.params.id}`)
     }
   }
 })
 
-watch(()=>onlineLogs.value,(v)=>{
-  if(v && v!="empty"){
+watch(() => onlineLogs.value, (v) => {
+  if (v && v != "empty") {
     setupChart()
   }
 })
@@ -215,6 +224,12 @@ const chartColors = {
     primary: "#00D1B2",
     info: "#209CEE",
     danger: "#FF3860",
+    slate: "#94a3b8",
+    cyan: "#0e7490",
+    violet: "#7c3aed",
+    pink: "#db2777",
+    yellow: "#fde047",
+    amber: "#78350f"
   },
 };
 
@@ -252,7 +267,15 @@ const sampleChartData = (points) => {
       types.push(element.type)
     }
   }
-  let colors = ["primary", "danger", "info"]
+  let colors = ['primary',
+    'info',
+    'danger',
+    'slate',
+    'cyan',
+    'violet',
+    'pink ',
+    'yellow',
+    'amber']
   let dataSets = []
   for (let index = 0; index < types.length; index++) {
     const type = types[index];
@@ -267,59 +290,59 @@ const sampleChartData = (points) => {
 
 const setupChart = () => {
   if (time.value == 1) {
-      time_to.value = new Date().toISOString()
-      var d = new Date();
+    time_to.value = new Date().toISOString()
+    var d = new Date();
 
-      // Set it to one month ago
-      d.setMonth(d.getMonth() - 2);
+    // Set it to one month ago
+    d.setMonth(d.getMonth() - 2);
 
-      // // Zero the time component
-      // d.setHours(0, 0, 0, 0);
+    // // Zero the time component
+    // d.setHours(0, 0, 0, 0);
 
-      // Get the time value in milliseconds and convert to seconds
-      time_from.value = d.toISOString()
+    // Get the time value in milliseconds and convert to seconds
+    time_from.value = d.toISOString()
 
-    } else if (time.value == 2) {
-      time_to.value = new Date().toISOString()
-      var d = new Date();
+  } else if (time.value == 2) {
+    time_to.value = new Date().toISOString()
+    var d = new Date();
 
-      // Set it to one week ago
-      d.setDate(d.getDate() - 7);
+    // Set it to one week ago
+    d.setDate(d.getDate() - 7);
 
-      // // Zero the time component
-      // d.setHours(0, 0, 0, 0);
+    // // Zero the time component
+    // d.setHours(0, 0, 0, 0);
 
-      // Get the time value in milliseconds and convert to seconds
-      time_from.value = d.toISOString()
-    } else if (time.value == 3) {
-      time_to.value = new Date().toISOString()
-      var d = new Date();
+    // Get the time value in milliseconds and convert to seconds
+    time_from.value = d.toISOString()
+  } else if (time.value == 3) {
+    time_to.value = new Date().toISOString()
+    var d = new Date();
 
-      // Set it to one day ago
-      d.setDate(d.getDate() - 1);
+    // Set it to one day ago
+    d.setDate(d.getDate() - 1);
 
-      // // Zero the time component
-      // d.setHours(0, 0, 0, 0);
+    // // Zero the time component
+    // d.setHours(0, 0, 0, 0);
 
-      // Get the time value in milliseconds and convert to seconds
-      time_from.value = d.toISOString()
-    } else if (time.value == 4) {
-      time_to.value = new Date().toISOString()
-      var d = new Date();
+    // Get the time value in milliseconds and convert to seconds
+    time_from.value = d.toISOString()
+  } else if (time.value == 4) {
+    time_to.value = new Date().toISOString()
+    var d = new Date();
 
-      // Set it to one year ago
-      d.setYear(d.getYear() - 1);
+    // Set it to one year ago
+    d.setYear(d.getYear() - 1);
 
-      // // Zero the time component
-      // d.setHours(0, 0, 0, 0);
+    // // Zero the time component
+    // d.setHours(0, 0, 0, 0);
 
-      // Get the time value in milliseconds and convert to seconds
-      time_from.value = d.toISOString()
-    }
-    fetchLogsInterval(time_to.value, time_from.value, node.value.id).then((resp) => {
-      log.value = resp.data.data.log
-      fillChartData(log.value)
-    })
+    // Get the time value in milliseconds and convert to seconds
+    time_from.value = d.toISOString()
+  }
+  fetchLogsInterval(time_to.value, time_from.value, node.value.id).then((resp) => {
+    log.value = resp.data.data.log
+    fillChartData(log.value)
+  })
 }
 
 watchEffect(() => {
@@ -346,32 +369,32 @@ onMounted(() => {
 let map = null;
 
 const setupLeafletMap = (center, name = "") => {
-    console.log('creating map...')
-    var mapOptions = {
-        center: center,
-        zoom: 12
-    }
-    // Remove existing 
-    if (!!map) {
-        map.off()
-        map.remove()
-    }
-    if (center.length) {
-        // Creating a map object
-        map = new L.map('nodeMapContainer', mapOptions);
+  console.log('creating map...')
+  var mapOptions = {
+    center: center,
+    zoom: 12
+  }
+  // Remove existing 
+  if (!!map) {
+    map.off()
+    map.remove()
+  }
+  if (center.length) {
+    // Creating a map object
+    map = new L.map('nodeMapContainer', mapOptions);
 
-        // Creating a Layer object
-        var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    // Creating a Layer object
+    var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-        // Adding layer to the map
-        map.addLayer(layer);
+    // Adding layer to the map
+    map.addLayer(layer);
 
-        // Creating a marker
-        var marker = L.marker(center);
-        marker.bindTooltip(name).openTooltip();
-        // Adding marker to the map
-        marker.addTo(map);
-    }
+    // Creating a marker
+    var marker = L.marker(center);
+    marker.bindTooltip(name).openTooltip();
+    // Adding marker to the map
+    marker.addTo(map);
+  }
 }
 
 const createOptionTree = async (bTree) => {
@@ -390,20 +413,20 @@ const createOptionTree = async (bTree) => {
 
 const controllersOptions = ref([])
 
-watch(buildingsTree, (newVal,oldVal) => {
-  if(newVal !== oldVal){
+watch(buildingsTree, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
     createOptionTree(newVal)
   }
 })
 
-watchEffect(()=>{
-  if(controllersOptions.value && node.value){
-      formNode.source = node.value.controller_id
+watchEffect(() => {
+  if (controllersOptions.value && node.value) {
+    formNode.source = node.value.controller_id
   }
 })
 
-watch(()=>formNode.source , (v) => {
-  if(v && node.value.id && v != node.value.controller_id){
+watch(() => formNode.source, (v) => {
+  if (v && node.value.id && v != node.value.controller_id) {
     updateNodeController(node.value.id, v)
   }
 })
