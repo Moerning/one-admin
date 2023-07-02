@@ -189,7 +189,7 @@ const changeNodeStatus = (id,value) => {
           <span class="controller-tools justify-around mt-1 w-full">
             <BaseButton color="info" :icon="mdiEye" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
               iconHeight="h-20" @click="$router.push({ name: 'ControllerShow', params: { id: data.id } })" small />
-            <BaseButton color="success" :icon="mdiPencil" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
+            <BaseButton @click="$router.push({ name: 'ControllerShow', params: { id: data.id } })" color="success" :icon="mdiPencil" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
               iconHeight="h-20" small />
           </span>
           <span class="controller-icon">

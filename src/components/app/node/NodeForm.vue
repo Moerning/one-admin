@@ -16,12 +16,13 @@ const editable = ref()
 
 const add = () => {
   const { createNode } = useNode()
-
   createNode({
     description: form.description,
     model: form.model,
     ip_local: form.ip_local,
-    controller_id: form.controller.id
+    controller_id: form.controller.id,
+    id: form.id,
+    statuses: form.status?.id ? true : false,
   }).then(() => {
     alert('Successful Operation')
   }).catch((e) => {
@@ -46,8 +47,8 @@ const controllerOptions = computed(()=>{
 })
 
 const statuses = [
-  { id:0 , label :"ON" },
-  { id:1 , label :"OFF" },
+  { id:1 , label :"ON" },
+  { id:0 , label :"OFF" },
 ]
 
 const form = reactive({
