@@ -216,7 +216,7 @@ const routes = [
         name: "BuildingControllerForm",
         component: () => import('@/components/app/controller/ControllerForm.vue'),
         meta:{
-          view: 'نود'
+          view: 'کنترلر'
         }
       },
     ]

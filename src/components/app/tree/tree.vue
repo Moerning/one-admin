@@ -154,8 +154,8 @@ const changeNodeStatus = (id,value) => {
                   @click="() => showControllerForm = !showControllerForm"
                   small
                 /> -->
-            <BaseButton color="success" :icon="mdiPencil" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
-              iconHeight="h-20" small @click="zoomOnMe(id)" />
+            <BaseButton @click="$router.push({ name: 'BuildingsEdit' , params: { id:data.id } })" color="success" :icon="mdiPencil" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
+              iconHeight="h-20" small />
           </span>
           <span class="building-icon">
             <BaseIcon :size="400" w="w-20" h="h-20" :path="mdiHome" />
@@ -170,8 +170,8 @@ const changeNodeStatus = (id,value) => {
           <span class="node-tools items-center justify-around mt-1 w-full">
             <!-- <BaseButton color="info" :icon="mdiEye" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
               iconHeight="h-20" @click="$router.push({ name: 'NodeShowId', params: { id: data.id } })" small /> -->
-            <BaseButton color="success" :icon="mdiPencil" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
-              iconHeight="h-20" small />
+            <!-- <BaseButton color="success" :icon="mdiPencil" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
+              iconHeight="h-20" small /> -->
             <Toggle :value="getOnlineNodeStatus(data.id)" @change="(v)=>changeNodeStatus(data.id,v)">
               <template v-slot:label="{ checked, classList }">
                 <span :class="classList.label" class="text-[40px]">{{ checked ? 'روشن' : 'خاموش' }}</span>
@@ -189,8 +189,8 @@ const changeNodeStatus = (id,value) => {
           <span class="controller-tools justify-around mt-1 w-full">
             <BaseButton color="info" :icon="mdiEye" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
               iconHeight="h-20" @click="$router.push({ name: 'ControllerShow', params: { id: data.id } })" small />
-            <BaseButton @click="$router.push({ name: 'ControllerShow', params: { id: data.id } })" color="success" :icon="mdiPencil" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
-              iconHeight="h-20" small />
+            <!-- <BaseButton @click="$router.push({ name: 'ControllerShow', params: { id: data.id } })" color="success" :icon="mdiPencil" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
+              iconHeight="h-20" small /> -->
           </span>
           <span class="controller-icon">
             <BaseIcon :size="400" w="w-20" h="h-20" :path="mdiAccessPoint" />
