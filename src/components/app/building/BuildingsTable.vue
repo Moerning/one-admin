@@ -88,7 +88,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <treeContainer />
   <div class="grid lg:grid-cols-1 grid-cols-1 pb-12 pt-8 border-[3px] rounded-lg my-8 px-4">
     <div class="pb-8">
       <BaseButton
@@ -157,12 +156,6 @@ onMounted(() => {
               :icon="mdiPencil"
               small
               @click="$router.push(`/buildings/form/${building.id}`)"
-            />
-            <BaseButton
-              color="warning"
-              :icon="mdiAlarmCheck"
-              small
-              @click="$router.push(`/events/${building.id}`)"
             />
           </BaseButtons>
         </td>

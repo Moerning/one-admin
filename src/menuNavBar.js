@@ -10,11 +10,11 @@ export default [
   {
     isCurrentUser: true,
     menu: [
-      {
-        icon: mdiAccount,
-        label: "حساب کاربری",
-        to: "/profile",
-      },
+      // {
+      //   icon: mdiAccount,
+      //   label: "حساب کاربری",
+      //   to: "/profile",
+      // },
       {
         icon: mdiCogOutline,
         label: "تنظیمات",

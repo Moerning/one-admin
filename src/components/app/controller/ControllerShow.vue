@@ -9,7 +9,7 @@
       <div class="px-4 md:px-8 min-h-[50vh]">
         <div class="grid grid-cols-2 md:grid-cols-4 rtl bg-gray-100 rounded-2xl px-4 py-3" v-if="controller?.id">
           <div class="flex flex-col items-start py-4 gap-2">
-            <span class="font-bold text-gray-400">مدل :</span>
+            <span class="font-bold text-gray-400">نام :</span>
             <span>{{ controller.model }}</span>
           </div>
           <div class="flex flex-col items-start py-4 gap-2">
@@ -17,7 +17,7 @@
             <span>{{ controller.mac_address }}</span>
           </div>
           <div class="flex flex-col items-start py-4 gap-2">
-            <span class="font-bold text-gray-400">آیدی :</span>
+            <span class="font-bold text-gray-400">شناسه :</span>
             <span>{{ controller.id }}</span>
           </div>
         </div>

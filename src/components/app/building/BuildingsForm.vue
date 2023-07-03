@@ -37,7 +37,7 @@ const add = () => {
 const update = () => {
   const { updateBuilding } = useBuilding()
 
-  updateBuilding( form.name, form.address, form.lat, form.long ).then(()=>{
+  updateBuilding( form.id, form.name, form.address, form.lat, form.long ).then(()=>{
     alert('Successful Operation')
   }).catch(()=>{
     alert('Operation Failed!')

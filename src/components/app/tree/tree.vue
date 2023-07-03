@@ -185,7 +185,7 @@ const changeNodeStatus = (id,value) => {
       </template>
       <template #node-controller="{ data }">
         <div @click="e => buildingClicked(props)" class="controller-node">
-          <span v-if="data?.mac_address" class="max-w-[325px] text-[40px] controller-text">{{ data.mac_address }}</span>
+          <span v-if="data?.mac_address || data.model" class="max-w-[325px] text-[40px] controller-text">{{ data.model ? data.model : data.mac_address  }}</span>
           <span class="controller-tools justify-around mt-1 w-full">
             <BaseButton color="info" :icon="mdiEye" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
               iconHeight="h-20" @click="$router.push({ name: 'ControllerShow', params: { id: data.id } })" small />

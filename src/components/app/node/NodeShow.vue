@@ -27,7 +27,7 @@
       </div>
     </CardBox>
     <CardBox>
-      <SectionTitleLineWithButton :icon="mdiTableBorder" title="چنل ها" main>
+      <SectionTitleLineWithButton :icon="mdiTableBorder" title="کانال ها" main>
       </SectionTitleLineWithButton>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6 p-5 bg-gray-100 rounded-2xl rtl">
         <template v-if="onlineChannels && onlineChannels.length && onlineChannels != 'empty'">
@@ -37,7 +37,7 @@
             v-for="channel in onlineChannels" />
         </template>
         <div v-else>
-          <p>چنلی ثبت نشده است.</p>
+          <p>کانالی ثبت نشده است.</p>
         </div>
       </div>
       <div class="grid grid-cols-12 px-8 py-10 bg-gray-100 rounded-xl mt-10" v-if="chartData">
