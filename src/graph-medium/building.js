@@ -76,6 +76,7 @@ export const useBuilding = () => {
               emptyNodes()
               for (let index = 0; index < list.length; index++) {
                 const element = list[index];
+                element.label = element.name
                 try {
                     const controllers = await fetchBuildingControllers(element.id)
                     element.controllers = controllers.data.data.controller

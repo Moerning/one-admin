@@ -143,6 +143,17 @@ export const useAccount = () => {
     })
   }
 
+  const updateBuildingAccount = (params) => {
+    return axe.post('', {
+    query: `mutation MyMutation {
+      update_building(where: {id: {_eq: "${params.building_id}"}}, _set: {account_id: "${params.account_id}"}) {
+        affected_rows
+      }
+    }`
+  })
+}
+  
+
   return {
     createAccount,
     setUsername,
@@ -155,6 +166,7 @@ export const useAccount = () => {
     setUserRole,
     logout,
     setUserRole,
+    updateBuildingAccount,
     ...toRefs(state)
   }
 }

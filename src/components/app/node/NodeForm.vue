@@ -40,7 +40,7 @@ const controllerOptions = computed(()=>{
   getAllControllers.value.forEach((o)=>{
     options.push({
       id:o.id,
-      label:o.mac_address
+      label:o.model ? o.model : o.id
     })
   })
   return options
