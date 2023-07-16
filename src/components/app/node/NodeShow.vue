@@ -9,7 +9,14 @@
           </div>
           <div class="flex flex-col gap-y-3 items-start py-4">
             <span class="font-bold text-gray-400 text-lg">وضعیت :</span>
-            <span>{{ node.status }}</span>
+            <Toggle :value="node.status" @change="(v)=>changeNodeStatus(v)">
+              <template v-slot:label="{ checked, classList }">
+                <span :class="classList.label + ` ${checked ? 'left-[2px]' : 'right-[2px]'}`" class="text-[12px] ltr absolute left-1 top-[50%] translate-y-[-50%]"
+                  
+                >{{ checked ? 'فعال' : 'غیرفعال' }}</span>
+              </template>
+            </Toggle>
+            <!-- <span>{{ node.status }}</span> -->
           </div>
           <div class="flex flex-col gap-y-3 items-start py-4">
             <span class="font-bold text-gray-400 text-lg">کنترلر :</span>
@@ -85,6 +92,7 @@ import gql from 'graphql-tag';
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useBuilding } from "../../../graph-medium/building";
+import Toggle from '@vueform/toggle';
 
 const formNode = reactive({})
 
@@ -169,7 +177,7 @@ watch(() => onlineLogs.value, (v) => {
 })
 
 
-const { fetchNode, fetchNodeChannels, updateNodeController } = useNode()
+const { fetchNode, fetchNodeChannels, updateNodeController, updateNodeStatus } = useNode()
 const { fetchLogsInterval } = useController()
 const { fetchLog } = useLog()
 
@@ -431,9 +439,14 @@ watch(() => formNode.source, (v) => {
   }
 })
 
+const changeNodeStatus = (v) => {
+  node.value.status = v
+  updateNodeStatus(node.value.id, v)
+}
+
 </script>
 
-<style scoped>
+<style>
 #nodeMapContainer {
   width: 600px;
   height: 300px;
@@ -453,5 +466,12 @@ watch(() => formNode.source, (v) => {
 
 .vue-treeselect__input:focus {
   @apply !outline-transparent !border-transparent ring-0;
+}
+
+:root{
+  --toggle-width: 5rem;
+  --toggle-height: 1.5rem;
+  --toggle-border: .25rem;
+  --toggle-ring-width: 0px;
 }
 </style>

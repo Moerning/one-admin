@@ -39,6 +39,7 @@ onMounted(() => {
     type: "line",
     data: props.data,
     options: {
+      animation: false,
       responsive: true,
       maintainAspectRatio: false,
       scales: {
