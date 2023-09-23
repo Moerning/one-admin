@@ -1,12 +1,19 @@
 <template>
     <div class="rounded-lg p-2 border tree-container" v-if="showTree">
-        <tree :initialNodes="treeInitialNodes" v-if="showTree" />
+        <tree :concise="props.concise" :initialNodes="treeInitialNodes" v-if="showTree" />
     </div>
 </template>
 <script setup>
 import { watch, ref } from "vue";
 import { useBuilding } from "../../../graph-medium/building";
 import tree from "./tree.vue";
+
+const props = defineProps({
+    concise:{
+        type:Boolean,
+        default:false
+    }
+})
 
 const { buildingsTree } = useBuilding()
 const showTree = ref(false)

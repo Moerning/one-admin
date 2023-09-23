@@ -84,12 +84,20 @@ onMounted(() => {
   })
 });
 
+const props = defineProps({
+  concise:{
+    type: Boolean,
+    default: false
+  }
+})
 
 </script>
 
 <template>
-  <div class="grid lg:grid-cols-1 grid-cols-1 pb-12 pt-8 border-[3px] rounded-lg my-8 px-4">
-    <div class="pb-8">
+  <div class="grid lg:grid-cols-1 grid-cols-1 rounded-lg"
+  :class="props.concise ? 'p-2' : 'pb-12 pt-8 border-[3px] my-8 px-4'"
+  >
+    <div class="pb-8" v-if="!props.concise">
       <BaseButton
               color="primary"
               :icon="mdiPlus"
@@ -98,13 +106,13 @@ onMounted(() => {
               @click="$router.push({ name: 'BuildingsForm' })"
             />
     </div>
-    <div class="flex justify-center">
-      <div id="container">
-          <div id="mapContainer"></div>
+    <div class="flex justify-center w-full">
+      <div id="container" class="w-full">
+          <div id="mapContainer" :class="props.concise ? 'mapContainerConcise' : 'mapContainer'"></div>
       </div>
     </div>
   </div>
-  <table>
+  <table v-if="!props.concise">
     <thead>
       <tr>
         <th v-for="header in buildingHeaders">
@@ -164,8 +172,14 @@ onMounted(() => {
   </table>
 </template>
 <style scoped>
-#mapContainer {
+.mapContainer {
     width: 600px;
     height: 300px;
+}
+
+.mapContainerConcise{
+  width: 95%;
+  height: auto;
+  min-height: 300px;
 }
 </style>

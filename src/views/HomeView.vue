@@ -2,36 +2,20 @@
 import { computed, ref, onMounted } from "vue";
 import { useMainStore } from "@/stores/main";
 import {
-  mdiAccountMultiple,
-  mdiCartOutline,
-  mdiChartTimelineVariant,
-  mdiMonitorCellphone,
-  mdiReload,
-  mdiGithub,
-  mdiChartPie,
-  mdiOfficeBuilding,
-  mdiAlarm,
   mdiAccessPoint,
   mdiHome,
   mdiAlarmLight
 } from "@mdi/js";
 import * as chartConfig from "@/components/Charts/chart.config.js";
-import LineChart from "@/components/Charts/LineChart.vue";
 import SectionMain from "@/components/SectionMain.vue";
 import CardBoxWidget from "@/components/CardBoxWidget.vue";
-import CardBox from "@/components/CardBox.vue";
-import TableSampleClients from "@/components/TableSampleClients.vue";
-import NotificationBar from "@/components/NotificationBar.vue";
-import BaseButton from "@/components/BaseButton.vue";
-import CardBoxTransaction from "@/components/CardBoxTransaction.vue";
-import CardBoxClient from "@/components/CardBoxClient.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
-import SectionBannerStarOnGitHub from "@/components/SectionBannerStarOnGitHub.vue";
-import CardBoxMainSection from "../components/CardBoxMainSection.vue";
 import { useBuilding } from "../graph-medium/building";
 import { useNode } from "../graph-medium/node";
 import TreeContainer from "../components/app/tree/treeContainer.vue";
+import BuildingsTable from "../components/app/building/BuildingsTable.vue";
+import RuleIndex from "../components/app/rule/RuleIndex.vue";
 
 const { buildingsTree } = useBuilding()
 const { nodes } = useNode()
@@ -79,82 +63,51 @@ const mainSections = computed(()=>{
     { name:'کنترلر ها',icon:mdiAccessPoint,to:{ name:'buildings' }, count: controllersCount.value },
   ]
 })
+
+const props = defineProps({
+    concise:{
+        type:Boolean,
+        default:false
+    }
+})
 </script>
 
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton
-        :icon="mdiChartTimelineVariant"
+      <!-- <SectionTitleLineWithButton
+      v-if="!props.concise"
+      :icon="mdiChartTimelineVariant"
         title="Overview"
         main
       >
-      </SectionTitleLineWithButton>
+      </SectionTitleLineWithButton> -->
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
-        <CardBoxWidget
+          <CardBoxWidget
           color="text-emerald-500"
           :icon="section.icon"
           :number="section.count"
           :label="section.name"
+          :no-padding="true"
           v-for="section in mainSections"
         />
-        <!-- <CardBoxWidget
-          trend="12%"
-          trend-type="down"
-          color="text-blue-500"
-          :icon="mdiCartOutline"
-          :number="7770"
-          prefix="$"
-          label="Sales"
-        />
-        <CardBoxWidget
-          trend="Overflow"
-          trend-type="alert"
-          color="text-red-500"
-          :icon="mdiChartTimelineVariant"
-          :number="256"
-          suffix="%"
-          label="Performance"
-        /> -->
       </div>
-
-      <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 rtl">
-        <div class="flex flex-col justify-between">
-          <CardBoxMainSection 
-          v-for="section in mainSections"
-          :name="section.name"
-          :icon="section.icon"
-          number="7"
-          />
+      <div class="grid grid-cols-12">
+        <div class="col-span-6">
+          <TreeContainer :concise="true" />
+        </div>
+        <div class="col-span-6">
+          <BuildingsTable :concise="true" />
+        </div>
+      </div>
+      <!-- <div class="grid grid-cols-12">
+        <div class="col-span-12 flex w-full justify-center">
+          <RuleIndex :concise="true" />
         </div>
       </div> -->
-      <TreeContainer />
-      <!-- <SectionBannerStarOnGitHub class="mt-6 mb-6" />
-
-      <SectionTitleLineWithButton :icon="mdiChartPie" title="Trends overview">
-        <BaseButton
-          :icon="mdiReload"
-          color="whiteDark"
-          @click="fillChartData"
-        />
-      </SectionTitleLineWithButton>
-
-      <CardBox class="mb-6">
-        <div v-if="chartData">
-          <line-chart :data="chartData" class="h-96" />
-        </div>
-      </CardBox>
-
-      <SectionTitleLineWithButton :icon="mdiAccountMultiple" title="Clients" />
-
-      <NotificationBar color="info" :icon="mdiMonitorCellphone">
-        <b>Responsive table.</b> Collapses on mobile
-      </NotificationBar>
-
-      <CardBox has-table>
-        <TableSampleClients />
-      </CardBox> -->
     </SectionMain>
   </LayoutAuthenticated>
 </template>
+<style>
+</style>

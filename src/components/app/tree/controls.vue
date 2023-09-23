@@ -48,15 +48,22 @@ const buildingType = ref()
 watch(buildingType,(v)=>{
     emit('setBuildingType',v)
 })
+
+const props = defineProps({
+    concise:{
+        type:Boolean,
+        default:false
+    }
+})
 </script>
 
 <template>
-    <Panel :position="PanelPosition.TopRight" class="custom-controls">
-        <div class="bg-slate-300 rounded border-2 border-success p-2 rtl flex flex-col gap-5">
-            <span class="text-[15px]">پنل کنترل</span>
-            <div class="flex flex-col items-start">
+    <Panel :position="PanelPosition.TopRight" class="custom-controls" :class="props.concise ? 'w-[7rem]' : ''">
+        <div class="text-right bg-slate-300 flex flex-col items-end" :class="!props.concise ? 'rounded border-2 border-success p-2 rtl gap-5' :'pt-1 pr-1'">
+            <span class="text-right" :class="!props.concise ? 'text-[15px]' : 'text-[10px]'">پنل کنترل</span>
+            <div class="flex flex-col items-end text-right">
                 <FormField label="نوع ساختمان">
-                    <FormControl input-height="h-[25px] py-0 text-[10px] ltr w-[80px]" class="text-[4px]" v-model="buildingType" :options="buildingTypeOptions" />
+                    <FormControl :input-height="!props.concise ? 'h-[25px] py-0 text-[10px] ltr w-[80px]' : 'h-[18px] py-0 text-[8px] ltr w-[6rem]'" class="text-[4px]" v-model="buildingType" :options="buildingTypeOptions" />
                 </FormField>
             </div>
         </div>

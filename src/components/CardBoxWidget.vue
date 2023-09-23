@@ -40,12 +40,16 @@ defineProps({
     type: String,
     default: null,
   },
+  noPadding: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
 <template>
-  <CardBox>
-    <BaseLevel v-if="trend" class="mb-3" mobile>
+  <CardBox :hasTable="$props.noPadding">
+    <BaseLevel v-if="trend" :class="props.noPadding ? 'mb-0' : 'mb-3'" mobile>
       <PillTagTrend :trend="trend" :trend-type="trendType" small />
       <!-- <BaseButton
         :icon="mdiCog"

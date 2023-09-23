@@ -78,25 +78,33 @@ watch(buildingsTree, (newVal,oldVal) => {
   }
 })
 
+const props = defineProps({
+    concise:{
+        type:Boolean,
+        default:false
+    }
+})
 </script>
 
 <template>
-  <CardBox>
-    <div class="flex flex-col items-start gap-y-4">
-      <div class="flex justify-between items-start w-full p-5 gap-10">
-        <BaseButton :icon="mdiPlus" small roundedFull color="success" label="افزودن" @click="addNew" />
-        <h2 class="text-[16px] font-[600]">دستور ها</h2>
-      </div>
-      <template v-if="!loading && selectTreeOptions.length">
-        <template v-for="(rule, i) in rules" :key="i">
-          <RuleForm :channel-tree-options="selectTreeOptions" :editable-rule-id="rule.id" />
+  <!-- <CardBox class="w-full"> -->
+    <div class="bg-white rounded-lg p-2 w-full" :class="props.concise ? 'w-[100%]' : 'w-[100%]'">
+      <div class="flex flex-col items-start gap-y-4 w-full">
+        <div class="flex justify-between items-start w-full p-5 gap-10">
+          <BaseButton :icon="mdiPlus" small roundedFull color="success" label="افزودن" @click="addNew" />
+          <h2 class="text-[16px] font-[600]">دستور ها</h2>
+        </div>
+        <template v-if="!loading && selectTreeOptions.length">
+          <template v-for="(rule, i) in rules" :key="i">
+            <RuleForm :concise="props.concise" :channel-tree-options="selectTreeOptions" :editable-rule-id="rule.id" />
+          </template>
         </template>
-      </template>
-      <div v-show="adding && !loading && selectTreeOptions.length" class="w-full">
-        <RuleForm :channel-tree-options="selectTreeOptions" key="add-new" />
+        <div v-show="adding && !loading && selectTreeOptions.length" class="w-full">
+          <RuleForm :channel-tree-options="selectTreeOptions" key="add-new" />
+        </div>
       </div>
     </div>
-  </CardBox>
+  <!-- </CardBox> -->
 </template>
 <style>
 .rtl {
