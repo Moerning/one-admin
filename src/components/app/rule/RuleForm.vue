@@ -20,6 +20,10 @@ const props = defineProps({
   },
   channelTreeOptions:{
     default:[]
+  },
+  concise:{
+    type:Boolean,
+    default:true
   }
 })
 
@@ -170,8 +174,8 @@ const changeRuleStatus = () => {
 <style>
 
 :root{
-  --toggle-width: 5rem;
-  --toggle-height: 2rem;
+  --toggle-width: 2rem;
+  --toggle-height: 1rem;
   --toggle-border: .25rem;
   --toggle-ring-width: 0px;
 }

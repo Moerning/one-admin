@@ -9,7 +9,7 @@ import { mdiHome, mdiEye, mdiPencil, mdiAlarmLight, mdiAccessPoint } from "@mdi/
 import BaseIcon from "@/components/BaseIcon.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import NodeForm from '../node/NodeForm.vue';
-import CustomControls from "./controls.vue";
+import CustomControls  from "./controls.vue";
 import gql from 'graphql-tag';
 import { useMutation, useResult, useSubscription } from "@vue/apollo-composable";
 import Toggle from '@vueform/toggle';
@@ -44,7 +44,11 @@ watch(() => onlineNodes.value, (v) => {
 
 
 const props = defineProps({
-  initialNodes: {}
+  initialNodes: {},
+  concise : {
+    type: Boolean,
+    default: false
+  }
 })
 
 const showControllerForm = ref(false)
@@ -126,20 +130,21 @@ const changeNodeStatus = (id,value) => {
   updateNodeStatus(id,value)
 }
 
+
 </script>
 
 <template>
-  <div class="w-[1500px] h-[800px]">
-    <VueFlow v-model="elements" :class="{ dark }" class="basicflow" :default-zoom="0.1" :max-zoom="4" :min-zoom="0.1"
+  <div class="w-full" :class="props.concise ? 'h-[300px]' : 'h-[700px]'">
+    <VueFlow v-model="elements" :class="{ dark }" class="basicflow" :default-zoom="props.concise ? 0 : 0.1" :max-zoom="4" :min-zoom="0.1"
       :style="{ backgroundColor: '#d9dadb' }">
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <!-- <MiniMap /> -->
       <Controls />
-      <CustomControls @set-building-type="setBuildingType" />
+      <CustomControls :concise="props.concise" @set-building-type="setBuildingType" />
       <template #node-building="{ data, id }">
         <div @click="e => buildingClicked(props)" class="building-node"
           :class="{ 'inactive-building': data.type != buildingType && buildingType != 'any' }">
-          <span v-if="data?.name" class="building-text">{{ data.name }}</span>
+          <span v-if="data?.name" :class="props.concise ? 'building-text-concise' : 'building-text'">{{ data.name }}</span>
           <div v-if="showControllerForm">
             <component :is="NodeForm" />
           </div>
@@ -164,7 +169,7 @@ const changeNodeStatus = (id,value) => {
       </template>
       <template #node-node="{ data }">
         <div @click="e => buildingClicked(props)" class="node-node">
-          <span v-if="data?.id" class="max-w-[325px] text-[40px] node-text">{{ data.id }}</span>
+          <span v-if="data?.id" class="max-w-[325px] node-text" :class="props.concise ? 'text-[100px]' : 'text-[40px]'">{{ data.id }}</span>
           <!-- <span v-if="data?.id" class="max-w-[325px] text-[40px] node-text">{{ getOnlineNodeStatus(data.id) }}</span> -->
 
           <span class="node-tools items-center justify-around mt-1 w-full">
@@ -185,7 +190,9 @@ const changeNodeStatus = (id,value) => {
       </template>
       <template #node-controller="{ data }">
         <div @click="e => buildingClicked(props)" class="controller-node">
-          <span v-if="data?.mac_address || data.model" class="max-w-[325px] text-[40px] controller-text">{{ data.model ? data.model : data.mac_address  }}</span>
+          <span v-if="data?.mac_address || data.model" class="max-w-[325px] controller-text" 
+          :class="props.concise ? 'text-[100px]' : 'text-[40px]'"
+          >{{ data.model ? data.model : data.mac_address  }}</span>
           <span class="controller-tools justify-around mt-1 w-full">
             <BaseButton color="info" :icon="mdiEye" :iconSize="48" class="w-28 h-28 mr-1" iconWidth="h-20"
               iconHeight="h-20" @click="$router.push({ name: 'ControllerShow', params: { id: data.id } })" small />
@@ -244,6 +251,12 @@ const changeNodeStatus = (id,value) => {
   @apply max-w-[325px] text-[48px];
   color: #5BA0BF;
 }
+
+.building-text-concise {
+  @apply max-w-[325px] text-[100px] font-[800];
+  color: #5BA0BF;
+}
+
 
 .building-node:hover .building-text {
   font-size: 50px;
