@@ -12,7 +12,7 @@ function getHeaders() {
 
 // Create an http link:
 const httpLink = new HttpLink({
-    uri: "http://localhost:8080/v1/graphql",
+    uri: "188.121.122.21/v1/graphql",
     fetch: (uri, options) => {
         options.headers = getHeaders()
         return fetch(uri, options)
@@ -21,7 +21,7 @@ const httpLink = new HttpLink({
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-    uri: "ws://localhost:8080/v1/graphql",
+    uri: "ws://188.121.122.21/v1/graphql",
     options: {
         reconnect: true,
         lazy: true,

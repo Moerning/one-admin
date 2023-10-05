@@ -10,21 +10,26 @@ const state = reactive({
 export const useRule = () => {
 
   const getAllRules = async () => {
-    const { data } = await axe.post('', {
-      query: `query RuleIndex {
-                rule(where: {account_id: {_eq: "${userId.value}"}}) {
-                  desired_source_channel_value
-                  desired_target_channel_value
-                  id
-                  source_channel_id
-                  status
-                  target_channel_id
-                  condition
-                }
-              }`
-    })
-    
-    state.rules = [...data.data.rule]
+    try {
+      const { data } = await axe.post('', {
+        query: `query RuleIndex {
+                  rule(where: {account_id: {_eq: "${userId.value}"}}) {
+                    desired_source_channel_value
+                    desired_target_channel_value
+                    id
+                    source_channel_id
+                    status
+                    target_channel_id
+                    condition
+                  }
+                }`
+      })
+      
+      state.rules = [...data.data.rule]
+      
+    } catch (error) {
+      
+    }
   }
   const fetchRule = (id) => {
     return axe.post('', {

@@ -101,11 +101,11 @@ const props = defineProps({
           <BuildingsTable :concise="true" />
         </div>
       </div>
-      <!-- <div class="grid grid-cols-12">
+      <div class="grid grid-cols-12">
         <div class="col-span-12 flex w-full justify-center">
           <RuleIndex :concise="true" />
         </div>
-      </div> -->
+      </div>
     </SectionMain>
   </LayoutAuthenticated>
 </template>

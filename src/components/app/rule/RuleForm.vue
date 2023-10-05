@@ -68,7 +68,7 @@ const prepareParams = () => {
 const add = () => {
   let params = prepareParams()
   createRule({ ...params }).then(() => {
-    location.reload();
+    // location.reload();
   }).catch((e) => {
     alert('Operation Failed!')
     console.log(e)
@@ -154,14 +154,18 @@ const changeRuleStatus = () => {
         <FormControl inputHeight="h-8" v-model="formRule.targetVal" placeholder="Trigger" type="text" />
         <span class="h-8 flex items-center">باشد.</span>
       </div>
-      <div class="flex justify-end flex-grow gap-2">
-        <Toggle :value="formRule.status" @change="(v)=>changeRuleStatus()">
+      <div class="flex justify-around flex-grow gap-2 items-center">
+        <div class="flex gap-2 h-full items-center">
+          <label for="active">فعال</label>
+          <input :value="formRule.status" @change="(v)=>changeRuleStatus()" type="checkbox" name="active">
+        </div>
+        <!-- <Toggle :value="formRule.status" @change="(v)=>changeRuleStatus()">
           <template v-slot:label="{ checked, classList }">
             <span :class="classList.label + ` ${checked ? 'left-[2px]' : 'right-[2px]'}`" class="text-[12px] ltr absolute left-1 top-[50%] translate-y-[-50%]"
               
             >{{ checked ? 'فعال' : 'غیرفعال' }}</span>
           </template>
-        </Toggle>
+        </Toggle> -->
         <BaseButtons>
           <div class="flex items-center gap-2">
             <BaseButton type="submit" class="py-1 text-[12px] px-1" color="info" label="ذخیره" @click="submit" roundedFull/>

@@ -100,7 +100,7 @@ const props = defineProps({
           </template>
         </template>
         <div v-show="adding && !loading && selectTreeOptions.length" class="w-full">
-          <RuleForm :channel-tree-options="selectTreeOptions" key="add-new" />
+          <RuleForm :concise="props.concise" :channel-tree-options="selectTreeOptions" key="add-new" />
         </div>
       </div>
     </div>
