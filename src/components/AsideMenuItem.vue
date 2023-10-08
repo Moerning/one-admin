@@ -57,29 +57,29 @@ const menuClick = (event) => {
       :class="componentClass"
       @click="menuClick"
     >
-      <BaseIcon
-        v-if="item.icon"
-        :path="item.icon"
-        class="flex-none"
-        :class="[vSlot && vSlot.isExactActive ? asideMenuItemActiveStyle : '']"
-        w="w-10"
-        :size="18"
-      />
-      <span
-        class="grow text-ellipsis line-clamp-1"
-        :class="[
-          { '': !hasDropdown },
-          vSlot && vSlot.isExactActive ? asideMenuItemActiveStyle : '',
-        ]"
-        >{{ item.label }}</span
-      >
-      <BaseIcon
+    <BaseIcon
         v-if="hasDropdown"
         :path="isDropdownActive ? mdiMinus : mdiPlus"
         class="flex-none"
         :class="[vSlot && vSlot.isExactActive ? asideMenuItemActiveStyle : '']"
         w="w-10"
       />
+      <span
+      class="grow text-ellipsis line-clamp-1 text-right"
+      :class="[
+        { '': !hasDropdown },
+        vSlot && vSlot.isExactActive ? asideMenuItemActiveStyle : '',
+      ]"
+        >{{ item.label }}</span>
+        
+        <BaseIcon
+          v-if="item.icon"
+          :path="item.icon"
+          class="flex-none"
+          :class="[vSlot && vSlot.isExactActive ? asideMenuItemActiveStyle : '']"
+          w="w-10"
+          :size="18"
+        />
     </component>
     <AsideMenuList
       v-if="hasDropdown"

@@ -1,5 +1,7 @@
 <script setup>
-import { mdiForwardburger, mdiBackburger, mdiMenu, mdiArrowRight, mdiAccountCancel } from "@mdi/js";
+import { mdiForwardburger, mdiBackburger, mdiMenu, mdiArrowRight, mdiAccountCancel, mdiAccountCog, 
+  mdiDatabase,mdiInformation,
+  mdiApplicationBrackets } from "@mdi/js";
 import { ref, computed, watchEffect, watch } from "vue";
 import { useRouter } from "vue-router";
 import menuNavBar from "@/menuNavBar.js";
@@ -118,6 +120,26 @@ const menuAside = computed(() => {
       label: "ساختمان‌ها",
       icon: mdiViewList,
       menu: buildingsMenu.value,
+    },
+    {
+      label: "قوانین",
+      icon: mdiApplicationBrackets,
+      to: { name:'AddRuleForm' },
+    },
+    {
+      label: "مدیریت کاربران",
+      icon: mdiAccountCog,
+      to: { name:'AccountsTable' },
+    },
+    {
+      label: "پایگاه داده",
+      icon: mdiDatabase,
+      href: 'http://localhost:8080'
+    },
+    {
+      label: "تماس با ما",
+      icon: mdiInformation,
+      to: { name:'AccountsTable' },
     }
   ]
 })
@@ -129,7 +151,7 @@ useMainStore().setUser({
     "/avatar.png",
 });
 
-const layoutAsidePadding = "xl:pl-60";
+const layoutAsidePadding = "xl:pr-60";
 
 const styleStore = useStyleStore();
 
@@ -187,9 +209,9 @@ const adminMenuNavbar = computed(() => {
           <BaseIcon :path="mdiMenu" size="24" />
         </NavBarItemPlain>
       </NavBar>
+      <slot />
       <AsideMenu :is-aside-mobile-expanded="isAsideMobileExpanded" :is-aside-lg-active="isAsideLgActive" :menu="menuAside"
         @menu-click="menuClick" @aside-lg-close-click="isAsideLgActive = false" />
-      <slot />
       <FooterBar>
       </FooterBar>
     </div>
